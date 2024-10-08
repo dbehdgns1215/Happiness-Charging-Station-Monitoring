@@ -24,8 +24,8 @@ public class ChargerStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
 
-    @OneToOne
-    @JoinColumn/*(name = "charger_id")*/ // 외래 키 설정
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn /*(name = "charger_id")*/ // 외래 키 설정
     private ChargerEntity chargerId; // 충전기 식별자
 
     @NotNull

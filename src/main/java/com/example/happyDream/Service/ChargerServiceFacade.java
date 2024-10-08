@@ -1,6 +1,7 @@
 package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDto;
+import com.example.happyDream.DTO.ChargerLogDto;
 import com.example.happyDream.Entity.ChargerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +39,25 @@ public class ChargerServiceFacade {
     public void chargerDelete(Integer id){
         this.chargerService.chargerDelete(id);
     }
+
+    //전체 충전 로그 조회
+    public List<ChargerLogDto> getAllChargerLog() {
+        return this.chargerLogService.getAllChargerLog();
+    }
+
+    //전체 충전 로그 삭제
+    public void deleteAllChargerLog() {
+        this.chargerLogService.deleteAllChargerLog();
+    }
+
+    //특정 충전기의 전체 충전 로그 조회
+    public List<ChargerLogDto> getAllTargetChargerLog(ChargerDto ChargerDto) {
+        return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
+    }
+
+    //특정 충전기 충전 로그 추가
+    public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
+        this.chargerLogService.createTargetChargerLog(chargerLogDto);
+    }
+
 }

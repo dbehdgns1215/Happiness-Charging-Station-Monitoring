@@ -23,11 +23,11 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; //리뷰 식별자
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private ChargerEntity chargerId; //충전기 식별자
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private UserEntity userId; //유저 식별자
 
