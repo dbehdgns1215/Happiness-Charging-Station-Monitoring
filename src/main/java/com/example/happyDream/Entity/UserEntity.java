@@ -1,6 +1,6 @@
 package com.example.happyDream.Entity;
 
-import com.example.happyDream.DTO.UserDto;
+import com.example.happyDream.DTO.UserDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -70,8 +70,8 @@ public class UserEntity {
         this.deletedAt = deletedAt;
     }
 
-    public UserDto toDto() {
-        return UserDto.builder()
+    public UserDTO toDto() {
+        return UserDTO.builder()
                 .id(id)
                 .username(username)
                 .password(password)

@@ -1,5 +1,6 @@
 package com.example.happyDream.Service;
 
+import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -63,5 +66,26 @@ public class ChargerService {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<ChargerDTO> convertEntityListToDtoList(List<ChargerEntity> entityList) {
+        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
+        return entityList.stream()
+                .map(ChargerEntity::toDto) // 각 엔티티를 DTO로 변환
+                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
+    }
+
+    public List<ChargerEntity> convertDtoListToEntityList(List<ChargerDTO> dtoList) {
+        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
+        return dtoList.stream()
+                .map(ChargerDTO::toEntity) // 각 엔티티를 DTO로 변환
+                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
+    }
+
+    public List<ChargerDTO> chargerSelectAll(){
+        List<ChargerDTO> dtoList = convertEntityListToDtoList(this.chargerRepository.findAll());
+        System.out.println("가져온 충전소 수: " + dtoList.size());
+
+        return dtoList;
     }
 }

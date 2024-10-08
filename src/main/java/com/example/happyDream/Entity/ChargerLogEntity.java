@@ -1,6 +1,6 @@
 package com.example.happyDream.Entity;
 
-import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerLogDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -52,8 +52,8 @@ public class ChargerLogEntity {
         this.modifiedAt = modifiedAt;
     }
 
-    public ChargerLogDto toDto() {
-        return ChargerLogDto.builder()
+    public ChargerLogDTO toDto() {
+        return ChargerLogDTO.builder()
                 .id(id)
                 .chargerId(chargerId)
                 .ampere(ampere)
