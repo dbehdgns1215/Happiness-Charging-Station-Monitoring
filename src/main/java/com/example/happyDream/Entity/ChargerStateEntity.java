@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class ChargerStateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
-    private Long id;
+    private Integer id;
 
     @OneToOne
     @JoinColumn/*(name = "charger_id")*/ // 외래 키 설정
