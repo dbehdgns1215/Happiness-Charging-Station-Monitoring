@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Getter //Setter 미사용
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
+
 public class ChargerStateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
