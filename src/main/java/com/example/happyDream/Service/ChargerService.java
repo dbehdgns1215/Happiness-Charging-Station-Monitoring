@@ -33,18 +33,18 @@ public class ChargerService {
                 .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
     }
 
-    //전체 충전기 조회
+    // 전체 충전기 조회
     public List<ChargerDto> chargerSelectAll(){
         List<ChargerDto> dtoList = convertEntityListToDtoList(this.chargerRepository.findAll());
         return dtoList;
     }
 
-    //전체 충전기 삭제
+    // 전체 충전기 삭제
     public void chargerDeleteAll(){
         this.chargerRepository.deleteAll();
     }
 
-    //특정 충전기 조회
+    // 특정 충전기 조회
     public ChargerDto chargerSelect(Integer id){
         Optional<ChargerEntity> entity = this.chargerRepository.findById(id);
         if(entity.isPresent()) {
@@ -54,7 +54,7 @@ public class ChargerService {
         }
     }
 
-    //특정 충전기 삭제
+    // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerRepository.deleteById(id);
     }

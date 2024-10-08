@@ -20,44 +20,48 @@ public class ChargerServiceFacade {
         this.chargerLogService = chargerLogService;
     }
 
-    //전체 충전기 조회
+    /* ===== ChargerService ===== */
+    // 전체 충전기 조회
     public List<ChargerDto> chargerSelectAll(){
         return this.chargerService.chargerSelectAll();
     }
 
-    //전체 충전기 삭제
+    // 전체 충전기 삭제
     public void chargerDeleteAll(){
         this.chargerService.chargerDeleteAll();
     }
 
-    //특정 충전기 조회
+    // 특정 충전기 조회
     public ChargerDto chargerSelect(Integer id){
         return this.chargerService.chargerSelect(id);
     }
 
-    //특정 충전기 삭제
+    // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerService.chargerDelete(id);
     }
 
-    //전체 충전 로그 조회
+    // 전체 충전 로그 조회
     public List<ChargerLogDto> getAllChargerLog() {
         return this.chargerLogService.getAllChargerLog();
     }
 
-    //전체 충전 로그 삭제
+    /* ===== ChargerLogService ===== */
+    // 전체 충전 로그 삭제
     public void deleteAllChargerLog() {
         this.chargerLogService.deleteAllChargerLog();
     }
 
-    //특정 충전기의 전체 충전 로그 조회
+    // 특정 충전기의 전체 충전 로그 조회
     public List<ChargerLogDto> getAllTargetChargerLog(ChargerDto ChargerDto) {
         return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
     }
 
-    //특정 충전기 충전 로그 추가
+    // 특정 충전기 충전 로그 추가
     public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
         this.chargerLogService.createTargetChargerLog(chargerLogDto);
     }
+
+    /* ===== ChargerStateService ===== */
 
 }
