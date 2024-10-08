@@ -14,14 +14,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "charger_log")
+@Table(name = "charger_state")
 @Getter //Setter 미사용
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class ChargerStateEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
+    private Long id;
+
     @OneToOne
-    private ChargerEntity chargerId; //충전기 식별자
+    @JoinColumn/*(name = "charger_id")*/ // 외래 키 설정
+    private ChargerEntity chargerId; // 충전기 식별자
 
     @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
