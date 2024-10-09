@@ -139,7 +139,7 @@ public class ChargerEntity {
         this.deletedAt = deletedAt;
     }
 
-    public ChargerDTO toDto() {
+    public ChargerDTO toDTO() {
         return ChargerDTO.builder()
                 .id(id)
                 .name(name)

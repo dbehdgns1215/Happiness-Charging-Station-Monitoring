@@ -1,7 +1,7 @@
 package com.example.happyDream.Controller;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Service.ChargerLogService;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +25,7 @@ public class ChargerLogController {
     //전체 충전 로그 조회
     @GetMapping("/chargers/logs")
     public String getAllChargerLog() {
-        List<ChargerLogDto> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog();
+        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog();
         return "";
     }
 
@@ -40,8 +40,8 @@ public class ChargerLogController {
     //특정 충전기의 전체 충전 로그 조회
     @GetMapping("/chargers/logs/{charger_id}")
     public String getChargerLog(@PathVariable("charger_id") Integer charger_id) {
-        ChargerDto chargerDto = chargerServiceFacade.chargerSelect(charger_id);
-        List<ChargerLogDto> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
+        ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(charger_id);
+        List<ChargerLogDTO> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
         return "";
     }
 
@@ -49,7 +49,7 @@ public class ChargerLogController {
     @PostMapping("/chargers/logs/{charger_id}")
     public String createChargerLog(@PathVariable("charger_id") Integer charger_id) {
         try {
-            ChargerDto chargerDto = chargerServiceFacade.chargerSelect(charger_id);
+            ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(charger_id);
             /*
             ChargerLogDto chargerLogDto = ChargerLogDto.builder()
                     .chargerId(chargerDto.toEntity())

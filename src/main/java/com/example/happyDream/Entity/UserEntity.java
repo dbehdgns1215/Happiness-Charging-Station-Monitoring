@@ -70,7 +70,7 @@ public class UserEntity {
         this.deletedAt = deletedAt;
     }
 
-    public UserDTO toDto() {
+    public UserDTO toDTO() {
         return UserDTO.builder()
                 .id(id)
                 .username(username)

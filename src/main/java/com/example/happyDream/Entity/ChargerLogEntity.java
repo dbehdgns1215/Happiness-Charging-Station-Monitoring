@@ -52,7 +52,7 @@ public class ChargerLogEntity {
         this.modifiedAt = modifiedAt;
     }
 
-    public ChargerLogDTO toDto() {
+    public ChargerLogDTO toDTO() {
         return ChargerLogDTO.builder()
                 .id(id)
                 .chargerId(chargerId)

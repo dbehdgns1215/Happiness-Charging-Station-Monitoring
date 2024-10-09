@@ -1,7 +1,7 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class ChargerServiceFacade {
 
     /* ===== ChargerService ===== */
     // 전체 충전기 조회
-    public List<ChargerDto> chargerSelectAll(){
+    public List<ChargerDTO> chargerSelectAll(){
         return this.chargerService.chargerSelectAll();
     }
 
@@ -32,7 +32,7 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 조회
-    public ChargerDto chargerSelect(Integer id){
+    public ChargerDTO chargerSelect(Integer id){
         return this.chargerService.chargerSelect(id);
     }
 
@@ -42,7 +42,7 @@ public class ChargerServiceFacade {
     }
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllChargerLog() {
+    public List<ChargerLogDTO> getAllChargerLog() {
         return this.chargerLogService.getAllChargerLog();
     }
 
@@ -53,13 +53,13 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllTargetChargerLog(ChargerDto ChargerDto) {
-        return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
+    public List<ChargerLogDTO> getAllTargetChargerLog(ChargerDTO ChargerDTO) {
+        return this.chargerLogService.getAllTargetChargerLog(ChargerDTO);
     }
 
     // 특정 충전기 충전 로그 추가
-    public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
-        this.chargerLogService.createTargetChargerLog(chargerLogDto);
+    public void createTargetChargerLog(ChargerLogDTO chargerLogDTO) {
+        this.chargerLogService.createTargetChargerLog(chargerLogDTO);
     }
 
     /* ===== ChargerStateService ===== */

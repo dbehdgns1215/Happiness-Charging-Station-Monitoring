@@ -68,7 +68,7 @@ public class ReviewEntity {
         this.deletedAt = deletedAt;
     }
 
-    public ReviewDTO toDto() {
+    public ReviewDTO toDTO() {
         return ReviewDTO.builder()
                 .id(id)
                 .chargerId(chargerId)

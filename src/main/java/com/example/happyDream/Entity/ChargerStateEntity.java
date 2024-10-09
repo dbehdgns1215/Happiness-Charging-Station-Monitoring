@@ -69,7 +69,7 @@ public class ChargerStateEntity {
         this.modifiedAt = modifiedAt;
     }
 
-    public ChargerStateDTO toDto() {
+    public ChargerStateDTO toDTO() {
         return ChargerStateDTO.builder()
                 .chargerId(chargerId)
                 .usingYn(usingYn)

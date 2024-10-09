@@ -1,7 +1,7 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerLogEntity;
 import com.example.happyDream.Repository.ChargerLogRepository;
@@ -24,30 +24,30 @@ public class ChargerLogService {
     }
 
     // ChargerLogEntity List → ChargerLogDTO List
-    private List<ChargerLogDto> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
+    private List<ChargerLogDTO> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
         if (entityList.isEmpty()) {
             log.warn("DTO list가 비어있음");
             throw new EntityNotFoundException();
         }
         return entityList.stream()
-                .map(ChargerLogEntity::toDto)
+                .map(ChargerLogEntity::toDTO)
                 .collect(Collectors.toList());
     }
 
     // ChargerLogDTO List → ChargerLogEntity List
-    private List<ChargerLogEntity> convertDtoListToEntityList(List<ChargerLogDto> dtoList) {
+    private List<ChargerLogEntity> convertDtoListToEntityList(List<ChargerLogDTO> dtoList) {
         if (dtoList.isEmpty()) {
             log.warn("Entity list가 비어있음");
             throw new EntityNotFoundException();
         }
         return dtoList.stream()
-                .map(ChargerLogDto::toEntity)
+                .map(ChargerLogDTO::toEntity)
                 .collect(Collectors.toList());
     }
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllChargerLog() {
-        List<ChargerLogDto> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
+    public List<ChargerLogDTO> getAllChargerLog() {
+        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
         return dtoList;
     }
 
@@ -60,13 +60,13 @@ public class ChargerLogService {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllTargetChargerLog(ChargerDto ChargerDto) {
-        List<ChargerLogDto> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(ChargerDto.toEntity()));
+    public List<ChargerLogDTO> getAllTargetChargerLog(ChargerDTO ChargerDto) {
+        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(ChargerDto.toEntity()));
         return dtoList;
     }
 
     // 특정 충전기 충전 로그 추가
-    public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
+    public void createTargetChargerLog(ChargerLogDTO chargerLogDto) {
         this.chargerLogRepository.save(chargerLogDto.toEntity());
     }
     // TODO - 충전기 하드웨어 설정 값 조회
