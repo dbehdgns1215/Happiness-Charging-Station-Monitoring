@@ -1,21 +1,14 @@
 package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,7 +33,7 @@ class ChargerStateServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 충전기에 대한 충전 상태 추가")
+    @DisplayName("존재하는 충전기에 대한 상태 추가")
     void createChargerStateAlreadyExistTest() {
 
     }
