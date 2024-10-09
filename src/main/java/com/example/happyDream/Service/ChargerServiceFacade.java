@@ -19,7 +19,23 @@ public class ChargerServiceFacade {
         this.chargerLogService = chargerLogService;
     }
 
+    //전체 충전기 조회
     public List<ChargerDto> chargerSelectAll(){
         return this.chargerService.chargerSelectAll();
+    }
+
+    //전체 충전기 삭제
+    public void chargerDeleteAll(){
+        this.chargerService.chargerDeleteAll();
+    }
+
+    //특정 충전기 조회
+    public ChargerDto chargerSelect(Integer id){
+        return this.chargerService.chargerSelect(id);
+    }
+
+    //특정 충전기 삭제
+    public void chargerDelete(Integer id){
+        this.chargerService.chargerDelete(id);
     }
 }
