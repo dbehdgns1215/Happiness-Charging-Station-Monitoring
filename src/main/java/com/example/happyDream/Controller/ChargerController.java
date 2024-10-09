@@ -52,7 +52,7 @@ public class ChargerController {
     }
 
     //특정 충전기 삭제
-    @GetMapping("/chargers/{id}")
+    @DeleteMapping("/chargers/{id}")
     public String chargerDelete(@PathVariable("id") Integer id) {
         this.chargerServiceFacade.chargerDelete(id);
         return " ";
