@@ -4,6 +4,8 @@ import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ChargerStateRepository extends JpaRepository<ChargerStateEntity, Integer> {
+import java.util.Optional;
 
+public interface ChargerStateRepository extends JpaRepository<ChargerStateEntity, Integer> {
+    public Optional<ChargerStateEntity> findByChargerId(ChargerEntity chargerEntity);
 }
