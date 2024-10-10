@@ -23,7 +23,7 @@ public class ChargerLogController {
     }
 
     //전체 충전 로그 조회
-    @GetMapping("/chargers/logs")
+    @GetMapping("/api/v1/chargers/logs")
     public String getAllChargerLog() {
         List<ChargerLogDto> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog();
         return "";
@@ -31,46 +31,48 @@ public class ChargerLogController {
 
     //전체 충전 로그 삭제
     //TODO - 권한 검증 추가
-    @DeleteMapping("/chargers/logs")
+    @DeleteMapping("/api/v1/chargers/logs")
     public String deleteAllChargerLog() {
         this.chargerServiceFacade.deleteAllChargerLog();
         return "";
     }
 
     //특정 충전기의 전체 충전 로그 조회
-    @GetMapping("/chargers/logs/{charger_id}")
-    public String getChargerLog(@PathVariable("charger_id") Integer charger_id) {
-        ChargerDto chargerDto = chargerServiceFacade.chargerSelect(charger_id);
+    @GetMapping("/api/v1/chargers/logs/{id}")
+    public String getChargerLog(@PathVariable("id") Integer chargerId) {
+        ChargerDto chargerDto = chargerServiceFacade.chargerSelect(chargerId);
         List<ChargerLogDto> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
         return "";
     }
 
     //특정 충전기 충전 로그 추가
-    @PostMapping("/chargers/logs/{charger_id}")
-    public String createChargerLog(@PathVariable("charger_id") Integer charger_id) {
+    @PostMapping("/api/v1/chargers/logs/{id}")
+    public String createChargerLog(@PathVariable("id") Integer chargerId, Float ampere) {
         try {
-            ChargerDto chargerDto = chargerServiceFacade.chargerSelect(charger_id);
-            /*
+            ChargerDto chargerDto = chargerServiceFacade.chargerSelect(chargerId);
+
             ChargerLogDto chargerLogDto = ChargerLogDto.builder()
                     .chargerId(chargerDto.toEntity())
-                    .ampere(charger_id)
+                    .ampere(ampere)
+                    .build();
+
             chargerServiceFacade.createTargetChargerLog(chargerLogDto);
-             */
+
         } catch (EntityNotFoundException ignored) {
-            log.warn("존재하지 않는 충전기 id: {}", charger_id);
+            log.warn("존재하지 않는 충전기 id: {}", chargerId);
         }
 
         return "";
     }
 
     //충전기 하드웨어 설정값 조회
-    @GetMapping("/chargers/logs/upgrade")
+    @GetMapping("/api/v1/chargers/logs/upgrade")
     public String getChargerLogSetting() {
         return "";
     }
 
     //충전기 하드웨어 설정값 변경
-    @PostMapping("/chargers/logs/upgrade")
+    @PostMapping("/api/v1/chargers/logs/upgrade")
     public String createChargerLogSetting() {
         return "";
     }

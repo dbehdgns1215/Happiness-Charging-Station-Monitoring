@@ -2,6 +2,9 @@ package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDto;
 import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerStateDto;
+import com.example.happyDream.Entity.ChargerStateEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -41,12 +44,12 @@ public class ChargerServiceFacade {
         this.chargerService.chargerDelete(id);
     }
 
+    /* ===== ChargerLogService ===== */
+
     // 전체 충전 로그 조회
     public List<ChargerLogDto> getAllChargerLog() {
         return this.chargerLogService.getAllChargerLog();
     }
-
-    /* ===== ChargerLogService ===== */
 
     // 전체 충전 로그 삭제
     public void deleteAllChargerLog() {
@@ -60,9 +63,39 @@ public class ChargerServiceFacade {
 
     // 특정 충전기 충전 로그 추가
     public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
+        //TODO - chargerId 검증 로직 추가(병합 이후)
         this.chargerLogService.createTargetChargerLog(chargerLogDto);
     }
 
     /* ===== ChargerStateService ===== */
 
+    // 전체 충전기 상태 조회
+    public List<ChargerStateDto> getAllChargerState() {
+        return this.chargerStateService.getAllChargerState();
+    }
+
+    // 전체 충전기 상태 초기화
+    public void initAllChargerState() {
+        this.chargerStateService.initAllChargerState();
+    }
+
+    // 특정 충전기 상태 조회
+    public ChargerStateDto getTargetChargerState(ChargerDto chargerDto) {
+        try {
+            return this.chargerStateService.getTargetChargerState(chargerDto);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    // 특정 충전기 상태 추가
+    public void createTargetChargerState(ChargerDto chargerDto) {
+        //TODO - chargerId 검증 로직 추가(병합 이후)
+        this.chargerStateService.createChargerState(chargerDto);
+    }
+
+    // 특정 충전기 상태 업데이트
+    public void changeTargetChargerState(ChargerStateDto chargerStateDto) {
+        this.chargerStateService.changeTargetChargerState(chargerStateDto);
+    }
 }

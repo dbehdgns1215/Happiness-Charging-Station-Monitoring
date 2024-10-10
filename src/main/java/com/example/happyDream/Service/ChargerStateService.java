@@ -4,6 +4,7 @@ import com.example.happyDream.DTO.ChargerDto;
 import com.example.happyDream.DTO.ChargerStateDto;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class ChargerStateService {
                 .collect(Collectors.toList());
     }
 
-    // 특정 충전기 상태 조회(엔티티 직접 반환)
+    // 특정 충전기 상태 조회(엔티티 직접 반환 - 값 변경 시 사용)
     private ChargerStateEntity getTargetChargerStateLegacy(ChargerDto chargerDto) {
         Optional<ChargerStateEntity> entity = this.chargerStateRepository.findByChargerId(chargerDto.toEntity());
         if (entity.isPresent()) {
@@ -57,6 +58,11 @@ public class ChargerStateService {
     @Transactional(readOnly = true)
     public List<ChargerStateDto> getAllChargerState() {
         List<ChargerStateDto> dtoList = convertEntityListToDtoList(this.chargerStateRepository.findAll());
+
+        if (dtoList.isEmpty()) {
+            log.info("데이터가 비어있음");
+        }
+
         return dtoList;
     }
 
@@ -88,7 +94,8 @@ public class ChargerStateService {
     public void createChargerState(ChargerDto chargerDto) {
         try {
             this.getTargetChargerState(chargerDto);
-            log.error("존재하는 충전기에 대한 상태 추가 - 충전기 id: {}", chargerDto.getId());
+            log.error("이미 존재하는 충전기 상태에 대한 추가 - 충전기 id: {}", chargerDto.getId());
+            //throw new EntityExistsException(); // 테스트용
         } catch (EntityNotFoundException e) {
             ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
             this.chargerStateRepository.save(entity);
@@ -97,12 +104,18 @@ public class ChargerStateService {
 
     // 특정 충전기 상태 업데이트
     @Transactional
-    public void changeTargetChargerState(ChargerDto chargerDto, Boolean usingYn) {
+    public void changeTargetChargerState(ChargerStateDto chargerStateDto) {
+        Integer chargerId = chargerStateDto.getChargerId().getId();
+        ChargerDto chargerDto = ChargerDto.builder().id(chargerId).build();
+
         try {
             ChargerStateEntity entity = getTargetChargerStateLegacy(chargerDto);
-            entity.changeUsingYn(usingYn);
+
+            entity.changeUsingYn(chargerStateDto.getUsingYn());
+            entity.changeBrokenYn(chargerStateDto.getBrokenYn());
         } catch (EntityNotFoundException e) {
-            log.error("존재하지 않는 충전기에 대한 상태 업데이트 - 충전기 id: {}", chargerDto.getId());
+            log.error("존재하지 않는 충전기에 대한 상태 업데이트 - 충전기 id: {}", chargerId);
+            //throw new EntityNotFoundException(); // 테스트용
         }
     }
 }
