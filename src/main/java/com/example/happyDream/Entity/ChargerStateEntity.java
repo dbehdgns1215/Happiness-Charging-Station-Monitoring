@@ -1,6 +1,6 @@
 package com.example.happyDream.Entity;
 
-import com.example.happyDream.DTO.ChargerStateDto;
+import com.example.happyDream.DTO.ChargerStateDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -67,8 +67,8 @@ public class ChargerStateEntity {
         this.modifiedAt = modifiedAt;
     }
 
-    public ChargerStateDto toDto() {
-        return ChargerStateDto.builder()
+    public ChargerStateDTO toDTO() {
+        return ChargerStateDTO.builder()
                 .id(id)
                 .chargerId(chargerId)
                 .usingYn(usingYn)

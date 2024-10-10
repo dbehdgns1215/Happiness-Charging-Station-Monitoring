@@ -1,6 +1,6 @@
 package com.example.happyDream.Entity;
 
-import com.example.happyDream.DTO.ChargerDto;
+import com.example.happyDream.DTO.ChargerDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -139,8 +139,8 @@ public class ChargerEntity {
         this.deletedAt = deletedAt;
     }
 
-    public ChargerDto toDto() {
-        return ChargerDto.builder()
+    public ChargerDTO toDTO() {
+        return ChargerDTO.builder()
                 .id(id)
                 .name(name)
                 .city1(city1)

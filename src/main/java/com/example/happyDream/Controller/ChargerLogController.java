@@ -1,7 +1,7 @@
 package com.example.happyDream.Controller;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerLogDto;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Service.ChargerLogService;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +25,7 @@ public class ChargerLogController {
     //전체 충전 로그 조회
     @GetMapping("/api/v1/chargers/logs")
     public String getAllChargerLog() {
-        List<ChargerLogDto> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog();
+        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog();
         return "";
     }
 
@@ -40,8 +40,8 @@ public class ChargerLogController {
     //특정 충전기의 전체 충전 로그 조회
     @GetMapping("/api/v1/chargers/logs/{id}")
     public String getChargerLog(@PathVariable("id") Integer chargerId) {
-        ChargerDto chargerDto = chargerServiceFacade.chargerSelect(chargerId);
-        List<ChargerLogDto> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
+        ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
+        List<ChargerLogDTO> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
         return "";
     }
 
@@ -49,14 +49,14 @@ public class ChargerLogController {
     @PostMapping("/api/v1/chargers/logs/{id}")
     public String createChargerLog(@PathVariable("id") Integer chargerId, Float ampere) {
         try {
-            ChargerDto chargerDto = chargerServiceFacade.chargerSelect(chargerId);
+            ChargerDTO chargerDTO = chargerServiceFacade.chargerSelect(chargerId);
 
-            ChargerLogDto chargerLogDto = ChargerLogDto.builder()
-                    .chargerId(chargerDto.toEntity())
+            ChargerLogDTO chargerLogDTO = ChargerLogDTO.builder()
+                    .chargerId(chargerDTO.toEntity())
                     .ampere(ampere)
                     .build();
 
-            chargerServiceFacade.createTargetChargerLog(chargerLogDto);
+            chargerServiceFacade.createTargetChargerLog(chargerLogDTO);
 
         } catch (EntityNotFoundException ignored) {
             log.warn("존재하지 않는 충전기 id: {}", chargerId);

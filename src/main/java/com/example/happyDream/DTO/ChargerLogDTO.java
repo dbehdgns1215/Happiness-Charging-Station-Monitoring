@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ChargerLogDto {
+public class ChargerLogDTO {
     //충전 로그 데이터
     private Long id;
     private ChargerEntity chargerId;
@@ -21,7 +21,7 @@ public class ChargerLogDto {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public ChargerLogDto(Long id, ChargerEntity chargerId, Float ampere, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ChargerLogDTO(Long id, ChargerEntity chargerId, Float ampere, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.chargerId = chargerId;
         this.ampere = ampere;

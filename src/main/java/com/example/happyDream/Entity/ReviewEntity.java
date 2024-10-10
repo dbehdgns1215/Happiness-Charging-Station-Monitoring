@@ -1,6 +1,6 @@
 package com.example.happyDream.Entity;
 
-import com.example.happyDream.DTO.ReviewDto;
+import com.example.happyDream.DTO.ReviewDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -68,8 +68,8 @@ public class ReviewEntity {
         this.deletedAt = deletedAt;
     }
 
-    public ReviewDto toDto() {
-        return ReviewDto.builder()
+    public ReviewDTO toDTO() {
+        return ReviewDTO.builder()
                 .id(id)
                 .chargerId(chargerId)
                 .userId(userId)

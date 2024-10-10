@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ChargerDto {
+public class ChargerDTO {
     //츙전기 기본 데이터
     private Integer id;
     private String name;
@@ -43,7 +43,7 @@ public class ChargerDto {
     private LocalDateTime deletedAt;
 
     @Builder
-    public ChargerDto(Integer id, String name, String city1, String city2, Integer city2Code, String addressNew, String addressOld, String addressDetail, Double latitude, Double longitude, Time weekdayOpen, Time saturdayOpen, Time holidayOpen, Time weekdayClose, Time saturdayClose, Time holidayClose, Integer chargerCount, Boolean chargeAirYn, Boolean chargePhoneYn, String callNumber, LocalDate updatedDate, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+    public ChargerDTO(Integer id, String name, String city1, String city2, Integer city2Code, String addressNew, String addressOld, String addressDetail, Double latitude, Double longitude, Time weekdayOpen, Time saturdayOpen, Time holidayOpen, Time weekdayClose, Time saturdayClose, Time holidayClose, Integer chargerCount, Boolean chargeAirYn, Boolean chargePhoneYn, String callNumber, LocalDate updatedDate, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
         this.name = name;
         this.city1 = city1;

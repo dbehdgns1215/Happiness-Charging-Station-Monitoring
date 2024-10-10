@@ -1,9 +1,8 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerLogDto;
-import com.example.happyDream.DTO.ChargerStateDto;
-import com.example.happyDream.Entity.ChargerStateEntity;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerLogDTO;
+import com.example.happyDream.DTO.ChargerStateDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class ChargerServiceFacade {
     /* ===== ChargerService ===== */
 
     // 전체 충전기 조회
-    public List<ChargerDto> chargerSelectAll(){
+    public List<ChargerDTO> chargerSelectAll(){
         return this.chargerService.chargerSelectAll();
     }
 
@@ -35,7 +34,7 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 조회
-    public ChargerDto chargerSelect(Integer id){
+    public ChargerDTO chargerSelect(Integer id){
         return this.chargerService.chargerSelect(id);
     }
 
@@ -47,7 +46,7 @@ public class ChargerServiceFacade {
     /* ===== ChargerLogService ===== */
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllChargerLog() {
+    public List<ChargerLogDTO> getAllChargerLog() {
         return this.chargerLogService.getAllChargerLog();
     }
 
@@ -57,20 +56,20 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDto> getAllTargetChargerLog(ChargerDto ChargerDto) {
-        return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
+    public List<ChargerLogDTO> getAllTargetChargerLog(ChargerDTO ChargerDTO) {
+        return this.chargerLogService.getAllTargetChargerLog(ChargerDTO);
     }
 
     // 특정 충전기 충전 로그 추가
-    public void createTargetChargerLog(ChargerLogDto chargerLogDto) {
+    public void createTargetChargerLog(ChargerLogDTO chargerLogDTO) {
         //TODO - chargerId 검증 로직 추가(병합 이후)
-        this.chargerLogService.createTargetChargerLog(chargerLogDto);
+        this.chargerLogService.createTargetChargerLog(chargerLogDTO);
     }
 
     /* ===== ChargerStateService ===== */
 
     // 전체 충전기 상태 조회
-    public List<ChargerStateDto> getAllChargerState() {
+    public List<ChargerStateDTO> getAllChargerState() {
         return this.chargerStateService.getAllChargerState();
     }
 
@@ -80,22 +79,22 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 상태 조회
-    public ChargerStateDto getTargetChargerState(ChargerDto chargerDto) {
+    public ChargerStateDTO getTargetChargerState(ChargerDTO chargerDTO) {
         try {
-            return this.chargerStateService.getTargetChargerState(chargerDto);
+            return this.chargerStateService.getTargetChargerState(chargerDTO);
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException();
         }
     }
 
     // 특정 충전기 상태 추가
-    public void createTargetChargerState(ChargerDto chargerDto) {
+    public void createTargetChargerState(ChargerDTO chargerDTO) {
         //TODO - chargerId 검증 로직 추가(병합 이후)
-        this.chargerStateService.createChargerState(chargerDto);
+        this.chargerStateService.createChargerState(chargerDTO);
     }
 
     // 특정 충전기 상태 업데이트
-    public void changeTargetChargerState(ChargerStateDto chargerStateDto) {
-        this.chargerStateService.changeTargetChargerState(chargerStateDto);
+    public void changeTargetChargerState(ChargerStateDTO chargerStateDTO) {
+        this.chargerStateService.changeTargetChargerState(chargerStateDTO);
     }
 }

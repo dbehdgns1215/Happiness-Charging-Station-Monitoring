@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class UserDto {
+public class UserDTO {
     //사용자 데이터
     private Integer id;
     private String username;
@@ -24,7 +24,7 @@ public class UserDto {
     private LocalDateTime deletedAt;
 
     @Builder
-    public UserDto(Integer id, String username, String password, String email, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+    public UserDTO(Integer id, String username, String password, String email, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
         this.username = username;
         this.password = password;

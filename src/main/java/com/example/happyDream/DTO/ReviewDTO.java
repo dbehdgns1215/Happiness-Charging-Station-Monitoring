@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ReviewDto {
+public class ReviewDTO {
     //리뷰 데이터
     private Integer id;
     private ChargerEntity chargerId;
@@ -26,7 +26,7 @@ public class ReviewDto {
     private LocalDateTime deletedAt;
 
     @Builder
-    public ReviewDto(Integer id, ChargerEntity chargerId, UserEntity userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+    public ReviewDTO(Integer id, ChargerEntity chargerId, UserEntity userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
         this.chargerId = chargerId;
         this.userId = userId;
