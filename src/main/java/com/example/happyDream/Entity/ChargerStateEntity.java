@@ -1,6 +1,7 @@
 package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.ChargerStateDTO;
+import com.example.happyDream.DTO.ChargerStateDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -8,8 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,7 +22,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class ChargerStateEntity {
-    private static final Logger log = LoggerFactory.getLogger(ChargerStateEntity.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
@@ -59,7 +57,8 @@ public class ChargerStateEntity {
     private LocalDateTime modifiedAt; //데이터 수정 시각
 
     @Builder
-    public ChargerStateEntity(ChargerEntity chargerId, Boolean usingYn, Boolean brokenYn, LocalDateTime usingAt, LocalDateTime brokenAt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ChargerStateEntity(Integer id, ChargerEntity chargerId, Boolean usingYn, Boolean brokenYn, LocalDateTime usingAt, LocalDateTime brokenAt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
         this.chargerId = chargerId;
         this.usingYn = usingYn;
         this.brokenYn = brokenYn;
@@ -71,6 +70,7 @@ public class ChargerStateEntity {
 
     public ChargerStateDTO toDTO() {
         return ChargerStateDTO.builder()
+                .id(id)
                 .chargerId(chargerId)
                 .usingYn(usingYn)
                 .brokenYn(brokenYn)
@@ -82,20 +82,14 @@ public class ChargerStateEntity {
     }
 
     public void changeUsingYn(Boolean value) {
-        if (value == null) {
-            log.error("changeUsingYn = null");
-        }
-        else {
+        if (value != null) {
             this.usingYn = value;
             this.usingAt = LocalDateTime.now();
         }
     }
 
     public void changeBrokenYn(Boolean value) {
-        if (value == null) {
-            log.error("changeBrokenYn = null");
-        }
-        else {
+        if (value != null) {
             this.brokenYn = value;
             this.brokenAt = LocalDateTime.now();
         }
