@@ -1,7 +1,6 @@
 package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.ChargerStateDTO;
-import com.example.happyDream.DTO.ChargerStateDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
