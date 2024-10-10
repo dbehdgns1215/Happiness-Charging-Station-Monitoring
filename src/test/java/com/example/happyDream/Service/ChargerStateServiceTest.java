@@ -1,7 +1,7 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDto;
-import com.example.happyDream.DTO.ChargerStateDto;
+import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
 import jakarta.persistence.EntityExistsException;
@@ -37,7 +37,7 @@ class ChargerStateServiceTest {
     ChargerStateRepository chargerStateRepository;
 
     // 공통 given
-    ChargerDto chargerDto = ChargerDto.builder().id(3).build();
+    ChargerDTO chargerDTO = ChargerDTO.builder().id(3).build();
 
 
     /* ===== PUBLIC TEST ===== */
@@ -45,7 +45,7 @@ class ChargerStateServiceTest {
     @DisplayName("데이터베이스가 비었을 때 getAll")
     void getAllChargerStateNullDatabase() {
         // given
-        List<ChargerStateDto> result = chargerStateService.getAllChargerState();
+        List<ChargerStateDTO> result = chargerStateService.getAllChargerState();
 
         // when 데이터베이스 조회시 빈 값 반환한다고 가정
         when(chargerStateRepository.findAll()).thenReturn(Collections.emptyList());
@@ -60,22 +60,20 @@ class ChargerStateServiceTest {
     @DisplayName("이미 존재하는 충전기 상태에 대한 추가")
     void createChargerStateAlreadyExistTest() {
         // given
-        ChargerStateEntity existingEntity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
+        ChargerStateEntity existingEntity = ChargerStateEntity.builder().chargerId(chargerDTO.toEntity()).build();
 
         // when 이미 존재하는 엔티티가 있다고 가정
         when(chargerStateRepository.findByChargerId(any())).thenReturn(Optional.of(existingEntity));
 
         // then EntityExistsException 발생 확인
-        assertThrows(EntityExistsException.class, () -> {
-            chargerStateService.createChargerState(chargerDto);
-        });
+        assertThrows(EntityExistsException.class, () -> chargerStateService.createChargerState(chargerDTO));
     }
 
     @Test
     @DisplayName("존재하지 않는 충전기 조회")
     void getTargetChargerStateNotFoundTest() {
         // when EntityNotFoundException 발생 확인
-        assertThatThrownBy(() -> chargerStateService.getTargetChargerState(chargerDto))
+        assertThatThrownBy(() -> chargerStateService.getTargetChargerState(chargerDTO))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
@@ -83,13 +81,13 @@ class ChargerStateServiceTest {
     @DisplayName("존재하지 않는 충전기 업데이트")
     void changeTargetChargerStateNotFoundTest() {
         // given
-        ChargerStateDto chargerStateDto = ChargerStateDto.builder()
-                .chargerId(chargerDto.toEntity())
+        ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
+                .chargerId(chargerDTO.toEntity())
                 .usingYn(true)
                 .build();
 
         // when EntityNotFoundException 발생 확인
-        assertThatThrownBy(() -> chargerStateService.changeTargetChargerState(chargerStateDto))
+        assertThatThrownBy(() -> chargerStateService.changeTargetChargerState(chargerStateDTO))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
@@ -98,12 +96,12 @@ class ChargerStateServiceTest {
     @DisplayName("충전기 상태 변경 시 Null 값 처리 테스트")
     void changeTargetChargerStateBooleanNullTest() {
         // given
-        ChargerStateDto chargerStateDto = ChargerStateDto.builder()
-                .chargerId(chargerDto.toEntity())
+        ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
+                .chargerId(chargerDTO.toEntity())
                 .usingYn(true)
                 .build();
 
         // when 설정하지 않은 값이 null 값을 가지는지 확인
-        assertThat(chargerStateDto.getBrokenYn()).isNull();
+        assertThat(chargerStateDTO.getBrokenYn()).isNull();
     }
 }
