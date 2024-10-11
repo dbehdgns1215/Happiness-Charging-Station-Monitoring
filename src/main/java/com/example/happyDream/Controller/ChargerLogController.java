@@ -22,6 +22,12 @@ public class ChargerLogController {
         this.chargerServiceFacade = chargerServiceFacade;
     }
 
+//    @GetMapping("/chargers/logs")
+//    public String getAllChargerLog() {}
+//    @GetMapping("/chargers/logs/{id}")
+//    public String getChargerLog(@PathVariable("id") Integer chargerId) {}
+
+    //TODO - API 엔트리 포인트 ChargerLogRestController로 분리
     //전체 충전 로그 조회
     @GetMapping("/api/v1/chargers/logs")
     public String getAllChargerLog() {
