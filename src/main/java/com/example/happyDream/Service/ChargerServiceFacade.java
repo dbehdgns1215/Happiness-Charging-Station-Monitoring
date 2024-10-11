@@ -3,7 +3,6 @@ package com.example.happyDream.Service;
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
-import com.example.happyDream.Entity.ChargerEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,8 +61,11 @@ public class ChargerServiceFacade {
 
     // 특정 충전기 충전 로그 추가
     public void createTargetChargerLog(ChargerLogDTO chargerLogDto) {
-        //TODO - chargerId 검증 로직 추가(병합 이후)
-        this.chargerLogService.createTargetChargerLog(chargerLogDto);
+        // FK(ChargerId) 존재 여부 1차 확인 후 PK(ChargerLogId) 부존재 여부 2차 확인
+        try {
+            this.chargerService.chargerSelect(chargerLogDto.getChargerId().getId()); // 검증용 호출, 반환값 ignored
+            this.chargerLogService.createTargetChargerLog(chargerLogDto);
+        } catch (EntityNotFoundException ignored) { }
     }
 
     /* ===== ChargerStateService ===== */
@@ -89,7 +91,6 @@ public class ChargerServiceFacade {
 
     // 특정 충전기 상태 추가
     public void createTargetChargerState(ChargerDTO chargerDto) {
-        //TODO - chargerId 검증 로직 추가(병합 이후)
         this.chargerStateService.createChargerState(chargerDto);
     }
 
