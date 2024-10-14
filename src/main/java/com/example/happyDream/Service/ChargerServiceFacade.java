@@ -37,6 +37,11 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelect(id);
     }
 
+    // 특정 충전기 조회(주소)
+    public List<ChargerDTO> chargerSelectByAddress(String address){
+        return this.chargerService.chargerSelectByAddress(address);
+    }
+
     // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerService.chargerDelete(id);

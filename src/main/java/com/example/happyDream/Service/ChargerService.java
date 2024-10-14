@@ -106,6 +106,17 @@ public class ChargerService {
         }
     }
 
+    public List<ChargerDTO> chargerSelectByAddress(String address){
+        List<ChargerEntity> chargers = this.chargerRepository.findChargersByAddress(address);
+        // chargers 리스트가 비어 있는지 체크하고, 비어 있지 않다면 내용을 출력
+        if (chargers.isEmpty()) {
+            System.out.println("충전소 데이터가 없습니다.");
+            throw new EntityNotFoundException();
+        } else {
+            return convertEntityListToDtoList(chargers);
+        }
+    }
+
     // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerRepository.deleteById(id);
