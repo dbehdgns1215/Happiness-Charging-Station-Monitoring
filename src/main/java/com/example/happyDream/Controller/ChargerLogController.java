@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @Controller
 public class ChargerLogController {
@@ -29,13 +27,13 @@ public class ChargerLogController {
     }
     
     // 특정 충전기 로그 조회
-    @GetMapping("/chargers/logs/{id}")
+    @GetMapping("/chargers/{id}/logs")
     public String getChargerLog(@PathVariable("id") Integer chargerId) {
         return "";
     }
 
     // TODO - 파라미터 웹에 맞게 수정 예정
-    @PostMapping("/chargers/logs/{id}")
+    @PostMapping("/chargers/{id}/logs")
     public String createChargerLog(@PathVariable("id") Integer chargerId, Float ampere) {
         try {
             ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);

@@ -40,7 +40,7 @@ public class ChargerLogRestController {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    @GetMapping("/chargers/logs/{id}")
+    @GetMapping("/chargers/{id}/logs")
     public String getChargerLog(@PathVariable("id") Integer chargerId) {
         ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
         List<ChargerLogDTO> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
@@ -48,7 +48,7 @@ public class ChargerLogRestController {
     }
 
     // 특정 충전기 충전 로그 추가
-    @PostMapping("/chargers/logs/{id}")
+    @PostMapping("/chargers/{id}/logs")
     public String createChargerLog(@PathVariable("id") Integer chargerId, Float ampere) {
         try {
             ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
@@ -74,8 +74,8 @@ public class ChargerLogRestController {
     }
 
     // 충전기 하드웨어 설정값 변경
-    @PostMapping("/chargers/logs/upgrade")
-    public String createChargerLogSetting() {
+    @PutMapping("/chargers/logs/upgrade")
+    public String updateChargerLogSetting() {
         return "";
     }
 }
