@@ -14,13 +14,13 @@ public class ResponseDTO {
     private String apiVersion;
     private String status;
     @SerializedName("response_code")
-    private String responseCode;
+    private Integer responseCode;
     private String message;
     private Integer count;
     private List<Object> data;
 
     @Builder
-    public ResponseDTO(String apiVersion, String status, String responseCode, String message, Integer count, List<Object> data) {
+    public ResponseDTO(String apiVersion, String status, Integer responseCode, String message, Integer count, List<Object> data) {
         this.apiVersion = apiVersion;
         this.status = status;
         this.responseCode = responseCode;
