@@ -1,15 +1,23 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ResponseDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
+import com.example.happyDream.Util.LocalDateAdapter;
+import com.example.happyDream.Util.LocalDateTimeAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -38,8 +46,22 @@ public class ChargerController {
     }
     @GetMapping("/api/chargers")
     @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
-    public List<ChargerDTO> getChargersApi() {
-        return this.chargerServiceFacade.chargerSelectAll();
+    public String getChargersApi() {
+        List<ChargerDTO> chargerDTOList = this.chargerServiceFacade.chargerSelectAll();
+        ResponseDTO responseDto = ResponseDTO.builder()
+                .apiVersion("v1")
+                .status("success")
+                .responseCode("200")
+                .message("success")
+                .count(chargerDTOList.size())
+                .data(Collections.singletonList(chargerDTOList))
+                .build();
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+        return gson.toJson(responseDto);
     }
 
     //전체 충전기 삭제
