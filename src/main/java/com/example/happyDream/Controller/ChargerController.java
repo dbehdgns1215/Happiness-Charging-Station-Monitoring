@@ -37,10 +37,25 @@ public class ChargerController {
         return "chargers"; // chargers.html로 이동
     }
 
+    //충전기 전체 조회
     @GetMapping("/api/chargers")
     @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
     public List<ChargerDTO> getChargersApi() {
         return this.chargerServiceFacade.chargerSelectAll();
+    }
+
+    //충전기 주소 조회
+    @GetMapping("/api/chargers/{address}")
+    @ResponseBody
+    public List<ChargerDTO> chargerSelect(@PathVariable("address") String address) {
+        return this.chargerServiceFacade.chargerSelectByAddress(address);
+    }
+
+    //주변 충전기 조회
+    @GetMapping("/api/chargers/{latitude}/{longitude}")
+    @ResponseBody
+    public List<ChargerDTO> chargerSelect(@PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
+        return this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
     }
 
     //전체 충전기 삭제
@@ -64,23 +79,6 @@ public class ChargerController {
     public String chargerSelect(@PathVariable("id") Integer id) {
         this.chargerServiceFacade.chargerSelect(id);
         return " ";
-    }
-
-    //특정 충전기 조회(주소)
-    @GetMapping("/api/chargers/{address}")
-    @ResponseBody
-    public List<ChargerDTO> chargerSelect(@PathVariable("address") String address) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
-        System.out.println("충전소 데이터:");
-        // 각 ChargerEntity를 출력
-        for (ChargerDTO charger : chargers) {
-            System.out.println("ID: " + charger.getId());
-            System.out.println("이름: " + charger.getName());
-            System.out.println("주소 (구주소): " + charger.getAddressOld());
-            System.out.println("주소 (신주소): " + charger.getAddressNew());
-            System.out.println("-------------------------------------------------");
-        }
-        return chargers;
     }
 
     //특정 충전기 삭제

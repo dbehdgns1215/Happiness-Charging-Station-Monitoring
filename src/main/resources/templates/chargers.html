@@ -22,6 +22,11 @@
     <input type="text" id="addressInput" placeholder="주소를 입력하세요" />
     <button id="searchButton">검색</button>
 </div>
+<div>
+    <input type="text" id="latitudeInput" placeholder="위도를 입력하세요" />
+    <input type="text" id="longitudeInput" placeholder="경도를 입력하세요" />
+    <button id="searchNearButton">주변 충전기 검색</button>
+</div>
 
 <div id="map"></div>
 
@@ -97,6 +102,85 @@
 
         // 주소로 검색 요청
         fetch(`/api/chargers/${encodeURIComponent(address)}`)
+            .then(response => response.json())
+            .then(chargerData => {
+                console.log("충전소 데이터:", chargerData);
+
+                // 기존 마커 제거 (기존 마커가 있을 경우)
+                markers.forEach(marker => marker.setMap(null)); // 기존 마커 제거
+                markers = []; // 마커 배열 초기화
+
+                // 데이터가 비어있는지 확인
+                if (!chargerData || chargerData.length === 0) {
+                    console.warn("충전소 데이터가 없습니다."); // 빈 데이터 경고
+                    return;
+                }
+
+                chargerData.forEach(charger => {
+                    console.log(`충전소 추가: ${charger.name} - 위도: ${charger.latitude}, 경도: ${charger.longitude}`);
+
+                    const marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(charger.latitude, charger.longitude),
+                        map: map,
+                        title: charger.name // 마커에 제목 추가
+                    });
+
+                    // 마커 클릭 시 정보창에 표시할 내용 생성
+                    const contentString = `
+                        <div class="info-window">
+                            <h3>${charger.name}</h3>
+                            <p><strong>도로명주소:</strong> ${charger.addressNew}</p>
+                            <p><strong>주소:</strong> ${charger.addressOld}</p>
+                            <p><strong>상태:</strong> ${charger.status}</p>
+                            <p><strong>충전 속도:</strong> ${charger.speed} kW</p>
+                            <p><strong>평일 운영 시간:</strong> ${charger.weekdayOpen} ~ ${charger.weekdayClose}</p>
+                            <p><strong>토요일 운영 시간:</strong> ${charger.saturdayOpen} ~ ${charger.saturdayClose}</p>
+                            <p><strong>일요일 운영 시간:</strong> ${charger.holidayOpen} ~ ${charger.holidayClose}</p>
+                            <p><strong>전화번호:</strong> ${charger.callNumber}</p>
+                        </div>
+                    `;
+
+                    const infowindow = new naver.maps.InfoWindow({
+                        content: contentString
+                    });
+
+                    naver.maps.Event.addListener(marker, 'click', function() {
+                        infowindow.open(map, marker.getPosition());
+                    });
+
+                    // 마커 배열에 추가
+                    markers.push(marker);
+                });
+
+                // 주소로 이동
+                const geocoder = new naver.maps.Service.Geocoder();
+                geocoder.geocode({ address: address }, (status, result) => {
+                    if (status === naver.maps.Service.Status.OK) {
+                        const latlng = new naver.maps.LatLng(result.v2.addresses[0].y, result.v2.addresses[0].x);
+                        map.setCenter(latlng);
+                        map.setZoom(15); // 줌 레벨 조정
+                    } else {
+                        alert("주소를 찾을 수 없습니다.");
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("데이터 가져오기 오류:", error);
+            });
+    });
+
+    // 주변 충전기 검색 버튼 클릭 이벤트
+    document.getElementById('searchNearButton').addEventListener('click', function() {
+        const latitude = document.getElementById('latitudeInput').value;
+        const longitude = document.getElementById('longitudeInput').value;
+
+        if (!latitude || !longitude) {
+            alert("위도와 경도를 입력해주세요.");
+            return;
+        }
+
+        // 주소로 검색 요청
+        fetch(`/api/chargers/${encodeURIComponent(latitude)}/${encodeURIComponent(longitude)}`)
             .then(response => response.json())
             .then(chargerData => {
                 console.log("충전소 데이터:", chargerData);
