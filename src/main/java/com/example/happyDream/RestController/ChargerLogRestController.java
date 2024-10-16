@@ -2,18 +2,27 @@ package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
+import com.example.happyDream.DTO.ResponseDTO;
 import com.example.happyDream.Service.ChargerLogService;
 import com.example.happyDream.Service.ChargerServiceFacade;
+import com.example.happyDream.Util.LocalDateAdapter;
+import com.example.happyDream.Util.LocalDateTimeAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(path = "/api/v1", produces = "application/json")
 public class ChargerLogRestController {
     private final ChargerServiceFacade chargerServiceFacade;
 
@@ -49,8 +58,14 @@ public class ChargerLogRestController {
 
     // 특정 충전기 충전 로그 추가
     @PostMapping("/chargers/{id}/logs")
-    public String createChargerLog(@PathVariable("id") Integer chargerId, Float ampere) {
+    public String createChargerLog(@PathVariable("id") Integer chargerId, @RequestBody ChargerLogDTO chargerLogDTO) {
+        ResponseDTO responseDto;
+
         try {
+            Float ampere = chargerLogDTO.getAmpere();
+            if (ampere == null) {
+                throw new NullPointerException("ampere is null");
+            }
             ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
 
             ChargerLogDTO chargerLogDto = ChargerLogDTO.builder()
@@ -59,12 +74,23 @@ public class ChargerLogRestController {
                     .build();
 
             chargerServiceFacade.createTargetChargerLog(chargerLogDto);
-
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK);
         } catch (EntityNotFoundException ignored) {
             log.warn("존재하지 않는 충전기 id: {}", chargerId);
+            responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_NOT_FOUND, "존재하지 않는 충전기 id: " + chargerId);
+        } catch (NullPointerException e) {
+            log.error("{} - 요청한 충전기 id: {}\n{}", e.getMessage(), chargerId, e.getStackTrace());
+            responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            log.error("알 수 없는 오류 - 요청한 충전기 id: {}\n{}", chargerId, e.getStackTrace());
+            responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "알 수 없는 오류");
         }
 
-        return "";
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+        return gson.toJson(responseDto);
     }
 
     // 충전기 하드웨어 설정값 조회
