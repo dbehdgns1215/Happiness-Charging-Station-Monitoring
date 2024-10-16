@@ -1,4 +1,4 @@
-package com.example.happyDream.Controller;
+package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ResponseDTO;
