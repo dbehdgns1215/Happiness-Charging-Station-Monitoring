@@ -41,12 +41,10 @@ public class UserEntity {
     private Byte userType; //유저 유형
 
     @CreatedDate
-    @NotNull
     @Column(updatable = false)
     private LocalDateTime createdAt; //데이터 생성일
 
     @LastModifiedDate
-    @NotNull
     @Column
     private LocalDateTime modifiedAt; //데이터 수정일
 
