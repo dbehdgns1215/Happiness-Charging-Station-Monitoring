@@ -46,16 +46,22 @@ public class ChargerLogService {
     }
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllChargerLog() {
+    public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
         List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
+        if (join == false) {
+            for (ChargerLogDTO dto : dtoList) {
+                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId().getId()).build();
+                dto.setChargerId(chargerDto.toEntity());
+            }
+        }
         return dtoList;
     }
 
     // 전체 충전 로그 삭제
     public void deleteAllChargerLog() {
-        int beforeCount = getAllChargerLog().size();
+        int beforeCount = getAllChargerLog(false).size();
         this.chargerLogRepository.deleteAll();
-        int afterCount = beforeCount - getAllChargerLog().size();
+        int afterCount = beforeCount - getAllChargerLog(false).size();
         log.warn("전체 충전 로그 {}개가 삭제됨", afterCount);
     }
 

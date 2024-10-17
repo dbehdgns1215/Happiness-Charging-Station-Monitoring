@@ -1,6 +1,7 @@
 package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.UserDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -15,45 +16,55 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user") //MYSQL 외 타 DB는 문제 발생할 수 있음(users, member 등 대응)
+@Schema(description = "유저 Entity")
 @Getter //Setter 미사용
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; //유저 식별자
+    @Schema(description = "유저 식별자")
+    private Integer id;
 
     @NotNull
     @Column(length = 32)
-    private String username; //아이디
+    @Schema(description = "아이디")
+    private String username;
 
     @NotNull
     @Column(length = 32)
-    private String password; //비밀번호
+    @Schema(description = "비밀번호")
+    private String password;
 
     @NotNull
     @Column(length = 64, unique = true)
-    private String email; //이메일
+    @Schema(description = "이메일")
+    private String email;
 
     //TODO - 추후 Enum 전환하고, 컨버터 추가
     @NotNull
     @Column(columnDefinition = "TINYINT UNSIGNED")
-    private Byte userType; //유저 유형
+    @Schema(description = "유저 타입")
+    private Byte userType;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt; //데이터 생성일
+    @Schema(description = "데이터 생성 시각")
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
-    private LocalDateTime modifiedAt; //데이터 수정일
+    @Schema(description = "데이터 수정 시각")
+    private LocalDateTime modifiedAt;
 
     @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
-    private Boolean deletedYn; //데이터 삭제 여부
+    @Schema(description = "삭제 여부")
+    private Boolean deletedYn;
 
     @Column(insertable = false)
-    private LocalDateTime deletedAt; //데이터 삭제일
+    @Schema(description = "데이터 삭제 시각")
+    private LocalDateTime deletedAt;
 
     @Builder
     public UserEntity(Integer id, String username, String password, String email, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {

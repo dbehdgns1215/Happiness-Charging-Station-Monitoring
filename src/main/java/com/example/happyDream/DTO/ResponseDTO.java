@@ -32,7 +32,7 @@ public class ResponseDTO {
     private Integer count = 0; // 기본값 0 설정
 
     @Builder.Default
-    private List<Object> data = Collections.unmodifiableList(new ArrayList<>()); // 기본값 빈 리스트 설정
+    private List<?> data = Collections.unmodifiableList(new ArrayList<>()); // 기본값 빈 리스트 설정
 
     public static ResponseDTOBuilder builder() {
         return new ResponseDTOBuilder(); // Builder 어노테이션이 생성한 빌더
@@ -48,7 +48,7 @@ public class ResponseDTO {
                 .build();
     }
 
-    public static ResponseDTO success(String apiVersion, int responseCode, List<Object> data) {
+    public static ResponseDTO success(String apiVersion, int responseCode, List<?> data) {
         return builder()
                 .apiVersion(apiVersion)
                 .status("success")

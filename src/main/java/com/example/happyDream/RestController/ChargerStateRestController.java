@@ -3,6 +3,7 @@ package com.example.happyDream.RestController;
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.Service.ChargerServiceFacade;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,8 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(path = "/api/v1", produces = "application/json")
+@Tag(name = "ChargerState", description = "충전기 상태 API")
 public class ChargerStateRestController {
     private final ChargerServiceFacade chargerServiceFacade;
 

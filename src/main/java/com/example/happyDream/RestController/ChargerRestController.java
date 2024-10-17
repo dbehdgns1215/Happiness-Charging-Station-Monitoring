@@ -7,6 +7,7 @@ import com.example.happyDream.Util.LocalDateAdapter;
 import com.example.happyDream.Util.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 @RestController //ResponseBody + Controller 어노테이션
 @RequestMapping(path = "/api/v1", produces = "application/json")
+@Tag(name = "Charger", description = "충전기 정보 API")
 public class ChargerRestController {
     private final ChargerServiceFacade chargerServiceFacade;
 
