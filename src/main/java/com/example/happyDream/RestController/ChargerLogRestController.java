@@ -6,10 +6,7 @@ import com.example.happyDream.DTO.ResponseDTO;
 import com.example.happyDream.Service.ChargerLogService;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.example.happyDream.Util.GsonUtil;
-import com.example.happyDream.Util.LocalDateAdapter;
-import com.example.happyDream.Util.LocalDateTimeAdapter;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -40,7 +37,11 @@ public class ChargerLogRestController {
     }
     
     @GetMapping("/chargers/logs")
-    @Operation(summary = "전체 충전 로그 조회", description = "전체 충전기의 충전 로그를 조회합니다.")
+    @Operation(summary = "전체 충전 로그 조회", description = "전체 충전기의 충전 로그를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "204", description = "조회는 성공했지만, 데이터가 없음", content = @Content(schema = @Schema(implementation = String.class)))
+            })
     public String getAllChargerLog() {
         ResponseDTO responseDto;
         try {
@@ -72,7 +73,7 @@ public class ChargerLogRestController {
     @GetMapping("/chargers/{id}/logs")
     @Operation(summary = "특정 충전기의 전체 충전 로그 조회", description = "충전기 id를 입력받아 특정 충전기의 전체 충전 로그를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "충전 로그 조회 성공", content = @Content(schema = @Schema(implementation = String.class)))
+                    @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = String.class)))
     })
     public String getChargerLog(@Parameter(description = "충전기 id", required = true, in = ParameterIn.PATH, example = "1")
                                     @PathVariable("id") Integer chargerId) {
