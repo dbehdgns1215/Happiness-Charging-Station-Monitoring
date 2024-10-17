@@ -31,6 +31,14 @@ public class ChargerController {
         return "chargers";
     }
 
+    // TODO 추후 chargers에 병합 예정
+    @GetMapping("/chargersTest")
+    public String chargerSelectAllTest(Model model) {
+        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
+        model.addAttribute("chargers", chargers);
+        return "chargersTest";
+    }
+
     //충전기 주소 조회
     @GetMapping("/chargers/address/{address}")
     public String chargerSelect(Model model, @PathVariable("address") String address) {
@@ -56,7 +64,7 @@ public class ChargerController {
     @DeleteMapping("/chargers")
     public String chargerDeleteAll() {
         this.chargerServiceFacade.chargerDeleteAll();
-        return " ";
+        return "chargers";
     }
 
     //충전기 추가
