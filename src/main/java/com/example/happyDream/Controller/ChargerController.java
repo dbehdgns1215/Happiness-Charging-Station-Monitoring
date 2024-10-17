@@ -36,7 +36,7 @@ public class ChargerController {
         }
         return "chargers"; // chargers.html로 이동
     }
-    @GetMapping("/api/chargers")
+    @GetMapping("/api/v1/chargers")
     @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
     public List<ChargerDTO> getChargersApi() {
         return this.chargerServiceFacade.chargerSelectAll();
