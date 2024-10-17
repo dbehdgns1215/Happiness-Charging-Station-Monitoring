@@ -1,6 +1,7 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,11 @@ public class ChargerController {
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
         model.addAttribute("chargers", chargers);
         return "chargers";
+    }
+    @GetMapping("/api/chargers")
+    @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
+    public List<ChargerDTO> getChargersApi() {
+        return this.chargerServiceFacade.chargerSelectAll();
     }
 
     //주변 충전기 조회
