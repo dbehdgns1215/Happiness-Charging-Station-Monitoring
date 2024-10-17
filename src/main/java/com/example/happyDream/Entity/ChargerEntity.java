@@ -94,12 +94,10 @@ public class ChargerEntity {
     private LocalDate updatedDate; //기준일자(원본 데이터 기준)
 
     @CreatedDate
-    @NotNull
     @Column(updatable = false) //업데이트 차단
     private LocalDateTime createdAt; //데이터 생성 시각
 
     @LastModifiedDate
-    @NotNull
     @Column
     private LocalDateTime modifiedAt; //데이터 수정 시각
 

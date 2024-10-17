@@ -2,6 +2,7 @@ package com.example.happyDream.DTO;
 
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerLogEntity;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.*;
 
 import java.time.LocalDateTime;

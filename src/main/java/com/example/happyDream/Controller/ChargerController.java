@@ -1,7 +1,6 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
-import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +65,7 @@ public class ChargerController {
     //특정 충전기 조회
     @GetMapping("/chargers/id/{id}")
     public String chargerSelect(@PathVariable("id") Integer id) {
-        this.chargerServiceFacade.chargerSelect(id);
+        ChargerDTO charger = this.chargerServiceFacade.chargerSelect(id);
         return " ";
     }
 

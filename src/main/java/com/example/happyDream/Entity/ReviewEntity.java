@@ -39,12 +39,10 @@ public class ReviewEntity {
     private Byte rating; //별점(1~5)
 
     @CreatedDate
-    @NotNull
     @Column
     private LocalDateTime createdAt; //데이터 생성 시각
 
     @LastModifiedDate
-    @NotNull
     @Column
     private LocalDateTime modifiedAt; //데이터 수정 시각
 

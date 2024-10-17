@@ -38,16 +38,14 @@ public class ChargerStateEntity {
     private Boolean brokenYn; //고장 여부(Y/N)
 
     @CreatedDate
-    @NotNull
+    @Column
     private LocalDateTime usingAt; //고장 상태 변경 시각
 
     @CreatedDate
-    @NotNull
     @Column
     private LocalDateTime brokenAt; //고장 여부 변경 시각
 
     @CreatedDate
-    @NotNull
     @Column(updatable = false)
     private LocalDateTime createdAt; //데이터 생성 시각
 

@@ -34,12 +34,10 @@ public class ChargerLogEntity {
 
     //관리 목적 데이터
     @CreatedDate
-    @NotNull
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @NotNull
     @Column
     private LocalDateTime modifiedAt;
 
