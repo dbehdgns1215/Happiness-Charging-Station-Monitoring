@@ -13,9 +13,7 @@ import java.io.FileReader;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,8 +104,47 @@ public class ChargerService {
         }
     }
 
+    // 특정 충전기 조회(주소)
+    public List<ChargerDTO> chargerSelectByAddress(String address){
+        Set<ChargerEntity> chargers = new HashSet<>();
+        List<ChargerDTO> chargersDTO = new ArrayList<>();
+        String[] addressList = address.split(" ");
+        try{
+            for (int i = 0; i<addressList.length; i++){
+                if(i==0){
+                    chargers.addAll(this.chargerRepository.findChargersByAddress(addressList[i]));
+                }else{
+                    chargers.retainAll(this.chargerRepository.findChargersByAddress(addressList[i]));
+                }
+            }
+            // chargers 리스트가 비어 있는지 체크하고, 비어 있지 않다면 내용을 출력
+            if (chargers.isEmpty()) {
+                System.out.println("충전소 데이터가 없습니다.");
+                throw new EntityNotFoundException();
+            } else {
+                for(ChargerEntity chargerEntitys : chargers) {
+                    chargersDTO.add(chargerEntitys.toDTO());
+                }
+                return chargersDTO;
+            }
+        }catch (Exception exception){
+            throw new EntityNotFoundException();
+        }
+    }
+
     // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerRepository.deleteById(id);
+    }
+
+    // 주변 충전기 조회
+    public List<ChargerDTO> chargerSelectNear(Double latitude, Double longitude){
+        List<ChargerEntity> chargers = this.chargerRepository.findChargersByNear(latitude, longitude);
+        if(chargers.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        else{
+            return convertEntityListToDtoList(chargers);
+        }
     }
 }

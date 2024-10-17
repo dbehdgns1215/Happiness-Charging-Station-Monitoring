@@ -9,52 +9,93 @@
             width: 100%;
             height: 500px;
         }
+        #searchContainer {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 <h1>충전소 지도</h1>
+
+<!-- 주소 입력 및 검색 버튼 추가 -->
+<div id="searchContainer">
+    <input type="text" id="addressInput" placeholder="주소를 입력하세요" />
+    <button type="button" class="search-button" onclick="searchChargers()">검색</button>
+</div>
+<div>
+    <input type="text" id="latitudeInput" placeholder="위도를 입력하세요" />
+    <input type="text" id="longitudeInput" placeholder="경도를 입력하세요" />
+    <button type="button" class="search-button" onclick="searchNearbyChargers()">주변 충전기 검색</button>
+</div>
+
 <div id="map"></div>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     // 지도 초기화
     const map = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(37.5665, 126.978), // 기본 위치 (서울)
         zoom: 10
     });
 
-    // 충전소 데이터 가져오기
-    fetch('/api/chargers') // 새로운 API 엔드포인트로 요청
-        .then(response => response.json())
-        .then(chargerData => {
-            console.log("충전소 데이터:", chargerData);
+    let markers = [];
 
-            // 데이터가 비어있는지 확인
-            if (!chargerData || chargerData.length === 0) {
-                console.warn("충전소 데이터가 없습니다."); // 빈 데이터 경고
-            } else {
-                chargerData.forEach(charger => {
-                    console.log(`충전소 추가: ${charger.name} - 위도: ${charger.latitude}, 경도: ${charger.longitude}`);
+    let chargerData = /*[[${chargers}]]*/ []; // 서버에서 받은 충전소 데이터
 
-                    const marker = new naver.maps.Marker({
-                        position: new naver.maps.LatLng(charger.latitude, charger.longitude),
-                        map: map,
-                        title: charger.name // 마커에 제목 추가
-                    });
-
-                    // 마커 클릭 시 정보 표시
-                    const infowindow = new naver.maps.InfoWindow({
-                        content: `<div style="width:150px;text-align:center;padding:10px;">${charger.name}</div>`
-                    });
-
-                    naver.maps.Event.addListener(marker, 'click', function() {
-                        infowindow.open(map, marker.getPosition());
-                    });
-                });
-            }
-        })
-        .catch(error => {
-            console.error("데이터 가져오기 오류:", error);
+    chargerData.forEach(charger => {
+        const marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(charger.latitude, charger.longitude),
+            map: map,
+            title: charger.name
         });
+
+        const contentString = `
+            <div class="info-window">
+                <h3>${charger.name}</h3>
+                <p><strong>도로명주소:</strong> ${charger.addressNew}</p>
+                <p><strong>주소:</strong> ${charger.addressOld}</p>
+                <p><strong>평일 운영 시간:</strong> ${charger.weekdayOpen} ~ ${charger.weekdayClose}</p>
+                <p><strong>토요일 운영 시간:</strong> ${charger.saturdayOpen} ~ ${charger.saturdayClose}</p>
+                <p><strong>일요일 운영 시간:</strong> ${charger.holidayOpen} ~ ${charger.holidayClose}</p>
+                <p><strong>전화번호:</strong> ${charger.callNumber}</p>
+            </div>
+        `;
+
+        const infowindow = new naver.maps.InfoWindow({
+            content: contentString
+        });
+
+        naver.maps.Event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker.getPosition());
+        });
+
+        markers.push(marker);
+    });
+    /*]]>*/
+
+    function searchChargers() {
+        const address = document.getElementById('addressInput').value;
+        if (address) {
+            // 주소로 URL 설정
+            const url = `/chargers/address/${encodeURIComponent(address)}`;
+            window.location.href = url; // 해당 URL로 리디렉션
+        } else {
+            alert("주소를 입력하세요.");
+        }
+    }
+
+    function searchNearbyChargers() {
+        const latitude = document.getElementById('latitudeInput').value;
+        const longitude = document.getElementById('longitudeInput').value;
+
+        if (latitude && longitude) {
+            // 위도와 경도로 URL 설정
+            const url = `/chargers/near/${encodeURIComponent(latitude)}/${encodeURIComponent(longitude)}`;
+            window.location.href = url; // 해당 URL로 리디렉션
+        } else {
+            alert("위도와 경도를 입력하세요.");
+        }
+    }
 </script>
 
 </body>

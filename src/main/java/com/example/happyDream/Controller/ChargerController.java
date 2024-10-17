@@ -1,7 +1,6 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
-import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,20 +25,25 @@ public class ChargerController {
     //전체 충전기 조회
     @GetMapping("/chargers")
     public String chargerSelectAll(Model model) {
-        try {
-            List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
-            String chargersJson = objectMapper.writeValueAsString(chargers);
-            model.addAttribute("chargers", chargersJson); // JSON 문자열로 추가
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            model.addAttribute("chargers", "[]"); // 빈 배열 처리
-        }
-        return "chargers"; // chargers.html로 이동
+        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
+        model.addAttribute("chargers", chargers);
+        return "chargers";
     }
-    @GetMapping("/api/chargers")
-    @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
-    public List<ChargerDTO> getChargersApi() {
-        return this.chargerServiceFacade.chargerSelectAll();
+
+    //충전기 주소 조회
+    @GetMapping("/chargers/address/{address}")
+    public String chargerSelect(Model model, @PathVariable("address") String address) {
+        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+        model.addAttribute("chargers", chargers);
+        return "chargers";
+    }
+
+    //주변 충전기 조회
+    @GetMapping("/chargers/near/{latitude}/{longitude}")
+    public String chargerSelectNear(Model model, @PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
+        List<ChargerDTO> chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
+        model.addAttribute("chargers", chargers);
+        return "chargers";
     }
 
     //전체 충전기 삭제
@@ -59,7 +63,7 @@ public class ChargerController {
     */
 
     //특정 충전기 조회
-    @GetMapping("/chargers/{id}")
+    @GetMapping("/chargers/id/{id}")
     public String chargerSelect(@PathVariable("id") Integer id) {
         ChargerDTO charger = this.chargerServiceFacade.chargerSelect(id);
         return " ";
