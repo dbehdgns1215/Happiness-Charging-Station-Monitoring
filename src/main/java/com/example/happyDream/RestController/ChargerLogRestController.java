@@ -53,7 +53,7 @@ public class ChargerLogRestController {
                 responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.unmodifiableList(chargerLogDtoList));
             }
         } catch (Exception e) {
-            log.error("알 수 없는 오류: {}", e.getStackTrace());
+            log.error("알 수 없는 오류: {} ", (Object) e.getStackTrace());
             responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "알 수 없는 오류");
         }
 

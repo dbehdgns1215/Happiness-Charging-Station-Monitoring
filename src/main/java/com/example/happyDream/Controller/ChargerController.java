@@ -5,6 +5,7 @@ import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class ChargerController {
     private final ChargerServiceFacade chargerServiceFacade;
@@ -40,23 +42,35 @@ public class ChargerController {
     }
 
     //충전기 주소 조회
-    @GetMapping("/chargers/address/{address}")
-    public String chargerSelect(Model model, @PathVariable("address") String address) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
-        model.addAttribute("chargers", chargers);
+    @GetMapping("/chargers/address")
+    public String chargerSelect(Model model,
+                                @RequestParam(value = "address", required = false) String address) {
+        if(address == null || address.isBlank()) {
+            log.warn("주소 파라미터 누락됨");
+            // TODO - 뷰 쪽 예외 처리 필요
+        }
+        else {
+            log.info(address);
+            List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+            model.addAttribute("chargers", chargers);
+        }
+
         return "chargers";
-    }
-    @GetMapping("/api/chargers")
-    @ResponseBody // 이 어노테이션은 이 메서드가 JSON 형식으로 응답함을 의미
-    public List<ChargerDTO> getChargersApi() {
-        return this.chargerServiceFacade.chargerSelectAll();
     }
 
     //주변 충전기 조회
-    @GetMapping("/chargers/near/{latitude}/{longitude}")
-    public String chargerSelectNear(Model model, @PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
-        model.addAttribute("chargers", chargers);
+    @GetMapping("/chargers/near")
+    public String chargerSelectNear(Model model,
+                                    @RequestParam(value = "latitude", required = false) Double latitude,
+                                    @RequestParam(value = "longitude", required = false) Double longitude) {
+        if (latitude == null || longitude == null) {
+            log.warn("위도 또는 경도 파라미터 누락됨");
+            // TODO - 뷰 쪽 예외 처리 필요
+        }
+        else {
+            List<ChargerDTO> chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
+            model.addAttribute("chargers", chargers);
+        }
         return "chargers";
     }
 
@@ -77,7 +91,7 @@ public class ChargerController {
     */
 
     //특정 충전기 조회
-    @GetMapping("/chargers/id/{id}")
+    @GetMapping("/chargers/{id}")
     public String chargerSelect(@PathVariable("id") Integer id) {
         ChargerDTO charger = this.chargerServiceFacade.chargerSelect(id);
         return " ";
