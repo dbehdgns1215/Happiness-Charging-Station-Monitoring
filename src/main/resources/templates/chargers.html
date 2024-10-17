@@ -77,7 +77,7 @@
         const address = document.getElementById('addressInput').value;
         if (address) {
             // 주소로 URL 설정
-            const url = `/chargers/address/${encodeURIComponent(address)}`;
+            const url = `/chargers/address?address=${encodeURIComponent(address)}`;
             window.location.href = url; // 해당 URL로 리디렉션
         } else {
             alert("주소를 입력하세요.");
@@ -90,7 +90,7 @@
 
         if (latitude && longitude) {
             // 위도와 경도로 URL 설정
-            const url = `/chargers/near/${encodeURIComponent(latitude)}/${encodeURIComponent(longitude)}`;
+            const url = `/chargers/near?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`;
             window.location.href = url; // 해당 URL로 리디렉션
         } else {
             alert("위도와 경도를 입력하세요.");
