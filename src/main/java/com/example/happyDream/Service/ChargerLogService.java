@@ -2,7 +2,6 @@ package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
-import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerLogEntity;
 import com.example.happyDream.Repository.ChargerLogRepository;
 import jakarta.persistence.EntityNotFoundException;

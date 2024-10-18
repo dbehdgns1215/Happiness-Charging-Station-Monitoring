@@ -1,18 +1,12 @@
 package com.example.happyDream.Service;
 
+import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.happyDream.DTO.ChargerDTO;
 
-import java.io.FileReader;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,8 +33,8 @@ public class ChargerService {
     }
 
     // 충전기 추가(단일)
-    public void createCharger(ChargerDTO chargerDto) {
-        this.chargerRepository.save(chargerDto.toEntity());
+    public ChargerDTO createCharger(ChargerDTO chargerDto) {
+        return this.chargerRepository.save(chargerDto.toEntity()).toDTO();
     }
 
     // 충전기 추가(리스트)

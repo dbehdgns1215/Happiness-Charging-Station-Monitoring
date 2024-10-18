@@ -53,6 +53,13 @@ public class ReviewEntity {
     @Column(insertable = false)
     private LocalDateTime deletedAt; //리뷰 삭제 시각
 
+    @PrePersist
+    public void checkYnNull() {
+        if (this.deletedYn == null) {
+            this.deletedYn = false;
+        }
+    }
+
     @Builder
     public ReviewEntity(Integer id, ChargerEntity chargerId, UserEntity userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
@@ -64,6 +71,7 @@ public class ReviewEntity {
         this.modifiedAt = modifiedAt;
         this.deletedYn = deletedYn;
         this.deletedAt = deletedAt;
+
     }
 
     public ReviewDTO toDTO() {

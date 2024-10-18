@@ -9,8 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,9 @@ public class ChargerServiceFacade {
     private final ChargerStateService chargerStateService;
     private final ChargerLogService chargerLogService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
     public ChargerServiceFacade(ChargerService chargerService, ChargerStateService chargerStateService, ChargerLogService chargerLogService) {
         this.chargerService = chargerService;
@@ -49,6 +55,7 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelectAll();
     }
 
+    @Transactional
     public ResponseDTO createChargerSyncGovernment(String requestJson) {
         Gson gson = GsonUtil.createGson();
 
@@ -71,7 +78,7 @@ public class ChargerServiceFacade {
         for (JsonElement recordElement : recordsArray) {
             JsonObject recordObject = recordElement.getAsJsonObject(); // 레코드 파싱
 
-            ChargerDTO charger = new ChargerDTO();
+            ChargerDTO newCharger = new ChargerDTO();
             for (Field field : ChargerDTO.class.getDeclaredFields()) {
                 field.setAccessible(true); // 리플렉션을 통해 private 접근 제어 무시하고 접근
                 String fieldName = fieldMapping.get(field.getName()); // DTO의 필드명을 공공데이터의 필드명으로 변환
@@ -80,31 +87,33 @@ public class ChargerServiceFacade {
                         String fieldValue = recordObject.get(fieldName).getAsString(); // DTO에 매핑할 필드의 데이터를 가져옴
                         // 타입별 데이터 파싱 (Reflection 활용)
                         if (field.getType() == String.class) {
-                            field.set(charger, fieldValue);
+                            field.set(newCharger, fieldValue);
                         } else if (field.getType() == Integer.TYPE || field.getType() == Integer.class) {
-                            field.set(charger, Integer.parseInt(fieldValue));
+                            field.set(newCharger, Integer.parseInt(fieldValue));
                         } else if (field.getType() == Double.TYPE || field.getType() == Double.class) {
-                            field.set(charger, Double.parseDouble(fieldValue));
+                            field.set(newCharger, Double.parseDouble(fieldValue));
                         } else if (field.getType() == LocalTime.class) {
-                            field.set(charger, LocalTime.parse(fieldValue + ":00"));
+                            field.set(newCharger, LocalTime.parse(fieldValue + ":00"));
                         } else if (field.getType() == Time.class) {
-                            field.set(charger, Time.valueOf(fieldValue + ":00")); // DTO 상 LocalTime 임에도 Time 으로 데이터 인식
+                            field.set(newCharger, Time.valueOf(fieldValue + ":00")); // DTO 상 LocalTime 임에도 Time 으로 데이터 인식
                         } else if (field.getType() == LocalDate.class) {
-                            field.set(charger, LocalDate.parse(fieldValue));
+                            field.set(newCharger, LocalDate.parse(fieldValue));
                         } else if (field.getType() == Date.class) {
-                            field.set(charger, Date.valueOf(fieldValue)); // DTO 상 LocalDate 임에도 Date 로 데이터 인식
+                            field.set(newCharger, Date.valueOf(fieldValue)); // DTO 상 LocalDate 임에도 Date 로 데이터 인식
                         } else if (field.getType() == Boolean.TYPE || field.getType() == Boolean.class) {
-                            field.set(charger, fieldValue.equals("Y"));
+                            field.set(newCharger, fieldValue.equals("Y"));
                         }
                     } catch (IllegalAccessException | NumberFormatException e) {
                         log.warn("타입별 데이터 파싱 중 오류 발생 - 필드명: {}\n{}", field.getName(), e.getStackTrace());
                     }
                 }
             }
-            chargerDtoList.add(charger);
+            chargerDtoList.add(newCharger);
+            ChargerDTO savedCharger = this.chargerService.createCharger(newCharger);
+            this.chargerStateService.createChargerState(this.chargerService.chargerSelect(savedCharger.getId()));
         }
         log.info("변환 성공한 충전기 수: {}", chargerDtoList.size());
-        this.chargerService.createCharger(chargerDtoList);
+
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 

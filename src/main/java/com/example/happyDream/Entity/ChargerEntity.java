@@ -99,11 +99,17 @@ public class ChargerEntity {
     @Column
     private LocalDateTime modifiedAt; //데이터 수정 시각
 
+    @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean deletedYn; //충전기 삭제 여부(Y/N)
 
     @Column(insertable = false)
     private LocalDateTime deletedAt; //충전기 삭제 시각
+
+    @PrePersist
+    public void checkYnNull() {
+        if (this.deletedYn == null) { this.deletedYn = false; }
+    }
 
     @Builder //추후 객체 생성 로직, 검증 코드 필요할 수 있으므로 Builder 별도 생성
     public ChargerEntity(Integer id, String name, String city1, String city2, Integer city2Code, String addressNew, String addressOld, String addressDetail, Double latitude, Double longitude, Time weekdayOpen, Time saturdayOpen, Time holidayOpen, Time weekdayClose, Time saturdayClose, Time holidayClose, Integer chargerCount, Boolean chargeAirYn, Boolean chargePhoneYn, String callNumber, LocalDate updatedDate, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
@@ -132,6 +138,8 @@ public class ChargerEntity {
         this.modifiedAt = modifiedAt;
         this.deletedYn = deletedYn;
         this.deletedAt = deletedAt;
+
+
     }
 
     public ChargerDTO toDTO() {
