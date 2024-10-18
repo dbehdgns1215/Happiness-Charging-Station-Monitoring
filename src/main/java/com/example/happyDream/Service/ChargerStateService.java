@@ -91,6 +91,7 @@ public class ChargerStateService {
     // 특정 충전기 상태 추가
     @Transactional
     public void createChargerState(ChargerDTO chargerDto) {
+        // 필요성 검토중
 //        try {
 //            this.getTargetChargerState(chargerDto);
 //            log.error("이미 존재하는 충전기 상태에 대한 추가 - 충전기 id: {}", chargerDto.getId());

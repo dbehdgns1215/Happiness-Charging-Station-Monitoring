@@ -114,7 +114,7 @@ public class ChargerServiceFacade {
         }
         log.info("변환 성공한 충전기 수: {}", chargerDtoList.size());
 
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, chargerDtoList);
     }
 
     // 충전기 추가
