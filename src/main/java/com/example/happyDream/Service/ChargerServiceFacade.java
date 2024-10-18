@@ -146,8 +146,8 @@ public class ChargerServiceFacade {
     }
 
     // 전체 충전 로그 삭제
-    public void deleteAllChargerLog() {
-        this.chargerLogService.deleteAllChargerLog();
+    public Long deleteAllChargerLog() {
+        return this.chargerLogService.deleteAllChargerLog();
     }
 
     // 특정 충전기의 전체 충전 로그 조회
