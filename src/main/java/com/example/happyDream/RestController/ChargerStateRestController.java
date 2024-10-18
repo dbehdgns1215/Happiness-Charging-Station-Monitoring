@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerStateRestController {
+public class ChargerStateRestController implements ChargerState{
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
