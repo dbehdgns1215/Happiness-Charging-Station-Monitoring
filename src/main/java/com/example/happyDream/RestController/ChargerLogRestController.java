@@ -101,7 +101,7 @@ public class ChargerLogRestController implements ChargerLog{
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK);
         } catch (EntityNotFoundException ignored) {
             log.warn("존재하지 않는 충전기 id: {}", chargerId);
-            responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_NOT_FOUND, "존재하지 않는 충전기 id: " + chargerId);
+            responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_NOT_FOUND, "충전기가 존재하지 않음");
         } catch (NullPointerException e) {
             log.error("{} - 요청한 충전기 id: {}\n{}", e.getMessage(), chargerId, e.getStackTrace());
             responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
