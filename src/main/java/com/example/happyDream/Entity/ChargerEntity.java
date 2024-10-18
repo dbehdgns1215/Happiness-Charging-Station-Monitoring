@@ -77,11 +77,9 @@ public class ChargerEntity {
     @Column(columnDefinition = "TINYINT UNSIGNED")
     private Integer chargerCount; //동시 충전 가능 대수
 
-    @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean chargeAirYn; //공기 주입 가능 여부(Y/N)
 
-    @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean chargePhoneYn; //휴대폰 충전 가능 여부(Y/N)
 
@@ -101,7 +99,6 @@ public class ChargerEntity {
     @Column
     private LocalDateTime modifiedAt; //데이터 수정 시각
 
-    @NotNull
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean deletedYn; //충전기 삭제 여부(Y/N)
 

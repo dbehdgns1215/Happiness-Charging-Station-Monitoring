@@ -58,11 +58,12 @@ public class ChargerLogService {
     }
 
     // 전체 충전 로그 삭제
-    public void deleteAllChargerLog() {
-        int beforeCount = getAllChargerLog(false).size();
+    public Long deleteAllChargerLog() {
+        long count = chargerLogRepository.count();
         this.chargerLogRepository.deleteAll();
-        int afterCount = beforeCount - getAllChargerLog(false).size();
-        log.warn("전체 충전 로그 {}개가 삭제됨", afterCount);
+        count = count - chargerLogRepository.count();
+        log.warn("전체 충전 로그 {}개가 삭제됨", count);
+        return count;
     }
 
     // 특정 충전기의 전체 충전 로그 조회
