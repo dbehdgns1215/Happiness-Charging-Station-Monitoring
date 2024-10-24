@@ -32,4 +32,16 @@ public class UserService {
     public void userDeleteAll() {
         this.userRepository.deleteAll();
     }
+
+    public void userInsert(String username, String password, String email, Byte userType, Boolean deletedYn) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+        userDTO.setPassword(password);
+        userDTO.setEmail(email);
+        userDTO.setCreatedAt(LocalDateTime.now());
+        userDTO.setModifiedAt(LocalDateTime.now());
+        userDTO.setUserType(userType);
+        userDTO.setDeletedYn(deletedYn);
+        this.userRepository.save(userDTO.toEntity());
+    }
 }
