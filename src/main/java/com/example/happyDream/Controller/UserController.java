@@ -50,4 +50,11 @@ public class UserController {
         UserDTO user = this.userService.userSelect(id);
         return " ";
     }
+
+    //특정 사용자 삭제
+    @DeleteMapping("/users/{id}")
+    public String userDelete(@PathVariable("id") Integer id) {
+        this.userService.userDelete(id);
+        return " ";
+    }
 }
