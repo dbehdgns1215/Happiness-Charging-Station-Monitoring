@@ -43,4 +43,11 @@ public class UserController {
         this.userService.userInsert(username, password, email, userType, deletedYn);
         return " ";
     }
+
+    //특정 사용자 조회
+    @GetMapping("/users/{id}")
+    public String userSelect(@PathVariable("id") Integer id) {
+        UserDTO user = this.userService.userSelect(id);
+        return " ";
+    }
 }
