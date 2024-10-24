@@ -29,4 +29,20 @@ public class ReviewService {
     public void reviewDeleteAll() {
         this.reviewRepository.deleteAll();
     }
+
+    public void reviewInsert(Integer chargerId,
+                             Integer userId,
+                             String content,
+                             Byte rating,
+                             Boolean deletedYn) {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setChargerId(chargerId);
+        reviewDTO.setUserId(userId);
+        reviewDTO.setReviewContent(content);
+        reviewDTO.setCreatedAt(LocalDateTime.now());
+        reviewDTO.setModifiedAt(LocalDateTime.now());
+        reviewDTO.setRating(rating);
+        reviewDTO.setDeletedYn(deletedYn);
+        this.reviewRepository.save(reviewDTO.toEntity());
+    }
 }
