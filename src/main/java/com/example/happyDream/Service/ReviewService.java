@@ -62,4 +62,13 @@ public class ReviewService {
         reviewDTO.setDeletedYn(deletedYn);
         this.reviewRepository.save(reviewDTO.toEntity());
     }
+
+    public ReviewDTO reviewSelect(Integer id) {
+        Optional<ReviewEntity> entity = this.reviewRepository.findById(id);
+        if(entity.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        return entity.get().toDTO();
+
+    }
 }
