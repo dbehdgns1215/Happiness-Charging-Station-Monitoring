@@ -2,6 +2,7 @@ package com.example.happyDream.Service;
 
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
+import com.example.happyDream.Util.Converter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,19 +26,6 @@ public class ChargerService {
         this.chargerRepository = chargerRepository;
     }
 
-    public List<ChargerDTO> convertEntityListToDtoList(List<ChargerEntity> entityList) {
-        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
-        return entityList.stream()
-                .map(ChargerEntity::toDTO) // 각 엔티티를 DTO로 변환
-                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
-    }
-    public List<ChargerEntity> convertDtoListToEntityList(List<ChargerDTO> dtoList) {
-        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
-        return dtoList.stream()
-                .map(ChargerDTO::toEntity) // 각 엔티티를 DTO로 변환
-                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
-    }
-
     // 충전기 추가(단일)
     public void createCharger(ChargerDTO chargerDto) {
         this.chargerRepository.save(chargerDto.toEntity());
@@ -45,12 +33,13 @@ public class ChargerService {
 
     // 충전기 추가(리스트)
     public void createCharger(List<ChargerDTO> chargerDtoList) {
-        List<ChargerEntity> chargerEntityList = convertDtoListToEntityList(chargerDtoList);
+        List<ChargerEntity> chargerEntityList = Converter.DtoListToEntityList(chargerDtoList, ChargerDTO::toEntity);
         this.chargerRepository.saveAll(chargerEntityList);
     }
 
     public List<ChargerDTO> chargerSelectAll(){
-        List<ChargerDTO> dtoList = convertEntityListToDtoList(this.chargerRepository.findAll());
+        List<ChargerEntity> entityList = this.chargerRepository.findAll();
+        List<ChargerDTO> dtoList = Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
         System.out.println("가져온 충전기 수: " + dtoList.size());
         return dtoList;
     }
@@ -110,7 +99,7 @@ public class ChargerService {
             throw new EntityNotFoundException();
         }
         else{
-            return convertEntityListToDtoList(chargers);
+            return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
         }
     }
 }
