@@ -53,4 +53,8 @@ public class UserService {
         return entity.get().toDTO();
 
     }
+
+    public void userDelete(Integer id) {
+        this.userRepository.deleteById(id);
+    }
 }
