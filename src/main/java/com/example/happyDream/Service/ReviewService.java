@@ -39,18 +39,16 @@ public class ReviewService {
     public void reviewInsert(Integer chargerId,
                              Integer userId,
                              String content,
-                             Byte rating,
-                             Boolean deletedYn) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating, deletedYn);
+                             Byte rating) {
+        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
         this.reviewRepository.save(reviewDTO.toEntity());
     }
 
     public void reviewUpdate(Integer chargerId,
                              Integer userId,
                              String content,
-                             Byte rating,
-                             Boolean deletedYn) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating, deletedYn);
+                             Byte rating) {
+        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
         this.reviewRepository.save(reviewDTO.toEntity());
     }
 
@@ -70,8 +68,7 @@ public class ReviewService {
     private ReviewDTO createReviewDto(Integer chargerId,
                                       Integer userId,
                                       String content,
-                                      Byte rating,
-                                      Boolean deletedYn) {
+                                      Byte rating) {
         ReviewDTO reviewDTO = new ReviewDTO();
         ChargerEntity chargerEntity = chargerService.chargerSelect(chargerId).toEntity();
         UserEntity userEntity = userService.userSelect(userId).toEntity();
@@ -81,7 +78,6 @@ public class ReviewService {
         reviewDTO.setCreatedAt(LocalDateTime.now());
         reviewDTO.setModifiedAt(LocalDateTime.now());
         reviewDTO.setRating(rating);
-        reviewDTO.setDeletedYn(deletedYn);
         return reviewDTO;
     }
 }

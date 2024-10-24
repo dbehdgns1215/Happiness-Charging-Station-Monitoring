@@ -38,9 +38,8 @@ public class ReviewController {
     public String reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
                                @RequestParam(value="user_id") Integer userId,
                                @RequestParam(value="review_content") String content,
-                               @RequestParam(value="rating") Byte rating,
-                               @RequestParam(value="deleted_yn") Boolean deletedYn) {
-        this.reviewService.reviewInsert(chargerId, userId, content, rating, deletedYn);
+                               @RequestParam(value="rating") Byte rating) {
+        this.reviewService.reviewInsert(chargerId, userId, content, rating);
         return " ";
     }
 
@@ -49,9 +48,8 @@ public class ReviewController {
     public String reviewUpdate(@RequestParam(value="charger_id") Integer chargerId,
                                @RequestParam(value="user_id") Integer userId,
                                @RequestParam(value="review_content") String content,
-                               @RequestParam(value="rating") Byte rating,
-                               @RequestParam(value="deleted_yn") Boolean deletedYn) {
-        this.reviewService.reviewUpdate(chargerId, userId, content, rating, deletedYn);
+                               @RequestParam(value="rating") Byte rating) {
+        this.reviewService.reviewUpdate(chargerId, userId, content, rating);
         return " ";
     }
 

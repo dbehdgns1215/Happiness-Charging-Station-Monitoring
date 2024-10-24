@@ -16,11 +16,14 @@ public class ReviewRestController {
         this.chargerRepository = chargerRepository;
     }
 
+    /*
     @PostMapping("/{chargerId}/{userId}")
     public ResponseEntity<String> addReview(
             @PathVariable Integer chargerId,
             @PathVariable Integer userId,
             @RequestBody ReviewDTO reviewDTO) {
+
+        // TODO -
 
         // ChargerEntity를 ID로 조회
         ChargerEntity charger = chargerRepository.findById(chargerId)
@@ -31,6 +34,7 @@ public class ReviewRestController {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         */
+    */
 
         // 로그로 받은 리뷰 정보 출력
         System.out.println("Received Review:");
