@@ -25,4 +25,8 @@ public class ReviewService {
         List<ReviewEntity> entityList = this.reviewRepository.findAll();
         return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
     }
+
+    public void reviewDeleteAll() {
+        this.reviewRepository.deleteAll();
+    }
 }
