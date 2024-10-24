@@ -29,4 +29,7 @@ public class UserService {
         return Converter.EntityListToDtoList(entityList, UserEntity::toDTO);
     }
 
+    public void userDeleteAll() {
+        this.userRepository.deleteAll();
+    }
 }
