@@ -45,4 +45,21 @@ public class ReviewService {
         reviewDTO.setDeletedYn(deletedYn);
         this.reviewRepository.save(reviewDTO.toEntity());
     }
+
+    public void reviewUpdate(Integer chargerId,
+                             Integer userId,
+                             String content,
+                             Byte rating,
+                             Boolean deletedYn) {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        ReviewEntity reviewEntity = charger
+        reviewDTO.setChargerId(chargerId);
+        reviewDTO.setUserId(userId);
+        reviewDTO.setReviewContent(content);
+        reviewDTO.setCreatedAt(LocalDateTime.now());
+        reviewDTO.setModifiedAt(LocalDateTime.now());
+        reviewDTO.setRating(rating);
+        reviewDTO.setDeletedYn(deletedYn);
+        this.reviewRepository.save(reviewDTO.toEntity());
+    }
 }
