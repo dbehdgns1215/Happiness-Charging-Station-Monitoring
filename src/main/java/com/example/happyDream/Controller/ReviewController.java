@@ -24,4 +24,11 @@ public class ReviewController {
         List<ReviewDTO> users = this.reviewService.reviewSelectAll();
         return " ";
     }
+
+    //전체 리뷰 삭제
+    @DeleteMapping("/users")
+    public String reviewDeleteAll() {
+        this.reviewService.reviewDeleteAll();
+        return " ";
+    }
 }
