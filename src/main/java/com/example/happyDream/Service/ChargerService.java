@@ -3,10 +3,18 @@ package com.example.happyDream.Service;
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
+import com.example.happyDream.Util.Converter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.happyDream.DTO.ChargerDTO;
 
+import java.io.FileReader;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,12 +47,13 @@ public class ChargerService {
 
     // 충전기 추가(리스트)
     public void createCharger(List<ChargerDTO> chargerDtoList) {
-        List<ChargerEntity> chargerEntityList = convertDtoListToEntityList(chargerDtoList);
+        List<ChargerEntity> chargerEntityList = Converter.DtoListToEntityList(chargerDtoList, ChargerDTO::toEntity);
         this.chargerRepository.saveAll(chargerEntityList);
     }
 
     public List<ChargerDTO> chargerSelectAll(){
-        List<ChargerDTO> dtoList = convertEntityListToDtoList(this.chargerRepository.findAll());
+        List<ChargerEntity> entityList = this.chargerRepository.findAll();
+        List<ChargerDTO> dtoList = Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
         System.out.println("가져온 충전기 수: " + dtoList.size());
         return dtoList;
     }
@@ -104,7 +113,7 @@ public class ChargerService {
             throw new EntityNotFoundException();
         }
         else{
-            return convertEntityListToDtoList(chargers);
+            return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
         }
     }
 }
