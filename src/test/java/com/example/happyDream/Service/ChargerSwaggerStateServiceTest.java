@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-class ChargerStateServiceTest {
+class ChargerSwaggerStateServiceTest {
     // 테스트 주체
     @InjectMocks
     ChargerStateService chargerStateService;

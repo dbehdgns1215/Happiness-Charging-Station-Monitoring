@@ -3,8 +3,8 @@ package com.example.happyDream.RestController;
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.Interface.ChargerStateSwagger;
 import com.example.happyDream.Service.ChargerServiceFacade;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerStateRestController implements ChargerState{
+public class ChargerStateSwaggerRestController implements ChargerStateSwagger {
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
-    public ChargerStateRestController(ChargerServiceFacade chargerServiceFacade) {
+    public ChargerStateSwaggerRestController(ChargerServiceFacade chargerServiceFacade) {
         this.chargerServiceFacade = chargerServiceFacade;
     }
 
