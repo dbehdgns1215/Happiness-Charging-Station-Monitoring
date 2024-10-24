@@ -14,11 +14,11 @@ import java.util.*;
 @Slf4j
 @RestController //ResponseBody + Controller 어노테이션
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerSwaggerRestController implements ChargerSwagger {
+public class ChargerRestController implements ChargerSwagger {
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
-    public ChargerSwaggerRestController(ChargerServiceFacade chargerServiceFacade) {
+    public ChargerRestController(ChargerServiceFacade chargerServiceFacade) {
         this.chargerServiceFacade = chargerServiceFacade;
     }
 

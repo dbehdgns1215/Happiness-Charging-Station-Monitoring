@@ -17,11 +17,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerStateSwaggerRestController implements ChargerStateSwagger {
+public class ChargerStateRestController implements ChargerStateSwagger {
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
-    public ChargerStateSwaggerRestController(ChargerServiceFacade chargerServiceFacade) {
+    public ChargerStateRestController(ChargerServiceFacade chargerServiceFacade) {
         this.chargerServiceFacade = chargerServiceFacade;
     }
 
