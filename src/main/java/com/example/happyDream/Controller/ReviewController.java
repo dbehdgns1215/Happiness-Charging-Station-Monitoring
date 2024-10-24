@@ -61,4 +61,11 @@ public class ReviewController {
         ReviewDTO review = this.reviewService.reviewSelect(id);
         return " ";
     }
+
+    //특정 사용자 삭제
+    @DeleteMapping("/reviews/{id}")
+    public String reviewDelete(@PathVariable("id") Integer id) {
+        this.reviewService.reviewDelete(id);
+        return " ";
+    }
 }
