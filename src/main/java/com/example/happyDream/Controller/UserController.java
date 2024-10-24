@@ -1,8 +1,6 @@
 package com.example.happyDream.Controller;
 
-import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.UserDTO;
-import com.example.happyDream.Service.UserReviewServiceFacade;
 import com.example.happyDream.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,24 +11,24 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private final UserReviewServiceFacade userReviewServiceFacade;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserReviewServiceFacade userReviewServiceFacade) {
-        this.userReviewServiceFacade = userReviewServiceFacade;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     //전체 사용자 조회
     @GetMapping("/users")
     public String userSelectAll(Model model) {
-        List<UserDTO> users = this.userReviewServiceFacade.userSelectAll();
+        List<UserDTO> users = this.userService.userSelectAll();
         return " ";
     }
 
     //전체 사용자 삭제
     @DeleteMapping("/users")
     public String userDeleteAll() {
-        this.userReviewServiceFacade.userDeleteAll();
+        this.userService.userDeleteAll();
         return " ";
     }
 
@@ -41,21 +39,21 @@ public class UserController {
                              @RequestParam(value="email") String email,
                              @RequestParam(value="user_type") Byte userType,
                              @RequestParam(value="deleted_yn") Boolean deletedYn) {
-        this.userReviewServiceFacade.userInsert(username, password, email, userType, deletedYn);
+        this.userService.userInsert(username, password, email, userType, deletedYn);
         return " ";
     }
 
     //특정 사용자 조회
     @GetMapping("/users/{id}")
     public String userSelect(@PathVariable("id") Integer id) {
-        UserDTO user = this.userReviewServiceFacade.userSelect(id);
+        UserDTO user = this.userService.userSelect(id);
         return " ";
     }
 
     //특정 사용자 삭제
     @DeleteMapping("/users/{id}")
     public String userDelete(@PathVariable("id") Integer id) {
-        this.userReviewServiceFacade.userDelete(id);
+        this.userService.userDelete(id);
         return " ";
     }
 }
