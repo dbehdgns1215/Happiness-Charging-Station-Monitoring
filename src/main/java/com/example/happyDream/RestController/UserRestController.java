@@ -39,9 +39,8 @@ public class UserRestController {
     public ResponseDTO userInsert(@RequestParam(value="username") String username,
                              @RequestParam(value="password") String password,
                              @RequestParam(value="email") String email,
-                             @RequestParam(value="user_type") Byte userType,
-                             @RequestParam(value="deleted_yn") Boolean deletedYn) {
-        this.userService.userInsert(username, password, email, userType, deletedYn);
+                             @RequestParam(value="user_type") Byte userType) {
+        this.userService.userInsert(username, password, email, userType);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
