@@ -4,7 +4,6 @@ import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,14 +91,17 @@ public class ChargerStateService {
     // 특정 충전기 상태 추가
     @Transactional
     public void createChargerState(ChargerDTO chargerDto) {
-        try {
-            this.getTargetChargerState(chargerDto);
-            log.error("이미 존재하는 충전기 상태에 대한 추가 - 충전기 id: {}", chargerDto.getId());
-            //throw new EntityExistsException(); // 테스트용
-        } catch (EntityNotFoundException e) {
-            ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
-            this.chargerStateRepository.save(entity);
-        }
+        // 필요성 검토중
+//        try {
+//            this.getTargetChargerState(chargerDto);
+//            log.error("이미 존재하는 충전기 상태에 대한 추가 - 충전기 id: {}", chargerDto.getId());
+//            //throw new EntityExistsException(); // 테스트용
+//        } catch (EntityNotFoundException e) {
+//            ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
+//            this.chargerStateRepository.save(entity);
+//        }
+        ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
+        this.chargerStateRepository.save(entity);
     }
 
     // 특정 충전기 상태 업데이트

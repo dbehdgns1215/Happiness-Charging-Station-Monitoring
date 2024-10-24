@@ -53,6 +53,7 @@ public class ResponseDTO {
                 .apiVersion(apiVersion)
                 .status("success")
                 .responseCode(responseCode)
+                .count(data.size())
                 .data(data)
                 .build();
     }

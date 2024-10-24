@@ -2,19 +2,17 @@ package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.ChargerStateDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @Entity
 @Table(name = "charger_state")
 @Getter //Setter 미사용
@@ -25,15 +23,15 @@ public class ChargerStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn /*(name = "charger_id")*/ // 외래 키 설정
+    @ManyToOne
+    @JoinColumn(unique = true) //OneToOne 대체
     private ChargerEntity chargerId; // 충전기 식별자
 
-    @NotNull
+    @ColumnDefault("0")
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean usingYn; //충전 여부(Y/N)
 
-    @NotNull
+    @ColumnDefault("0")
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
     private Boolean brokenYn; //고장 여부(Y/N)
 
@@ -52,6 +50,12 @@ public class ChargerStateEntity {
     @LastModifiedDate
     @Column
     private LocalDateTime modifiedAt; //데이터 수정 시각
+
+    @PrePersist
+    public void checkYnNull() {
+        if (this.usingYn == null) { this.usingYn = false; }
+        if (this.brokenYn == null) { this.brokenYn = false; }
+    }
 
     @Builder
     public ChargerStateEntity(Integer id, ChargerEntity chargerId, Boolean usingYn, Boolean brokenYn, LocalDateTime usingAt, LocalDateTime brokenAt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
