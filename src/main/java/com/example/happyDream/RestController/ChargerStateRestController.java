@@ -3,8 +3,8 @@ package com.example.happyDream.RestController;
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.Interface.ChargerStateSwagger;
 import com.example.happyDream.Service.ChargerServiceFacade;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerStateRestController implements ChargerState{
+public class ChargerStateRestController implements ChargerStateSwagger {
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
@@ -64,9 +64,8 @@ public class ChargerStateRestController implements ChargerState{
     // 특정 충전기 상태 변경
     @PutMapping("/chargers/{id}/states")
     public ResponseDTO changeTargetChargerState(@PathVariable("id") Integer chargerId, Boolean usingUn, Boolean brokenYn) {
-        ChargerDTO chargerDto = ChargerDTO.builder().id(chargerId).build();
         ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
-                .chargerId(chargerDto.toEntity())
+                .chargerId(chargerId)
                 .usingYn(usingUn)
                 .brokenYn(brokenYn)
                 .build();

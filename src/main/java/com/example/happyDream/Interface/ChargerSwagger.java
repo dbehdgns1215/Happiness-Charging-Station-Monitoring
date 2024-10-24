@@ -1,4 +1,4 @@
-package com.example.happyDream.RestController;
+package com.example.happyDream.Interface;
 
 import com.example.happyDream.DTO.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Charger", description = "충전기 정보 API")
-public interface Charger {
+public interface ChargerSwagger {
     @Operation(summary = "전체 충전기 조회", description = "전체 충전기를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = ResponseDTO.class, hidden = true))),

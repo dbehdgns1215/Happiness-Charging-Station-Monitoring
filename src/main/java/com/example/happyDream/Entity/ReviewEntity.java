@@ -77,8 +77,8 @@ public class ReviewEntity {
     public ReviewDTO toDTO() {
         return ReviewDTO.builder()
                 .id(id)
-                .chargerId(chargerId)
-                .userId(userId)
+                .chargerId(chargerId.getId())
+                .userId(userId.getId())
                 .reviewContent(reviewContent)
                 .rating(rating)
                 .createdAt(createdAt)

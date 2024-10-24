@@ -1,54 +1,76 @@
 package com.example.happyDream.RestController;
 
+import com.example.happyDream.DTO.ResponseDTO;
 import com.example.happyDream.DTO.ReviewDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
+import com.example.happyDream.Service.ReviewService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")
 public class ReviewRestController {
 
-    private final ChargerRepository chargerRepository;
+    private final ReviewService reviewService;
 
-    public ReviewRestController(ChargerRepository chargerRepository) {
-        this.chargerRepository = chargerRepository;
+    @Autowired
+    public ReviewRestController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
-    /*
-    @PostMapping("/{chargerId}/{userId}")
-    public ResponseEntity<String> addReview(
-            @PathVariable Integer chargerId,
-            @PathVariable Integer userId,
-            @RequestBody ReviewDTO reviewDTO) {
+    // TODO - Review 전체 예외 처리
+    // 전체 리뷰 조회
+    @GetMapping("/reviews")
+    public ResponseDTO reviewSelectAll(Model model) {
+        List<ReviewDTO> reviews = this.reviewService.reviewSelectAll();
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reviews);
+    }
 
-        // TODO -
+    // 리뷰 추가
+    @PostMapping("/reviews")
+    public ResponseDTO reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
+                               @RequestParam(value="user_id") Integer userId,
+                               @RequestParam(value="review_content") String content,
+                               @RequestParam(value="rating") Byte rating) {
+        this.reviewService.reviewInsert(chargerId, userId, content, rating);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+    }
 
-        // ChargerEntity를 ID로 조회
-        ChargerEntity charger = chargerRepository.findById(chargerId)
-                .orElseThrow(() -> new RuntimeException("Charger not found"));
+    // 특정 리뷰 수정
+    @PostMapping("/reviews/{id}")
+    public ResponseDTO reviewUpdate(@RequestParam(value="charger_id") Integer chargerId,
+                               @RequestParam(value="user_id") Integer userId,
+                               @RequestParam(value="review_content") String content,
+                               @RequestParam(value="rating") Byte rating) {
+        this.reviewService.reviewUpdate(chargerId, userId, content, rating);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+    }
 
-        // TODO - 나중에 User 관련 기능 개발 후 아래의 유저 조회 코드 추가 가능
-        /*
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        */
-    */
+    // 전체 리뷰 삭제
+    @DeleteMapping("/reviews")
+    public ResponseDTO reviewDeleteAll() {
+        this.reviewService.reviewDeleteAll();
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+    }
 
-        // 로그로 받은 리뷰 정보 출력
-        System.out.println("Received Review:");
-        System.out.println("ChargerId: " + chargerId);
-        System.out.println("User ID: " + userId);
-        System.out.println("Content: " + reviewDTO.getReviewContent());
-        System.out.println("Rating: " + reviewDTO.getRating());
-        // TODO - 앱에서는 userID와 chargerID가 int로 넘어올 수 밖에 없는 구조이기 때문에
-        // TODO - chargerID와 userID를 기준으로 review 테이블에 저장해야 함
+    // 특정 리뷰 조회
+    @GetMapping("/reviews/{id}")
+    public ResponseDTO reviewSelect(@PathVariable("id") Integer id) {
+        ReviewDTO review = this.reviewService.reviewSelect(id);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(review));
+    }
 
-        // TODO - 특정 충전소의 리뷰 조회 -> chargerID로 조회
-        // TODO - 특정 유저의 리뷰 조회 -> userID로 조회
-
-
-        return ResponseEntity.ok("Review added successfully");
+    // 특정 리뷰 삭제
+    @DeleteMapping("/reviews/{id}")
+    public ResponseDTO reviewDelete(@PathVariable("id") Integer id) {
+        this.reviewService.reviewDelete(id);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 }
