@@ -23,6 +23,8 @@ public class ChargerStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
 
+    // https://netframework.tistory.com/entry/Hibernate-OneToOne
+    // OneToOne은 어렵다!!!!
     @ManyToOne
     @JoinColumn(unique = true) //OneToOne 대체
     private ChargerEntity chargerId; // 충전기 식별자

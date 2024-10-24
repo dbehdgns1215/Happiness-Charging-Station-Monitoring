@@ -44,14 +44,6 @@ public class ReviewService {
         this.reviewRepository.save(reviewDTO.toEntity());
     }
 
-    public void reviewUpdate(Integer chargerId,
-                             Integer userId,
-                             String content,
-                             Byte rating) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
-        this.reviewRepository.save(reviewDTO.toEntity());
-    }
-
     public ReviewDTO reviewSelect(Integer id) {
         Optional<ReviewEntity> entity = this.reviewRepository.findById(id);
         if(entity.isEmpty()){
@@ -59,6 +51,14 @@ public class ReviewService {
         }
         return entity.get().toDTO();
 
+    }
+
+    public void reviewUpdate(Integer chargerId,
+                             Integer userId,
+                             String content,
+                             Byte rating) {
+        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
+        this.reviewRepository.save(reviewDTO.toEntity());
     }
 
     public void reviewDelete(Integer id) {
@@ -69,15 +69,14 @@ public class ReviewService {
                                       Integer userId,
                                       String content,
                                       Byte rating) {
-        ReviewDTO reviewDTO = new ReviewDTO();
         ChargerEntity chargerEntity = chargerService.chargerSelect(chargerId).toEntity();
         UserEntity userEntity = userService.userSelect(userId).toEntity();
-        reviewDTO.setChargerId(chargerEntity);
-        reviewDTO.setUserId(userEntity);
-        reviewDTO.setReviewContent(content);
-        reviewDTO.setCreatedAt(LocalDateTime.now());
-        reviewDTO.setModifiedAt(LocalDateTime.now());
-        reviewDTO.setRating(rating);
-        return reviewDTO;
+
+        return ReviewDTO.builder()
+                .chargerId(chargerEntity)
+                .userId(userEntity)
+                .reviewContent(content)
+                .rating(rating)
+                .build();
     }
 }

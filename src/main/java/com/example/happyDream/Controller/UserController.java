@@ -18,42 +18,4 @@ public class UserController {
         this.userService = userService;
     }
 
-    //전체 사용자 조회
-    @GetMapping("/users")
-    public String userSelectAll(Model model) {
-        List<UserDTO> users = this.userService.userSelectAll();
-        return " ";
-    }
-
-    //전체 사용자 삭제
-    @DeleteMapping("/users")
-    public String userDeleteAll() {
-        this.userService.userDeleteAll();
-        return " ";
-    }
-
-    //사용자 추가
-    @PostMapping("/users")
-    public String userInsert(@RequestParam(value="username") String username,
-                             @RequestParam(value="password") String password,
-                             @RequestParam(value="email") String email,
-                             @RequestParam(value="user_type") Byte userType,
-                             @RequestParam(value="deleted_yn") Boolean deletedYn) {
-        this.userService.userInsert(username, password, email, userType, deletedYn);
-        return " ";
-    }
-
-    //특정 사용자 조회
-    @GetMapping("/users/{id}")
-    public String userSelect(@PathVariable("id") Integer id) {
-        UserDTO user = this.userService.userSelect(id);
-        return " ";
-    }
-
-    //특정 사용자 삭제
-    @DeleteMapping("/users/{id}")
-    public String userDelete(@PathVariable("id") Integer id) {
-        this.userService.userDelete(id);
-        return " ";
-    }
 }
