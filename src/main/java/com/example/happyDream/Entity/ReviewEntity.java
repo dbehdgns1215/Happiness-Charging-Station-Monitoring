@@ -66,6 +66,7 @@ public class ReviewEntity {
         this.deletedAt = deletedAt;
     }
 
+        /* // TODO - 앱에서 리뷰를 보낼 땐, 충전소와 유저의 값이 int로 넘어옴. DTO로 변환하는 로직 수정 필요
     public ReviewDTO toDTO() {
         return ReviewDTO.builder()
                 .id(id)
@@ -79,4 +80,5 @@ public class ReviewEntity {
                 .deletedAt(deletedAt)
                 .build();
     }
+         */
 }
