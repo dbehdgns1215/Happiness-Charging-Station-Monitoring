@@ -36,10 +36,10 @@ public class ReviewController {
     //리뷰 추가
     @PostMapping("/reviews")
     public String reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
-                             @RequestParam(value="user_id") Integer userId,
-                             @RequestParam(value="review_content") String content,
-                             @RequestParam(value="rating") Byte rating,
-                             @RequestParam(value="deleted_yn") Boolean deletedYn) {
+                               @RequestParam(value="user_id") Integer userId,
+                               @RequestParam(value="review_content") String content,
+                               @RequestParam(value="rating") Byte rating,
+                               @RequestParam(value="deleted_yn") Boolean deletedYn) {
         this.reviewService.reviewInsert(chargerId, userId, content, rating, deletedYn);
         return " ";
     }
@@ -52,6 +52,13 @@ public class ReviewController {
                                @RequestParam(value="rating") Byte rating,
                                @RequestParam(value="deleted_yn") Boolean deletedYn) {
         this.reviewService.reviewUpdate(chargerId, userId, content, rating, deletedYn);
+        return " ";
+    }
+
+    //특정 리뷰 조회
+    @GetMapping("/reviews/{id}")
+    public String reviewSelect(@PathVariable("id") Integer id) {
+        ReviewDTO review = this.reviewService.reviewSelect(id);
         return " ";
     }
 }
