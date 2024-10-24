@@ -44,4 +44,13 @@ public class UserService {
         userDTO.setDeletedYn(deletedYn);
         this.userRepository.save(userDTO.toEntity());
     }
+
+    public UserDTO userSelect(Integer id) {
+        Optional<UserEntity> entity = this.userRepository.findById(id);
+        if(entity.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        return entity.get().toDTO();
+
+    }
 }
