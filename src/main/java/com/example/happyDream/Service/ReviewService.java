@@ -52,7 +52,6 @@ public class ReviewService {
                              Byte rating,
                              Boolean deletedYn) {
         ReviewDTO reviewDTO = new ReviewDTO();
-        ReviewEntity reviewEntity = charger
         reviewDTO.setChargerId(chargerId);
         reviewDTO.setUserId(userId);
         reviewDTO.setReviewContent(content);
@@ -70,5 +69,9 @@ public class ReviewService {
         }
         return entity.get().toDTO();
 
+    }
+
+    public void reviewDelete(Integer id) {
+        this.reviewRepository.deleteById(id);
     }
 }
