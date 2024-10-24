@@ -73,8 +73,8 @@ public class ReviewService {
         UserEntity userEntity = userService.userSelect(userId).toEntity();
 
         return ReviewDTO.builder()
-                .chargerId(chargerEntity)
-                .userId(userEntity)
+                .chargerId(chargerEntity.getId())
+                .userId(userEntity.getId())
                 .reviewContent(content)
                 .rating(rating)
                 .build();

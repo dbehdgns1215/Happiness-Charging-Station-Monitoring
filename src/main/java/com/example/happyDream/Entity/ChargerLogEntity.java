@@ -53,7 +53,7 @@ public class ChargerLogEntity {
     public ChargerLogDTO toDTO() {
         return ChargerLogDTO.builder()
                 .id(id)
-                .chargerId(chargerId)
+                .chargerId(chargerId.getId())
                 .ampere(ampere)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)

@@ -64,9 +64,8 @@ public class ChargerStateRestController implements ChargerStateSwagger {
     // 특정 충전기 상태 변경
     @PutMapping("/chargers/{id}/states")
     public ResponseDTO changeTargetChargerState(@PathVariable("id") Integer chargerId, Boolean usingUn, Boolean brokenYn) {
-        ChargerDTO chargerDto = ChargerDTO.builder().id(chargerId).build();
         ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
-                .chargerId(chargerDto.toEntity())
+                .chargerId(chargerId)
                 .usingYn(usingUn)
                 .brokenYn(brokenYn)
                 .build();
