@@ -26,4 +26,11 @@ public class UserController {
         return " ";
     }
 
+    //전체 사용자 삭제
+    @DeleteMapping("/users")
+    public String userDeleteAll() {
+        this.userService.userDeleteAll();
+        return " ";
+    }
+
 }
