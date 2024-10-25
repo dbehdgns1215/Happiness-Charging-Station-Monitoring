@@ -108,9 +108,9 @@ public class ChargerServiceFacade {
                     }
                 }
             }
-            chargerDtoList.add(newCharger);
             ChargerDTO savedCharger = this.chargerService.createCharger(newCharger);
             this.chargerStateService.createChargerState(this.chargerService.chargerSelect(savedCharger.getId()));
+            chargerDtoList.add(savedCharger);
         }
         log.info("변환 성공한 충전기 수: {}", chargerDtoList.size());
 

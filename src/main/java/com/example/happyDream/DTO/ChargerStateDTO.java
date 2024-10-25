@@ -29,7 +29,7 @@ public class ChargerStateDTO {
         ChargerEntity chargerEntity = ChargerEntity.builder().id(chargerId).build();
         return ChargerStateEntity.builder()
                 .id(id)
-                .chargerId(chargerEntity)
+                .charger(chargerEntity)
                 .usingYn(usingYn)
                 .brokenYn(brokenYn)
                 .usingAt(usingAt)

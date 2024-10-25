@@ -60,7 +60,7 @@ class ChargerSwaggerStateServiceTest {
     @DisplayName("이미 존재하는 충전기 상태에 대한 추가")
     void createChargerStateAlreadyExistTest() {
         // given
-        ChargerStateEntity existingEntity = ChargerStateEntity.builder().chargerId(chargerDTO.toEntity()).build();
+        ChargerStateEntity existingEntity = ChargerStateEntity.builder().charger(chargerDTO.toEntity()).build();
 
         // when 이미 존재하는 엔티티가 있다고 가정
         when(chargerStateRepository.findByChargerId(any())).thenReturn(Optional.of(existingEntity));
@@ -82,7 +82,7 @@ class ChargerSwaggerStateServiceTest {
     void changeTargetChargerStateNotFoundTest() {
         // given
         ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
-                .chargerId(chargerDTO.toEntity())
+                .chargerId(chargerDTO.getId())
                 .usingYn(true)
                 .build();
 
@@ -97,7 +97,7 @@ class ChargerSwaggerStateServiceTest {
     void changeTargetChargerStateBooleanNullTest() {
         // given
         ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
-                .chargerId(chargerDTO.toEntity())
+                .chargerId(chargerDTO.getId())
                 .usingYn(true)
                 .build();
 

@@ -100,7 +100,7 @@ public class ChargerStateService {
 //            ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
 //            this.chargerStateRepository.save(entity);
 //        }
-        ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
+        ChargerStateEntity entity = ChargerStateEntity.builder().charger(chargerDto.toEntity()).build();
         this.chargerStateRepository.save(entity);
     }
 
