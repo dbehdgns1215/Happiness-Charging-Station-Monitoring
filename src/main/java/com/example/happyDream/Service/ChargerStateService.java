@@ -107,7 +107,7 @@ public class ChargerStateService {
     // 특정 충전기 상태 업데이트
     @Transactional
     public void changeTargetChargerState(ChargerStateDTO chargerStateDto) {
-        Integer chargerId = chargerStateDto.getChargerId();
+        Integer chargerId = chargerStateDto.getChargerId().getId();
         ChargerDTO chargerDto = ChargerDTO.builder().id(chargerId).build();
 
         try {

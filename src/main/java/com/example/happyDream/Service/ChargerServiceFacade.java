@@ -168,7 +168,7 @@ public class ChargerServiceFacade {
     public void createTargetChargerLog(ChargerLogDTO chargerLogDto) {
         // FK(ChargerId) 존재 여부 1차 확인 후 PK(ChargerLogId) 부존재 여부 2차 확인
         try {
-            this.chargerService.chargerSelect(chargerLogDto.getChargerId()); // 검증용 호출, 반환값 ignored
+            this.chargerService.chargerSelect(chargerLogDto.getChargerId().getId()); // 검증용 호출, 반환값 ignored
             this.chargerLogService.createTargetChargerLog(chargerLogDto);
         } catch (EntityNotFoundException ignored) { }
     }

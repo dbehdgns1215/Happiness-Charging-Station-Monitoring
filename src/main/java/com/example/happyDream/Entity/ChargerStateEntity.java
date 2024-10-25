@@ -74,7 +74,7 @@ public class ChargerStateEntity {
     public ChargerStateDTO toDTO() {
         return ChargerStateDTO.builder()
                 .id(id)
-                .chargerId(chargerId.getId())
+                .chargerId(chargerId)
                 .usingYn(usingYn)
                 .brokenYn(brokenYn)
                 .usingAt(usingAt)

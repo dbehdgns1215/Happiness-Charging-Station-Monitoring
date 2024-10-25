@@ -47,12 +47,12 @@ public class ChargerLogService {
     // 전체 충전 로그 조회
     public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
         List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
-//        if (join == false) {
-//            for (ChargerLogDTO dto : dtoList) {
-//                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId()).build();
-//                dto.setChargerId(chargerDto);
-//            }
-//        }
+        if (join == false) {
+            for (ChargerLogDTO dto : dtoList) {
+                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId().getId()).build();
+                dto.setChargerId(chargerDto.toEntity());
+            }
+        }
         return dtoList;
     }
 

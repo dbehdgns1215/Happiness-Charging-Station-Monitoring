@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 public class ReviewDTO {
     //리뷰 데이터
     private Integer id;
-    private Integer chargerId;  // 수정: ChargerEntity 대신 Integer
-    private Integer userId;     // 수정: UserEntity 대신 Integer
+    private ChargerEntity chargerId;  // 수정: ChargerEntity 대신 Integer
+    private UserEntity userId;     // 수정: UserEntity 대신 Integer
     private String reviewContent;
     private Byte rating;
     
@@ -31,7 +31,7 @@ public class ReviewDTO {
     private LocalDateTime deletedAt;
 
     @Builder
-    public ReviewDTO(Integer id, Integer chargerId, Integer userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+    public ReviewDTO(Integer id, ChargerEntity chargerId, UserEntity userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
         this.chargerId = chargerId;
         this.userId = userId;
@@ -44,13 +44,10 @@ public class ReviewDTO {
     }
 
     public ReviewEntity toEntity() {
-        ChargerEntity chargerEntity = ChargerEntity.builder().id(chargerId).build();
-        UserEntity userEntity = UserEntity.builder().id(userId).build();
-
         return ReviewEntity.builder()
                 .id(id)
-                .chargerId(chargerEntity)
-                .userId(userEntity)
+                .chargerId(chargerId)
+                .userId(userId)
                 .reviewContent(reviewContent)
                 .rating(rating)
                 .createdAt(createdAt)

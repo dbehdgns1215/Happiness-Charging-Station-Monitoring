@@ -39,7 +39,7 @@ public class ChargerLogController {
             ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
 
             ChargerLogDTO chargerLogDto = ChargerLogDTO.builder()
-                    .chargerId(chargerDto.getId())
+                    .chargerId(chargerDto.toEntity())
                     .ampere(ampere)
                     .build();
 
