@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ChargerStateDTO {
     //충전 상태 기본 데이터
     private Integer id;
-    private ChargerEntity chargerId;
+    private Integer chargerId;
     private Boolean usingYn;
     private Boolean brokenYn;
 
@@ -24,7 +24,7 @@ public class ChargerStateDTO {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public ChargerStateDTO(Integer id, ChargerEntity chargerId, Boolean usingYn, Boolean brokenYn, LocalDateTime usingAt, LocalDateTime brokenAt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ChargerStateDTO(Integer id, Integer chargerId, Boolean usingYn, Boolean brokenYn, LocalDateTime usingAt, LocalDateTime brokenAt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.chargerId = chargerId;
         this.usingYn = usingYn;
@@ -36,9 +36,10 @@ public class ChargerStateDTO {
     }
 
     public ChargerStateEntity toEntity() {
+        ChargerEntity chargerEntity = ChargerEntity.builder().id(chargerId).build();
         return ChargerStateEntity.builder()
                 .id(id)
-                .chargerId(chargerId)
+                .chargerId(chargerEntity)
                 .usingYn(usingYn)
                 .brokenYn(brokenYn)
                 .usingAt(usingAt)

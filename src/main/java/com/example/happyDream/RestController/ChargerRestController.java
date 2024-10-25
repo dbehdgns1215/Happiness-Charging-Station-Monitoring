@@ -2,12 +2,8 @@ package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.Interface.ChargerSwagger;
 import com.example.happyDream.Service.ChargerServiceFacade;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,7 @@ import java.util.*;
 @Slf4j
 @RestController //ResponseBody + Controller 어노테이션
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class ChargerRestController implements Charger{
+public class ChargerRestController implements ChargerSwagger {
     private final ChargerServiceFacade chargerServiceFacade;
 
     @Autowired
