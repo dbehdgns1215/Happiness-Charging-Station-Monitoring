@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "유저 DTO")
 public class UserDTO {
     //사용자 데이터
@@ -41,19 +43,7 @@ public class UserDTO {
     @Schema(description = "데이터 삭제 시각")
     private LocalDateTime deletedAt;
 
-    @Builder
-    public UserDTO(Integer id, String username, String password, String email, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.userType = userType;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.deletedYn = deletedYn;
-        this.deletedAt = deletedAt;
-    }
-    
+
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .id(id)

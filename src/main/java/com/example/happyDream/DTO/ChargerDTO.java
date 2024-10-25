@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class ChargerDTO {
     //츙전기 기본 데이터
@@ -42,34 +44,6 @@ public class ChargerDTO {
     private Boolean deletedYn;
     private LocalDateTime deletedAt;
 
-    @Builder
-    public ChargerDTO(Integer id, String name, String city1, String city2, Integer city2Code, String addressNew, String addressOld, String addressDetail, Double latitude, Double longitude, Time weekdayOpen, Time saturdayOpen, Time holidayOpen, Time weekdayClose, Time saturdayClose, Time holidayClose, Integer chargerCount, Boolean chargeAirYn, Boolean chargePhoneYn, String callNumber, LocalDate updatedDate, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
-        this.id = id;
-        this.name = name;
-        this.city1 = city1;
-        this.city2 = city2;
-        this.city2Code = city2Code;
-        this.addressNew = addressNew;
-        this.addressOld = addressOld;
-        this.addressDetail = addressDetail;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.weekdayOpen = weekdayOpen;
-        this.saturdayOpen = saturdayOpen;
-        this.holidayOpen = holidayOpen;
-        this.weekdayClose = weekdayClose;
-        this.saturdayClose = saturdayClose;
-        this.holidayClose = holidayClose;
-        this.chargerCount = chargerCount;
-        this.chargeAirYn = chargeAirYn;
-        this.chargePhoneYn = chargePhoneYn;
-        this.callNumber = callNumber;
-        this.updatedDate = updatedDate;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.deletedYn = deletedYn;
-        this.deletedAt = deletedAt;
-    }
 
     public ChargerEntity toEntity() {
         return ChargerEntity.builder()

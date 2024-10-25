@@ -84,7 +84,7 @@ public class ChargerLogRestController implements ChargerLogSwagger {
             ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
 
             ChargerLogDTO chargerLogDto = ChargerLogDTO.builder()
-                    .chargerId(chargerDto.toEntity())
+                    .chargerId(chargerDto.getId())
                     .ampere(ampere)
                     .build();
 
