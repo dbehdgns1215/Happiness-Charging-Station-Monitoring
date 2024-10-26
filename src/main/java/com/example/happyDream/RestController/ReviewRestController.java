@@ -34,22 +34,23 @@ public class ReviewRestController {
     }
 
     // 리뷰 추가
-    @PostMapping("/reviews")
+    @PostMapping
     public ResponseDTO reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
-                               @RequestParam(value="user_id") Integer userId,
-                               @RequestParam(value="review_content") String content,
-                               @RequestParam(value="rating") Byte rating) {
-        this.reviewService.reviewInsert(chargerId, userId, content, rating);
+                                    @RequestBody ReviewDTO review) {
+        System.out.println("charger_id : " + chargerId);
+        System.out.println("userId : " + review.getUserId());
+        System.out.println("content : " + review.getReviewContent());
+        System.out.println("rating : " + review.getRating());
+        // user 테이블 완성 후 DB에 추가하는 로직 반영
+        // this.reviewService.reviewInsert(chargerId, review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
     // 특정 리뷰 수정
     @PostMapping("/reviews/{id}")
     public ResponseDTO reviewUpdate(@RequestParam(value="charger_id") Integer chargerId,
-                               @RequestParam(value="user_id") Integer userId,
-                               @RequestParam(value="review_content") String content,
-                               @RequestParam(value="rating") Byte rating) {
-        this.reviewService.reviewUpdate(chargerId, userId, content, rating);
+                                    @RequestBody ReviewDTO review) {
+        this.reviewService.reviewUpdate(chargerId, review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 

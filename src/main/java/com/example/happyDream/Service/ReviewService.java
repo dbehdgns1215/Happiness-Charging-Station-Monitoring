@@ -7,6 +7,7 @@ import com.example.happyDream.Entity.UserEntity;
 import com.example.happyDream.Repository.ReviewRepository;
 import com.example.happyDream.Util.Converter;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,9 @@ public class ReviewService {
         this.reviewRepository.deleteAll();
     }
 
-    public void reviewInsert(Integer chargerId,
-                             Integer userId,
-                             String content,
-                             Byte rating) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
+    public void reviewInsert(Integer chargerId, ReviewDTO review) {
+        ReviewDTO reviewDTO = createReviewDto(chargerId, review.getUserId(), review.getReviewContent(),
+                    review.getRating());
         this.reviewRepository.save(reviewDTO.toEntity());
     }
 
@@ -53,12 +52,18 @@ public class ReviewService {
 
     }
 
-    public void reviewUpdate(Integer chargerId,
-                             Integer userId,
-                             String content,
-                             Byte rating) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
-        this.reviewRepository.save(reviewDTO.toEntity());
+
+    @Transactional
+    public void reviewUpdate(Integer chargerId, ReviewDTO reviewDTO) {
+        ReviewEntity reviewEntity = reviewRepository.findByChargerIdAndUserId(
+                chargerId, reviewDTO.getUserId()
+        ).orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+        /*
+        reviewEntity.setReviewContent(reviewDTO.getReviewContent());
+        reviewEntity.setRating(reviewDTO.getRating());
+        reviewEntity.setModifiedAt(LocalDateTime.now());
+         */
+        // 엔티티에 Setter 미사용시 수정 로직을 어떻게 처리할 것인지 논의 필요
     }
 
     public void reviewDelete(Integer id) {
