@@ -116,6 +116,7 @@ public class ChargerEntity {
     public ChargerDTO toDTO() {
         return ChargerDTO.builder()
                 .id(id)
+                .chargerState(chargerState.toDTO())
                 .name(name)
                 .city1(city1)
                 .city2(city2)

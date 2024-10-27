@@ -1,5 +1,6 @@
 package com.example.happyDream.DTO;
 import com.example.happyDream.Entity.ChargerEntity;
+import com.example.happyDream.Entity.ChargerStateEntity;
 import lombok.*;
 
 import java.sql.Time;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class ChargerDTO {
     //츙전기 기본 데이터
     private Integer id;
+    private ChargerStateDTO chargerState;
     private String name;
     private String city1;
     private String city2;
@@ -44,10 +46,10 @@ public class ChargerDTO {
     private Boolean deletedYn;
     private LocalDateTime deletedAt;
 
-
     public ChargerEntity toEntity() {
         return ChargerEntity.builder()
                 .id(id)
+                .chargerState(chargerState.toEntity())
                 .name(name)
                 .city1(city1)
                 .city2(city2)

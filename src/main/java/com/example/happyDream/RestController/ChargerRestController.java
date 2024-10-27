@@ -37,6 +37,7 @@ public class ChargerRestController implements ChargerSwagger {
         return responseDto;
     }
 
+    // 비동기 처리 고려해봐야 함
     @PostMapping("/chargers")
     public ResponseDTO createChargerSyncGovernment(@RequestBody String requestJson) {
         return this.chargerServiceFacade.createChargerSyncGovernment(requestJson);
