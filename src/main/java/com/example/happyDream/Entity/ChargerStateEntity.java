@@ -22,9 +22,9 @@ public class ChargerStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(unique = true) //OneToOne 대체
-    private ChargerEntity charger; // 충전기 식별자
+    @OneToOne
+    @JoinColumn(name = "charger_id")
+    private ChargerEntity charger;
 
     @ColumnDefault("0")
     @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")

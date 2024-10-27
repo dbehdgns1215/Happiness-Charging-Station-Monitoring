@@ -25,6 +25,9 @@ public class ChargerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //id 자동 생성
     private Integer id; //충전기 식별자
 
+    @OneToOne(mappedBy = "charger", cascade = CascadeType.ALL)
+    private ChargerStateEntity chargerState;
+
     @NotNull
     @Column
     private String name; //충전기명

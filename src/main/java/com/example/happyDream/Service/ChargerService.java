@@ -45,6 +45,11 @@ public class ChargerService {
         return this.chargerRepository.save(chargerDto.toEntity()).toDTO();
     }
 
+    // 충전기 추가(단일) [레거시]
+    public ChargerEntity createChargerLegacy(ChargerEntity chargerEntity) {
+        return this.chargerRepository.save(chargerEntity);
+    }
+
     // 충전기 추가(리스트)
     public void createCharger(List<ChargerDTO> chargerDtoList) {
         List<ChargerEntity> chargerEntityList = Converter.DtoListToEntityList(chargerDtoList, ChargerDTO::toEntity);

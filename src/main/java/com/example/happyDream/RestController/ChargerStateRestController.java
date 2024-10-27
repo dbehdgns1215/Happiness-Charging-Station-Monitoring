@@ -49,7 +49,7 @@ public class ChargerStateRestController implements ChargerStateSwagger {
         ResponseDTO responseDto;
         try {
             ChargerStateDTO chargerStateDto = this.chargerServiceFacade.getTargetChargerState(chargerDto);
-            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, (List<?>) chargerStateDto);
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(chargerStateDto));
         } catch (EntityNotFoundException e) {
             log.error("ChargerState가 존재하지 않음 - 요청한 충전기 id: {}\n{}", chargerId, e.getStackTrace());
             responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_NOT_FOUND, "ChargerState가 존재하지 않음");
@@ -63,14 +63,14 @@ public class ChargerStateRestController implements ChargerStateSwagger {
 
     // 특정 충전기 상태 변경
     @PutMapping("/chargers/{id}/states")
-    public ResponseDTO changeTargetChargerState(@PathVariable("id") Integer chargerId, Boolean usingUn, Boolean brokenYn) {
+    public ResponseDTO changeTargetChargerState(@PathVariable("id") Integer chargerId,
+                                                @RequestBody ChargerStateDTO chargerStateDto) {
         ChargerStateDTO chargerStateDTO = ChargerStateDTO.builder()
                 .chargerId(chargerId)
-                .usingYn(usingUn)
-                .brokenYn(brokenYn)
+                .usingYn(chargerStateDto.getUsingYn())
+                .brokenYn(chargerStateDto.getBrokenYn())
                 .build();
         this.chargerServiceFacade.changeTargetChargerState(chargerStateDTO); // TODO - 상태 반환
         return ResponseDTO.error("v1", HttpServletResponse.SC_NOT_IMPLEMENTED, "미구현");
     }
-
 }

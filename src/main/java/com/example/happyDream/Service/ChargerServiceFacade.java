@@ -4,6 +4,7 @@ import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Util.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -108,9 +109,12 @@ public class ChargerServiceFacade {
                     }
                 }
             }
-            ChargerDTO savedCharger = this.chargerService.createCharger(newCharger);
-            this.chargerStateService.createChargerState(this.chargerService.chargerSelect(savedCharger.getId()));
-            chargerDtoList.add(savedCharger);
+            ChargerEntity chargerEntity = this.chargerService.createChargerLegacy(newCharger.toEntity());
+            this.chargerService.chargerSelect(chargerEntity.getId());
+            this.chargerStateService.createChargerStateLegacy(chargerEntity);
+            this.chargerService.chargerSelect(chargerEntity.getId());
+
+            chargerDtoList.add(chargerEntity.toDTO());
         }
         log.info("변환 성공한 충전기 수: {}", chargerDtoList.size());
 
@@ -192,11 +196,6 @@ public class ChargerServiceFacade {
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException();
         }
-    }
-
-    // 특정 충전기 상태 추가
-    public void createTargetChargerState(ChargerDTO chargerDto) {
-        this.chargerStateService.createChargerState(chargerDto);
     }
 
     // 특정 충전기 상태 업데이트
