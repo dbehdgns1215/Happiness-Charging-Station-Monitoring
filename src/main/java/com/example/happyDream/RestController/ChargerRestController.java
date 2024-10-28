@@ -23,6 +23,7 @@ public class ChargerRestController implements ChargerSwagger {
         this.chargerServiceFacade = chargerServiceFacade;
     }
 
+    // 전체 충전기 조회
     @GetMapping("/chargers")
     public ResponseDTO getAllChargers() {
         List<ChargerDTO> chargerDtoList = this.chargerServiceFacade.chargerSelectAll();
@@ -37,6 +38,7 @@ public class ChargerRestController implements ChargerSwagger {
         return responseDto;
     }
 
+    // 전체 충전기 조회(상세)
     @GetMapping("/chargers/detail")
     public ResponseDTO getAllChargersDetail() {
         List<ChargerDetailDTO> chargerDetailDtoList = this.chargerServiceFacade.chargerSelectAllDetail();
@@ -53,7 +55,8 @@ public class ChargerRestController implements ChargerSwagger {
 
     // 비동기 처리 고려해봐야 함
     @PostMapping("/chargers")
-    public ResponseDTO createChargerSyncGovernment(@RequestBody String requestJson) {
-        return this.chargerServiceFacade.createChargerSyncGovernment(requestJson);
+    public ResponseDTO createCharger(@RequestParam(required = false) Boolean initYn,
+                                     @RequestBody String requestJson) {
+        return this.chargerServiceFacade.createChargerFromJson(initYn, requestJson);
     }
 }
