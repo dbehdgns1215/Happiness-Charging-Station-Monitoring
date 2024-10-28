@@ -25,7 +25,7 @@ public class ChargerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //id 자동 생성
     private Integer id; //충전기 식별자
 
-    @OneToOne(mappedBy = "charger", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "charger", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ChargerStateEntity chargerState;
 
     @NotNull
@@ -114,33 +114,66 @@ public class ChargerEntity {
     }
 
     public ChargerDTO toDTO() {
-        return ChargerDTO.builder()
-                .id(id)
-                .chargerState(chargerState.toDTO())
-                .name(name)
-                .city1(city1)
-                .city2(city2)
-                .city2Code(city2Code)
-                .addressNew(addressNew)
-                .addressOld(addressOld)
-                .addressDetail(addressDetail)
-                .latitude(latitude)
-                .longitude(longitude)
-                .weekdayOpen(weekdayOpen)
-                .saturdayOpen(saturdayOpen)
-                .holidayOpen(holidayOpen)
-                .weekdayClose(weekdayClose)
-                .saturdayClose(saturdayClose)
-                .holidayClose(holidayClose)
-                .chargerCount(chargerCount)
-                .chargeAirYn(chargeAirYn)
-                .chargePhoneYn(chargePhoneYn)
-                .callNumber(callNumber)
-                .updatedDate(updatedDate)
-                .createdAt(createdAt)
-                .modifiedAt(modifiedAt)
-                .deletedYn(deletedYn)
-                .deletedAt(deletedAt)
-                .build();
+        ChargerDTO chargerDto;
+        if (this.chargerState != null) {
+            chargerDto = ChargerDTO.builder()
+                    .id(id)
+                    .chargerState(chargerState.toDTO())
+                    .name(name)
+                    .city1(city1)
+                    .city2(city2)
+                    .city2Code(city2Code)
+                    .addressNew(addressNew)
+                    .addressOld(addressOld)
+                    .addressDetail(addressDetail)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .weekdayOpen(weekdayOpen)
+                    .saturdayOpen(saturdayOpen)
+                    .holidayOpen(holidayOpen)
+                    .weekdayClose(weekdayClose)
+                    .saturdayClose(saturdayClose)
+                    .holidayClose(holidayClose)
+                    .chargerCount(chargerCount)
+                    .chargeAirYn(chargeAirYn)
+                    .chargePhoneYn(chargePhoneYn)
+                    .callNumber(callNumber)
+                    .updatedDate(updatedDate)
+                    .createdAt(createdAt)
+                    .modifiedAt(modifiedAt)
+                    .deletedYn(deletedYn)
+                    .deletedAt(deletedAt)
+                    .build();
+        }
+        else {
+            chargerDto = ChargerDTO.builder()
+                    .id(id)
+                    .name(name)
+                    .city1(city1)
+                    .city2(city2)
+                    .city2Code(city2Code)
+                    .addressNew(addressNew)
+                    .addressOld(addressOld)
+                    .addressDetail(addressDetail)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .weekdayOpen(weekdayOpen)
+                    .saturdayOpen(saturdayOpen)
+                    .holidayOpen(holidayOpen)
+                    .weekdayClose(weekdayClose)
+                    .saturdayClose(saturdayClose)
+                    .holidayClose(holidayClose)
+                    .chargerCount(chargerCount)
+                    .chargeAirYn(chargeAirYn)
+                    .chargePhoneYn(chargePhoneYn)
+                    .callNumber(callNumber)
+                    .updatedDate(updatedDate)
+                    .createdAt(createdAt)
+                    .modifiedAt(modifiedAt)
+                    .deletedYn(deletedYn)
+                    .deletedAt(deletedAt)
+                    .build();
+        }
+        return chargerDto;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerDetailDTO;
 import com.example.happyDream.DTO.ResponseDTO;
 import com.example.happyDream.Interface.ChargerSwagger;
 import com.example.happyDream.Service.ChargerServiceFacade;
@@ -33,7 +34,20 @@ public class ChargerRestController implements ChargerSwagger {
         else {
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.unmodifiableList(chargerDtoList));
         }
+        return responseDto;
+    }
 
+    @GetMapping("/chargers/detail")
+    public ResponseDTO getAllChargersDetail() {
+        List<ChargerDetailDTO> chargerDetailDtoList = this.chargerServiceFacade.chargerSelectAllDetail();
+
+        ResponseDTO responseDto;
+        if (chargerDetailDtoList.isEmpty()) {
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_NO_CONTENT, Collections.unmodifiableList(chargerDetailDtoList));
+        }
+        else {
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.unmodifiableList(chargerDetailDtoList));
+        }
         return responseDto;
     }
 

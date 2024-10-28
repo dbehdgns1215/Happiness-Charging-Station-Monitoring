@@ -1,6 +1,7 @@
 package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ChargerDetailDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
 import com.example.happyDream.Util.Converter;
@@ -59,6 +60,12 @@ public class ChargerService {
     public List<ChargerDTO> chargerSelectAll(){
         List<ChargerEntity> entityList = this.chargerRepository.findAll();
         List<ChargerDTO> dtoList = Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
+        System.out.println("가져온 충전기 수: " + dtoList.size());
+        return dtoList;
+    }
+
+    public List<ChargerDetailDTO> chargerSelectAllDetail(){
+        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerDetail();
         System.out.println("가져온 충전기 수: " + dtoList.size());
         return dtoList;
     }

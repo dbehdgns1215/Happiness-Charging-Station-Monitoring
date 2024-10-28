@@ -1,9 +1,6 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDTO;
-import com.example.happyDream.DTO.ChargerLogDTO;
-import com.example.happyDream.DTO.ChargerStateDTO;
-import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.DTO.*;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Util.GsonUtil;
 import com.google.gson.Gson;
@@ -54,6 +51,10 @@ public class ChargerServiceFacade {
     // 전체 충전기 조회
     public List<ChargerDTO> chargerSelectAll(){
         return this.chargerService.chargerSelectAll();
+    }
+
+    public List<ChargerDetailDTO> chargerSelectAllDetail(){
+        return this.chargerService.chargerSelectAllDetail();
     }
 
     @Transactional

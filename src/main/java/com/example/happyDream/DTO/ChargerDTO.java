@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChargerDTO {
-    //츙전기 기본 데이터
+    // 츙전기 기본 데이터
     private Integer id;
     private ChargerStateDTO chargerState;
     private String name;
@@ -27,7 +27,7 @@ public class ChargerDTO {
     private Double latitude;
     private Double longitude;
 
-    //츙전기 운영 관련 데이터
+    // 츙전기 운영 관련 데이터
     private Time weekdayOpen;
     private Time saturdayOpen;
     private Time holidayOpen;
@@ -39,7 +39,7 @@ public class ChargerDTO {
     private Boolean chargePhoneYn;
     private String callNumber;
 
-    //관리 목적 데이터
+    // 관리 목적 데이터
     private LocalDate updatedDate;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -47,33 +47,66 @@ public class ChargerDTO {
     private LocalDateTime deletedAt;
 
     public ChargerEntity toEntity() {
-        return ChargerEntity.builder()
-                .id(id)
-                .chargerState(chargerState.toEntity())
-                .name(name)
-                .city1(city1)
-                .city2(city2)
-                .city2Code(city2Code)
-                .addressNew(addressNew)
-                .addressOld(addressOld)
-                .addressDetail(addressDetail)
-                .latitude(latitude)
-                .longitude(longitude)
-                .weekdayOpen(weekdayOpen)
-                .saturdayOpen(saturdayOpen)
-                .holidayOpen(holidayOpen)
-                .weekdayClose(weekdayClose)
-                .saturdayClose(saturdayClose)
-                .holidayClose(holidayClose)
-                .chargerCount(chargerCount)
-                .chargeAirYn(chargeAirYn)
-                .chargePhoneYn(chargePhoneYn)
-                .callNumber(callNumber)
-                .updatedDate(updatedDate)
-                .createdAt(createdAt)
-                .modifiedAt(modifiedAt)
-                .deletedYn(deletedYn)
-                .deletedAt(deletedAt)
-                .build();
+        ChargerEntity chargerEntity;
+        if (this.chargerState != null) {
+            chargerEntity = ChargerEntity.builder()
+                    .id(id)
+                    .chargerState(chargerState.toEntity())
+                    .name(name)
+                    .city1(city1)
+                    .city2(city2)
+                    .city2Code(city2Code)
+                    .addressNew(addressNew)
+                    .addressOld(addressOld)
+                    .addressDetail(addressDetail)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .weekdayOpen(weekdayOpen)
+                    .saturdayOpen(saturdayOpen)
+                    .holidayOpen(holidayOpen)
+                    .weekdayClose(weekdayClose)
+                    .saturdayClose(saturdayClose)
+                    .holidayClose(holidayClose)
+                    .chargerCount(chargerCount)
+                    .chargeAirYn(chargeAirYn)
+                    .chargePhoneYn(chargePhoneYn)
+                    .callNumber(callNumber)
+                    .updatedDate(updatedDate)
+                    .createdAt(createdAt)
+                    .modifiedAt(modifiedAt)
+                    .deletedYn(deletedYn)
+                    .deletedAt(deletedAt)
+                    .build();
+        }
+        else {
+            chargerEntity = ChargerEntity.builder()
+                    .id(id)
+                    .name(name)
+                    .city1(city1)
+                    .city2(city2)
+                    .city2Code(city2Code)
+                    .addressNew(addressNew)
+                    .addressOld(addressOld)
+                    .addressDetail(addressDetail)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .weekdayOpen(weekdayOpen)
+                    .saturdayOpen(saturdayOpen)
+                    .holidayOpen(holidayOpen)
+                    .weekdayClose(weekdayClose)
+                    .saturdayClose(saturdayClose)
+                    .holidayClose(holidayClose)
+                    .chargerCount(chargerCount)
+                    .chargeAirYn(chargeAirYn)
+                    .chargePhoneYn(chargePhoneYn)
+                    .callNumber(callNumber)
+                    .updatedDate(updatedDate)
+                    .createdAt(createdAt)
+                    .modifiedAt(modifiedAt)
+                    .deletedYn(deletedYn)
+                    .deletedAt(deletedAt)
+                    .build();
+        }
+        return chargerEntity;
     }
 }

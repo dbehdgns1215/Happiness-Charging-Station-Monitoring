@@ -22,7 +22,7 @@ public class ChargerStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 고유 식별자 추가
     private Integer id;
 
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "charger_id")
     private ChargerEntity charger;
 
