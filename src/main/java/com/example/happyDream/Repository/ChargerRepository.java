@@ -28,20 +28,20 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
 //            "cs.createdAt as chargerStateCreatedAt, cs.modifiedAt as chargerStateModifiedAt) " +
 //            "FROM ChargerEntity c " +
 //            "JOIN c.chargerState cs")
-@Query("SELECT new com.example.happyDream.DTO.ChargerDetailDTO(" +
-        "c.id as chargerId, c.name as name, c.city1 as city1, c.city2 as city2, c.city2Code as city2Code, " +
-        "c.addressNew as addressNew, c.addressOld as addressOld, c.addressDetail as addressDetail, " +
-        "c.latitude as latitude, c.longitude as longitude, " +
-        "c.weekdayOpen as weekdayOpen, c.saturdayOpen as saturdayOpen, c.holidayOpen as holidayOpen, " +
-        "c.weekdayClose as weekdayClose, c.saturdayClose as saturdayClose, c.holidayClose as holidayClose, " +
-        "c.chargerCount as chargerCount, c.chargeAirYn as chargeAirYn, c.chargePhoneYn as chargePhoneYn, " +
-        "c.callNumber as callNumber, " +
-        "c.updatedDate as updatedDate, c.createdAt as chargerCreatedAt, c.modifiedAt as chargerModifiedAt, " +
-        "c.deletedYn as deletedYn, c.deletedAt as deletedAt, " +
-        "cs.id as chargerStateId, cs.usingYn as usingYn, cs.brokenYn as brokenYn, " +
-        "cs.usingAt as usingAt, cs.brokenAt as brokenAt, " +
-        "cs.createdAt as chargerStateCreatedAt, cs.modifiedAt as chargerStateModifiedAt) " +
-        "FROM ChargerEntity c " +
-        "JOIN c.chargerState cs")
+    @Query("SELECT new com.example.happyDream.DTO.ChargerDetailDTO(" +
+            "c.id as chargerId, c.name as name, c.city1 as city1, c.city2 as city2, c.city2Code as city2Code, " +
+            "c.addressNew as addressNew, c.addressOld as addressOld, c.addressDetail as addressDetail, " +
+            "c.latitude as latitude, c.longitude as longitude, " +
+            "c.weekdayOpen as weekdayOpen, c.saturdayOpen as saturdayOpen, c.holidayOpen as holidayOpen, " +
+            "c.weekdayClose as weekdayClose, c.saturdayClose as saturdayClose, c.holidayClose as holidayClose, " +
+            "c.chargerCount as chargerCount, c.chargeAirYn as chargeAirYn, c.chargePhoneYn as chargePhoneYn, " +
+            "c.callNumber as callNumber, " +
+            "c.updatedDate as updatedDate, c.createdAt as chargerCreatedAt, c.modifiedAt as chargerModifiedAt, " +
+            "c.deletedYn as deletedYn, c.deletedAt as deletedAt, " +
+            "cs.id as chargerStateId, cs.usingYn as usingYn, cs.brokenYn as brokenYn, " +
+            "cs.usingAt as usingAt, cs.brokenAt as brokenAt, " +
+            "cs.createdAt as chargerStateCreatedAt, cs.modifiedAt as chargerStateModifiedAt) " +
+            "FROM ChargerEntity c " +
+            "JOIN c.chargerState cs")
     List<ChargerDetailDTO> findAllChargerDetail();
 }

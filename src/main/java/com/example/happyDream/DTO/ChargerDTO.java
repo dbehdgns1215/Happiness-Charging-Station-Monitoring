@@ -1,6 +1,7 @@
 package com.example.happyDream.DTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerStateEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.sql.Time;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class ChargerDTO {
     // 츙전기 기본 데이터
     private Integer id;
+    @JsonIgnore
     private ChargerStateDTO chargerState;
     private String name;
     private String city1;
@@ -47,66 +49,32 @@ public class ChargerDTO {
     private LocalDateTime deletedAt;
 
     public ChargerEntity toEntity() {
-        ChargerEntity chargerEntity;
-        if (this.chargerState != null) {
-            chargerEntity = ChargerEntity.builder()
-                    .id(id)
-                    .chargerState(chargerState.toEntity())
-                    .name(name)
-                    .city1(city1)
-                    .city2(city2)
-                    .city2Code(city2Code)
-                    .addressNew(addressNew)
-                    .addressOld(addressOld)
-                    .addressDetail(addressDetail)
-                    .latitude(latitude)
-                    .longitude(longitude)
-                    .weekdayOpen(weekdayOpen)
-                    .saturdayOpen(saturdayOpen)
-                    .holidayOpen(holidayOpen)
-                    .weekdayClose(weekdayClose)
-                    .saturdayClose(saturdayClose)
-                    .holidayClose(holidayClose)
-                    .chargerCount(chargerCount)
-                    .chargeAirYn(chargeAirYn)
-                    .chargePhoneYn(chargePhoneYn)
-                    .callNumber(callNumber)
-                    .updatedDate(updatedDate)
-                    .createdAt(createdAt)
-                    .modifiedAt(modifiedAt)
-                    .deletedYn(deletedYn)
-                    .deletedAt(deletedAt)
-                    .build();
-        }
-        else {
-            chargerEntity = ChargerEntity.builder()
-                    .id(id)
-                    .name(name)
-                    .city1(city1)
-                    .city2(city2)
-                    .city2Code(city2Code)
-                    .addressNew(addressNew)
-                    .addressOld(addressOld)
-                    .addressDetail(addressDetail)
-                    .latitude(latitude)
-                    .longitude(longitude)
-                    .weekdayOpen(weekdayOpen)
-                    .saturdayOpen(saturdayOpen)
-                    .holidayOpen(holidayOpen)
-                    .weekdayClose(weekdayClose)
-                    .saturdayClose(saturdayClose)
-                    .holidayClose(holidayClose)
-                    .chargerCount(chargerCount)
-                    .chargeAirYn(chargeAirYn)
-                    .chargePhoneYn(chargePhoneYn)
-                    .callNumber(callNumber)
-                    .updatedDate(updatedDate)
-                    .createdAt(createdAt)
-                    .modifiedAt(modifiedAt)
-                    .deletedYn(deletedYn)
-                    .deletedAt(deletedAt)
-                    .build();
-        }
-        return chargerEntity;
+        return ChargerEntity.builder()
+                .id(id)
+                .name(name)
+                .city1(city1)
+                .city2(city2)
+                .city2Code(city2Code)
+                .addressNew(addressNew)
+                .addressOld(addressOld)
+                .addressDetail(addressDetail)
+                .latitude(latitude)
+                .longitude(longitude)
+                .weekdayOpen(weekdayOpen)
+                .saturdayOpen(saturdayOpen)
+                .holidayOpen(holidayOpen)
+                .weekdayClose(weekdayClose)
+                .saturdayClose(saturdayClose)
+                .holidayClose(holidayClose)
+                .chargerCount(chargerCount)
+                .chargeAirYn(chargeAirYn)
+                .chargePhoneYn(chargePhoneYn)
+                .callNumber(callNumber)
+                .updatedDate(updatedDate)
+                .createdAt(createdAt)
+                .modifiedAt(modifiedAt)
+                .deletedYn(deletedYn)
+                .deletedAt(deletedAt)
+                .build();
     }
 }
