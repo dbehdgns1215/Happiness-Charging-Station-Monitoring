@@ -165,8 +165,8 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllTargetChargerLog(ChargerDTO ChargerDto) {
-        return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
+    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId) {
+        return this.chargerLogService.getAllTargetChargerLog(chargerId);
     }
 
     // 특정 충전기 충전 로그 추가
