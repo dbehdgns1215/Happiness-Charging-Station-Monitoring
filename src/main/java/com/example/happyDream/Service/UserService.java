@@ -33,12 +33,11 @@ public class UserService {
         this.userRepository.deleteAll();
     }
 
-    public void userInsert(String username, String password, String email, Byte userType) {
+    public void userInsert(String username, String password) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(username);
         userDTO.setPassword(password);
-        userDTO.setEmail(email);
-        userDTO.setUserType(userType);
+
         this.userRepository.save(userDTO.toEntity());
     }
 

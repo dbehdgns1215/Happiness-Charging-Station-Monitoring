@@ -1,9 +1,11 @@
 package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.DTO.ReviewDTO;
 import com.example.happyDream.DTO.UserDTO;
 import com.example.happyDream.Service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+@RestController
+@RequestMapping("/api/v1")
 public class UserRestController {
     private final UserService userService;
 
@@ -37,10 +40,20 @@ public class UserRestController {
     //사용자 추가
     @PostMapping("/users")
     public ResponseDTO userInsert(@RequestParam(value="username") String username,
-                             @RequestParam(value="password") String password,
-                             @RequestParam(value="email") String email,
-                             @RequestParam(value="user_type") Byte userType) {
-        this.userService.userInsert(username, password, email, userType);
+                                  @RequestBody UserDTO userDTO) {
+        System.out.println("username : " + username);
+        System.out.println("password : " + userDTO.getPassword());
+//        this.userService.userInsert(username, userDTO.getPassword(), userDTO.getUserType());
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseDTO userLogin(@RequestParam(value="username") String username,
+                                  @RequestBody UserDTO userDTO) {
+        System.out.println("username : " + userDTO.getUsername());
+        System.out.println("password : " + userDTO.getPassword());
+
+        // 인증 로직 수행
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 

@@ -36,11 +36,6 @@ public class UserEntity {
     @Schema(description = "비밀번호")
     private String password;
 
-    @NotNull
-    @Column(length = 64, unique = true)
-    @Schema(description = "이메일")
-    private String email;
-
     //TODO - 추후 Enum 전환하고, 컨버터 추가
     @NotNull
     @Column(columnDefinition = "TINYINT UNSIGNED")
@@ -67,11 +62,10 @@ public class UserEntity {
     private LocalDateTime deletedAt;
 
     @Builder
-    public UserEntity(Integer id, String username, String password, String email, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+    public UserEntity(Integer id, String username, String password, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.email = email;
         this.userType = userType;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
@@ -84,7 +78,6 @@ public class UserEntity {
                 .id(id)
                 .username(username)
                 .password(password)
-                .email(email)
                 .userType(userType)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
