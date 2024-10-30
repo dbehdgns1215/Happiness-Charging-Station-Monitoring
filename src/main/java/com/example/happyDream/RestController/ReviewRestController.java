@@ -41,8 +41,8 @@ public class ReviewRestController {
         System.out.println("userId : " + review.getUserId());
         System.out.println("content : " + review.getReviewContent());
         System.out.println("rating : " + review.getRating());
-        // user 테이블 완성 후 DB에 추가하는 로직 반영
-        // this.reviewService.reviewInsert(chargerId, review);
+
+        this.reviewService.reviewInsert(chargerId, review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 

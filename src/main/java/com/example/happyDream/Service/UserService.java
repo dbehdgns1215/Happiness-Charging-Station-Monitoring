@@ -73,4 +73,8 @@ public class UserService {
 
         return passwordEncoder.matches(rawPassword, storedPassword);
     }
+
+    public Optional<UserEntity> findUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }
