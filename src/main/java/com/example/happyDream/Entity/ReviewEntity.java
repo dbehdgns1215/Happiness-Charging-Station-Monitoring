@@ -28,7 +28,7 @@ public class ReviewEntity {
     private ChargerEntity chargerId; //충전기 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private UserEntity userId; //유저 식별자
 
     @Column(length = 1024)
