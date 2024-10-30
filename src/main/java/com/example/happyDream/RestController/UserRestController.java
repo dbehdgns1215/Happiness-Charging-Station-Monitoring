@@ -1,13 +1,11 @@
 package com.example.happyDream.RestController;
 
 import com.example.happyDream.DTO.ResponseDTO;
-import com.example.happyDream.DTO.ReviewDTO;
 import com.example.happyDream.DTO.UserDTO;
 import com.example.happyDream.Service.UserService;
+import com.example.happyDream.Util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -17,10 +15,12 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class UserRestController {
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     // 전체 사용자 조회
@@ -37,24 +37,25 @@ public class UserRestController {
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
-    //사용자 추가
+    //사용자 추가 (회원가입)
     @PostMapping("/users")
-    public ResponseDTO userInsert(@RequestParam(value="username") String username,
-                                  @RequestBody UserDTO userDTO) {
-        System.out.println("username : " + username);
-        System.out.println("password : " + userDTO.getPassword());
-//        this.userService.userInsert(username, userDTO.getPassword(), userDTO.getUserType());
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+    public ResponseDTO userInsert(@RequestBody UserDTO userDTO) {
+        userService.userInsert(userDTO.getUsername(), userDTO.getPassword());
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, "회원가입 성공");
     }
 
     @PostMapping("/login")
-    public ResponseDTO userLogin(@RequestParam(value="username") String username,
-                                  @RequestBody UserDTO userDTO) {
-        System.out.println("username : " + userDTO.getUsername());
-        System.out.println("password : " + userDTO.getPassword());
+    public ResponseDTO userLogin(@RequestBody UserDTO userDTO) {
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
 
-        // 인증 로직 수행
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
+        // 사용자 인증
+        if (userService.validateUser(username, password)) {
+            String token = jwtUtil.generateToken(username);  // JWT 발급
+            return ResponseDTO.success("v1", HttpServletResponse.SC_OK, token);
+        } else {
+            return ResponseDTO.error("v1", HttpServletResponse.SC_UNAUTHORIZED, "로그인 실패");
+        }
     }
 
     //특정 사용자 조회

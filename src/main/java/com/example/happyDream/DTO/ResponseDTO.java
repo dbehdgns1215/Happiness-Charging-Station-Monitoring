@@ -58,6 +58,14 @@ public class ResponseDTO {
                 .build();
     }
 
+    public static ResponseDTO success(String apiVersion, int responseCode, String jwt) {
+        return builder()
+                .apiVersion(apiVersion)
+                .status("success")
+                .responseCode(responseCode)
+                .message(jwt)
+                .build();
+    }
     public static ResponseDTO error(String apiVersion, int responseCode, String message) {
         return builder()
                 .apiVersion(apiVersion)

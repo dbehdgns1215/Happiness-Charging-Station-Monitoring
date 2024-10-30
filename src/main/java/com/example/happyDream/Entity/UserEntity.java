@@ -32,7 +32,7 @@ public class UserEntity {
     private String username;
 
     @NotNull
-    @Column(length = 32)
+    @Column(length = 255)
     @Schema(description = "비밀번호")
     private String password;
 
