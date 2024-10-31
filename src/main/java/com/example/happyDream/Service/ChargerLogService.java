@@ -66,8 +66,14 @@ public class ChargerLogService {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId) {
-        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId, Boolean descYn) {
+        List<ChargerLogDTO> dtoList;
+        if (descYn) {
+            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId));
+        }
+        else {
+            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+        }
         return dtoList;
     }
 

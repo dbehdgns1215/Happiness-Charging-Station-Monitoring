@@ -12,4 +12,7 @@ public interface ChargerLogRepository extends JpaRepository<ChargerLogEntity, Lo
     //public List<ChargerLogEntity> findAllByChargerId(ChargerEntity chargerEntity);
     @Query("SELECT cl FROM ChargerLogEntity cl WHERE cl.charger.id = :chargerId")
     List<ChargerLogEntity> findAllByChargerId(@Param("chargerId") Integer chargerId);
+
+    @Query("SELECT cl FROM ChargerLogEntity cl WHERE cl.charger.id = :chargerId ORDER BY cl.id DESC")
+    List<ChargerLogEntity> findAllByChargerIdOrderByDesc(@Param("chargerId") Integer chargerId);
 }

@@ -32,9 +32,10 @@ public class ChargerLogController {
     // 특정 충전기 로그 조회
     @GetMapping("/chargers/{id}/logs")
     public String getChargerLog(Model model,
-                                @PathVariable("id") Integer chargerId) {
+                                @PathVariable("id") Integer chargerId,
+                                @RequestParam(value = "descYn", defaultValue = "true") Boolean descYn) {
         // TODO - 충전기가 없거나 로그가 없는 경우 웹에서 오류 처리
-        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllTargetChargerLog(chargerId);
+        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllTargetChargerLog(chargerId, descYn);
         model.addAttribute("logList", chargerLogDtoList);
         return "chargerLog.html";
     }
