@@ -1,9 +1,7 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDTO;
-import com.example.happyDream.DTO.ChargerLogDTO;
-import com.example.happyDream.DTO.ChargerStateDTO;
-import com.example.happyDream.DTO.ResponseDTO;
+import com.example.happyDream.DTO.*;
+import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Util.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -18,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -33,6 +32,7 @@ import java.util.Map;
 @Slf4j
 @Service
 public class ChargerServiceFacade {
+    private static final String CHARGER_JSON_PATH = "src/main/resources/data/chargerList.json";
     private static final String CHARGER_MAPPING_JSON_PATH = "src/main/resources/data/chargerDataGovernmentMapping.json";
 
     private final ChargerService chargerService;
@@ -55,9 +55,31 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelectAll();
     }
 
+    public List<ChargerDetailDTO> chargerSelectAllDetail(){
+        return this.chargerService.chargerSelectAllDetail();
+    }
+
     @Transactional
-    public ResponseDTO createChargerSyncGovernment(String requestJson) {
+    public ResponseDTO createChargerFromJson(Boolean initYn, String requestJson) {
         Gson gson = GsonUtil.createGson();
+
+        if (initYn != null & Boolean.TRUE.equals(initYn)) {
+            log.info("init 실행됨 {}", initYn);
+            try (BufferedReader br = new BufferedReader(new FileReader(CHARGER_JSON_PATH))) {
+                StringBuilder sb = new StringBuilder();
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                br.close();
+
+                requestJson = sb.toString();
+            } catch (IOException e) {
+                log.error("초기화를 위한 공공데이터 JSON 파일을 불러오지 못함 {}\n{}", CHARGER_MAPPING_JSON_PATH, e.getStackTrace());
+                return ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "초기화를 위한 공공데이터 JSON 파일을 불러오지 못함");
+            }
+        }
 
         // JSON 기본 구조 파싱
         JsonObject jsonObject = gson.fromJson(requestJson, JsonObject.class); // JsonObject로 파싱
@@ -79,6 +101,7 @@ public class ChargerServiceFacade {
             JsonObject recordObject = recordElement.getAsJsonObject(); // 레코드 파싱
 
             ChargerDTO newCharger = new ChargerDTO();
+
             for (Field field : ChargerDTO.class.getDeclaredFields()) {
                 field.setAccessible(true); // 리플렉션을 통해 private 접근 제어 무시하고 접근
                 String fieldName = fieldMapping.get(field.getName()); // DTO의 필드명을 공공데이터의 필드명으로 변환
@@ -108,9 +131,12 @@ public class ChargerServiceFacade {
                     }
                 }
             }
-            chargerDtoList.add(newCharger);
-            ChargerDTO savedCharger = this.chargerService.createCharger(newCharger);
-            this.chargerStateService.createChargerState(this.chargerService.chargerSelect(savedCharger.getId()));
+            ChargerEntity chargerEntity = this.chargerService.createChargerLegacy(newCharger.toEntity());
+            this.chargerService.chargerSelect(chargerEntity.getId());
+            this.chargerStateService.createChargerStateLegacy(chargerEntity);
+            this.chargerService.chargerSelect(chargerEntity.getId());
+
+            chargerDtoList.add(chargerEntity.toDTO());
         }
         log.info("변환 성공한 충전기 수: {}", chargerDtoList.size());
 
@@ -160,8 +186,8 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllTargetChargerLog(ChargerDTO ChargerDto) {
-        return this.chargerLogService.getAllTargetChargerLog(ChargerDto);
+    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId) {
+        return this.chargerLogService.getAllTargetChargerLog(chargerId);
     }
 
     // 특정 충전기 충전 로그 추가
@@ -192,11 +218,6 @@ public class ChargerServiceFacade {
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException();
         }
-    }
-
-    // 특정 충전기 상태 추가
-    public void createTargetChargerState(ChargerDTO chargerDto) {
-        this.chargerStateService.createChargerState(chargerDto);
     }
 
     // 특정 충전기 상태 업데이트

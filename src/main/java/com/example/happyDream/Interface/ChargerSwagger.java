@@ -21,5 +21,5 @@ public interface ChargerSwagger {
                     @ApiResponse(responseCode = "200", description = "충전기 추가 성공", content = @Content(schema = @Schema(implementation = ResponseDTO.class, hidden = true))),
                     @ApiResponse(responseCode = "500", description = "충전기 추가 실패(공공데이터-ChargerDTO 간 필드 매핑에 필요한 JSON 파일을 불러오지 못함)", content = @Content(schema = @Schema(implementation = ResponseDTO.class, hidden = true)))
             })
-    public ResponseDTO createChargerSyncGovernment(String requestJson);
+    public ResponseDTO createCharger(Boolean initYn, String requestJson);
 }

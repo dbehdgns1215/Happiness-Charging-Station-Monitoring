@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ChargerStateRepository extends JpaRepository<ChargerStateEntity, Integer> {
-    public Optional<ChargerStateEntity> findByChargerId(ChargerEntity chargerEntity);
+    public Optional<ChargerStateEntity> findByCharger(ChargerEntity chargerEntity);
 }

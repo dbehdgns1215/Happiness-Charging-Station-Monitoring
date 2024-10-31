@@ -3,10 +3,7 @@ package com.example.happyDream.Entity;
 import com.example.happyDream.DTO.ReviewDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,7 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "review")
 @Getter //Setter 미사용
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class ReviewEntity {
     @Id
@@ -58,20 +57,6 @@ public class ReviewEntity {
         if (this.deletedYn == null) {
             this.deletedYn = false;
         }
-    }
-
-    @Builder
-    public ReviewEntity(Integer id, ChargerEntity chargerId, UserEntity userId, String reviewContent, Byte rating, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
-        this.id = id;
-        this.chargerId = chargerId;
-        this.userId = userId;
-        this.reviewContent = reviewContent;
-        this.rating = rating;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.deletedYn = deletedYn;
-        this.deletedAt = deletedAt;
-
     }
 
     public ReviewDTO toDTO() {
