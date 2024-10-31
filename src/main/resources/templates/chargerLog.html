@@ -2,11 +2,12 @@
 <div layout:fragment="content" class="container text-center my-3">
     <style></style>
 
-<!--    <link rel="stylesheet" th:href="@{/css/book_list.css}">-->
-<!--    <script sec:authorize="isAuthenticated()"></script>-->
-    <script th:inline="javascript">
+<!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
+    <!--  인증된 사용자 접속 시 스크립트  -->
+    <script sec:authorize="isAuthenticated()"></script>
 
-    </script>
+    <!--  기본 실행 스크립트  -->
+    <script th:inline="javascript"></script>
 
     <div class="d-block text-start">
         <H2>충전 로그 조회</H2>
