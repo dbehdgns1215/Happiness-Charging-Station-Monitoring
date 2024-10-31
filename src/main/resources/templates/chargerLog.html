@@ -37,6 +37,7 @@
             <th>로그 id</th>
             <th>등록일</th>
             <th>등록 시각</th>
+            <th>기기 전송 시각</th>
             <th>충전량</th>
         </tr>
         </thead>
@@ -47,6 +48,7 @@
             <td th:text="${log.id}">로그 id</td>
             <td th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd')}">등록일</td>
             <td th:text="${#temporals.format(log.createdAt, 'HH:mm:ss')}">등록 시각</td>
+            <td th:text="${#temporals.format(log.requestAt, 'HH:mm:ss')}">기기 전송 시각</td>
             <td th:text="${log.ampere}">충전량</td>
         </tr>
         </tbody>
