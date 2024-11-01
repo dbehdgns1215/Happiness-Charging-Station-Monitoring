@@ -13,11 +13,54 @@
     </style>
 
 <!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
-    <!--  인증된 사용자 접속 시 스크립트  -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
     <script sec:authorize="isAuthenticated()"></script>
 
-    <!--  기본 실행 스크립트  -->
-    <script th:inline="javascript"></script>
+    <!--  타임리프 기본 실행 스크립트  -->
+    <script th:inline="javascript">
+        let logList = [[${logList}]]; // 데이터 저장
+
+        let chartDataArray = new Array();
+
+        logList.forEach((log) => {
+            let chartData = new Object();
+            chartData.x = log.requestAt;
+            chartData.y = log.ampere;
+
+            chartDataArray.push(chartData);
+        });
+
+        window.onload = function(){
+            var config  = {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        data: chartDataArray
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x'
+                            },
+                            zoom: {
+                                enabled: true,
+                                mode: 'x'
+                            }
+                        }
+                    }
+                }
+            }
+
+            const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, config);
+        }
+    </script>
 
     <div class="d-block text-start">
         <H2>충전 로그 조회</H2>
@@ -27,6 +70,10 @@
     <div class="alert alert-secondary mb-0 d-flex align-items-center" th:if="${#lists.isEmpty(logList)==true}">
         <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
         <div>표시할 도서가 없습니다.</div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
     </div>
 
     <table class="table table-bordered table-hover">
