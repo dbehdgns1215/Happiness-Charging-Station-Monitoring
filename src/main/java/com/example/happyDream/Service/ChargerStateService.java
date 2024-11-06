@@ -42,8 +42,9 @@ public class ChargerStateService {
     }
 
     // 특정 충전기 상태 조회(엔티티 직접 반환 - 값 변경 시 사용) [레거시]
-    private ChargerStateEntity getTargetChargerStateLegacy(ChargerDTO chargerDto) {
-        Optional<ChargerStateEntity> entity = this.chargerStateRepository.findByCharger(chargerDto.toEntity());
+    private ChargerStateEntity getTargetChargerStateLegacy(Integer chargerId) {
+        ChargerEntity chargerEntity = ChargerEntity.builder().id(chargerId).build();
+        Optional<ChargerStateEntity> entity = this.chargerStateRepository.findByCharger(chargerEntity);
         if (entity.isPresent()) {
             return entity.get();
         }
@@ -79,12 +80,12 @@ public class ChargerStateService {
     // 특정 충전기 상태 조회(읽기 전용)
     // 존재하는 경우 DTO 반환, 없는 경우 예외 발생
     @Transactional(readOnly = true)
-    public ChargerStateDTO getTargetChargerState(ChargerDTO chargerDto) {
+    public ChargerStateDTO getTargetChargerState(Integer chargerId) {
         try {
-            ChargerStateEntity entity = getTargetChargerStateLegacy(chargerDto);
+            ChargerStateEntity entity = getTargetChargerStateLegacy(chargerId);
             return entity.toDTO();
         } catch (EntityNotFoundException e) {
-            log.info("존재하지 않는 충전기의 상태 조회 - 충전기 id: {}", chargerDto.getId());
+            log.info("존재하지 않는 충전기의 상태 조회 - 충전기 id: {}", chargerId);
             throw new EntityNotFoundException();
         }
     }
@@ -116,10 +117,9 @@ public class ChargerStateService {
     @Transactional
     public void changeTargetChargerState(ChargerStateDTO chargerStateDto) {
         Integer chargerId = chargerStateDto.getChargerId();
-        ChargerDTO chargerDto = ChargerDTO.builder().id(chargerId).build();
 
         try {
-            ChargerStateEntity entity = getTargetChargerStateLegacy(chargerDto);
+            ChargerStateEntity entity = getTargetChargerStateLegacy(chargerId);
 
             entity.changeUsingYn(chargerStateDto.getUsingYn());
             entity.changeBrokenYn(chargerStateDto.getBrokenYn());

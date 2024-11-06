@@ -212,9 +212,9 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 상태 조회
-    public ChargerStateDTO getTargetChargerState(ChargerDTO chargerDto) {
+    public ChargerStateDTO getTargetChargerState(Integer chargerId) {
         try {
-            return this.chargerStateService.getTargetChargerState(chargerDto);
+            return this.chargerStateService.getTargetChargerState(chargerId);
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException();
         }

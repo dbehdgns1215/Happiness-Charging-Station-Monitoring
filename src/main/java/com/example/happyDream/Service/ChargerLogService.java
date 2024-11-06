@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class ChargerLogService {
     private List<ChargerLogDTO> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
         if (entityList.isEmpty()) {
             log.warn("DTO list가 비어있음");
-            throw new EntityNotFoundException();
+            return new ArrayList<>();
         }
         return entityList.stream()
                 .map(ChargerLogEntity::toDTO)
