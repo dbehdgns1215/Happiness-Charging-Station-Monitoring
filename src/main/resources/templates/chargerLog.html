@@ -10,6 +10,17 @@
         tr > td.state.deactivate {
             background-color: #E0E0E0;
         }
+
+        .chartBox {
+            width: 100%;
+            background: white;
+        }
+        .container {
+            overflow-x: scroll;
+        }
+        .containerBody {
+            height: 450px;
+        }
     </style>
 
 <!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
@@ -20,45 +31,65 @@
 
     <!--  타임리프 기본 실행 스크립트  -->
     <script th:inline="javascript">
-        let logList = [[${logList}]]; // 데이터 저장
+        const logList = [[${logList}]]; // 데이터 저장
 
+        // 그래프 표시 데이터
+        const logListReverse = [...logList].reverse();
         let chartDataArray = new Array();
 
-        logList.forEach((log) => {
+        logListReverse.forEach((log) => {
             let chartData = new Object();
-            chartData.x = log.requestAt;
+            chartData.x = new String(log.requestAt).replace('T', ' ').substring(2);
             chartData.y = log.ampere;
 
             chartDataArray.push(chartData);
         });
 
-        window.onload = function(){
-            var config  = {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        data: chartDataArray
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            pan: {
-                                enabled: true,
-                                mode: 'x'
-                            },
-                            zoom: {
-                                enabled: true,
-                                mode: 'x'
-                            }
+        let config  = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '충전 전력량(W)',
+                    data: chartDataArray,
+                    lineTension: 0.1,
+                    borderWidth: 3,
+                    pointBorderWidth: 3,
+                    pointBackgroundColor: '#FFFFFF',
+                    pointHoverBackgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: logListReverse.length / 10
                         }
+                    },
+                    y: {
+                        beginAtZero: true
                     }
                 }
             }
+        }
 
+        window.onload = function(){
+            // Chart.js 그래프 생성
             const ctx = document.getElementById('myChart');
+            const container = document.getElementsByClassName('container')[0];
+            const containerBody = document.getElementsByClassName('containerBody')[0];
 
-            new Chart(ctx, config);
+            const myChart = new Chart(ctx, config); // 그래프 생성
+            const totalLableSize = myChart.data.labels.length; // 레이블 개수
+            const thresholdLableSize = 150; // 스크롤 적용할 레이블 개수 임계치
+            const widthPerLabel = 4; // 레이블 당 폭
+
+            if (totalLableSize > thresholdLableSize) {
+                containerBody.style.width = document.getElementsByClassName('container')[0].offsetWidth + (totalLableSize - thresholdLableSize) * widthPerLabel + 'px';
+            }
+            
+            myChart.update();
         }
     </script>
 
@@ -72,8 +103,12 @@
         <div>표시할 도서가 없습니다.</div>
     </div>
 
-    <div class="chart-container">
-        <canvas id="myChart"></canvas>
+    <div class="chartBox">
+        <div class="container">
+            <div class="containerBody">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <table class="table table-bordered table-hover">
