@@ -31,6 +31,9 @@ public class ChargerLogEntity {
     @Column
     private Float ampere;
 
+    @Column
+    private LocalDateTime requestAt;
+
     //관리 목적 데이터
     @CreatedDate
     @Column(updatable = false)
@@ -45,6 +48,7 @@ public class ChargerLogEntity {
                 .id(id)
                 .chargerId(charger.getId())
                 .ampere(ampere)
+                .requestAt(requestAt)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
                 .build();

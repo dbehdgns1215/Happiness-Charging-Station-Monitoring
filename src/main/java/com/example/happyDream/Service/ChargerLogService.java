@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class ChargerLogService {
     private List<ChargerLogDTO> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
         if (entityList.isEmpty()) {
             log.warn("DTO list가 비어있음");
-            throw new EntityNotFoundException();
+            return new ArrayList<>();
         }
         return entityList.stream()
                 .map(ChargerLogEntity::toDTO)
@@ -66,8 +67,14 @@ public class ChargerLogService {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId) {
-        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId, Boolean descYn) {
+        List<ChargerLogDTO> dtoList;
+        if (descYn) {
+            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId));
+        }
+        else {
+            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+        }
         return dtoList;
     }
 

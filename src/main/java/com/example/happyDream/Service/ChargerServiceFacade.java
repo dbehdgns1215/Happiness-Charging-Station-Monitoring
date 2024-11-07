@@ -186,8 +186,8 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기의 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId) {
-        return this.chargerLogService.getAllTargetChargerLog(chargerId);
+    public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId, Boolean descYn) {
+        return this.chargerLogService.getAllTargetChargerLog(chargerId, descYn);
     }
 
     // 특정 충전기 충전 로그 추가
@@ -212,9 +212,9 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 상태 조회
-    public ChargerStateDTO getTargetChargerState(ChargerDTO chargerDto) {
+    public ChargerStateDTO getTargetChargerState(Integer chargerId) {
         try {
-            return this.chargerStateService.getTargetChargerState(chargerDto);
+            return this.chargerStateService.getTargetChargerState(chargerId);
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException();
         }

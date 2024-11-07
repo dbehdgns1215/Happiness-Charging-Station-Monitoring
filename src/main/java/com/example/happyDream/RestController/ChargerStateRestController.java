@@ -44,11 +44,9 @@ public class ChargerStateRestController implements ChargerStateSwagger {
     // 특정 충전기 상태 조회
     @GetMapping("/chargers/{id}/states")
     public ResponseDTO getTargetChargerState(@PathVariable("id") Integer chargerId) {
-        ChargerDTO chargerDto = ChargerDTO.builder().id(chargerId).build();
-
         ResponseDTO responseDto;
         try {
-            ChargerStateDTO chargerStateDto = this.chargerServiceFacade.getTargetChargerState(chargerDto);
+            ChargerStateDTO chargerStateDto = this.chargerServiceFacade.getTargetChargerState(chargerId);
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(chargerStateDto));
         } catch (EntityNotFoundException e) {
             log.error("ChargerState가 존재하지 않음 - 요청한 충전기 id: {}\n{}", chargerId, e.getStackTrace());
