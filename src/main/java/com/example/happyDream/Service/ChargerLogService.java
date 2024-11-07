@@ -4,6 +4,7 @@ import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Entity.ChargerLogEntity;
 import com.example.happyDream.Repository.ChargerLogRepository;
+import com.example.happyDream.Util.Converter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +24,9 @@ public class ChargerLogService {
         this.chargerLogRepository = chargerLogRepository;
     }
 
-    // ChargerLogEntity List → ChargerLogDTO List
-    private List<ChargerLogDTO> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
-        if (entityList.isEmpty()) {
-            log.warn("DTO list가 비어있음");
-            return new ArrayList<>();
-        }
-        return entityList.stream()
-                .map(ChargerLogEntity::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ChargerLogDTO List → ChargerLogEntity List
-    private List<ChargerLogEntity> convertDtoListToEntityList(List<ChargerLogDTO> dtoList) {
-        if (dtoList.isEmpty()) {
-            log.warn("Entity list가 비어있음");
-            throw new EntityNotFoundException();
-        }
-        return dtoList.stream()
-                .map(ChargerLogDTO::toEntity)
-                .collect(Collectors.toList());
-    }
-
     // 전체 충전 로그 조회
     public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
-        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
+        List<ChargerLogDTO> dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAll(), ChargerLogEntity::toDTO);
 //        if (join == false) {
 //            for (ChargerLogDTO dto : dtoList) {
 //                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId()).build();
@@ -70,10 +49,10 @@ public class ChargerLogService {
     public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId, Boolean descYn) {
         List<ChargerLogDTO> dtoList;
         if (descYn) {
-            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId));
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId), ChargerLogEntity::toDTO);
         }
         else {
-            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId), ChargerLogEntity::toDTO);
         }
         return dtoList;
     }

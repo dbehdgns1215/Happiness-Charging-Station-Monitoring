@@ -5,6 +5,7 @@ import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
+import com.example.happyDream.Util.Converter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ChargerStateService {
     // 전체 충전기 상태 조회(읽기 전용)
     @Transactional(readOnly = true)
     public List<ChargerStateDTO> getAllChargerState() {
-        List<ChargerStateDTO> dtoList = convertEntityListToDtoList(this.chargerStateRepository.findAll());
+        List<ChargerStateDTO> dtoList = Converter.EntityListToDtoList(this.chargerStateRepository.findAll(), ChargerStateEntity::toDTO);
 
         if (dtoList.isEmpty()) {
             log.info("데이터가 비어있음");

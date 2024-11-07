@@ -20,14 +20,6 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "-radians(:userLongitude))+sin(radians(:userLatitude))*sin(radians(c.latitude)))) <= 3")
     List<ChargerEntity> findChargersByNear(@Param("userLatitude") Double userLatitude, @Param("userLongitude") Double userLongitude);
 
-//    @Query("SELECT new com.example.happyDream.DTO.ChargerDetailDTO(" +
-//            "c.id as chargerId, c.name, c.city1, c.city2, c.city2Code, c.addressNew, c.addressOld, c.addressDetail, c.latitude, c.longitude, " +
-//            "c.weekdayOpen, c.saturdayOpen, c.holidayOpen, c.weekdayClose, c.saturdayClose, c.holidayClose, c.chargerCount, c.chargeAirYn, c.chargePhoneYn, c.callNumber, " +
-//            "c.updatedDate, c.createdAt as chargerCreatedAt, c.modifiedAt as chargerModifiedAt, c.deletedYn, c.deletedAt, " +
-//            "cs.id as chargerStateId, cs.usingYn, cs.brokenYn, cs.usingAt, cs.brokenAt, " +
-//            "cs.createdAt as chargerStateCreatedAt, cs.modifiedAt as chargerStateModifiedAt) " +
-//            "FROM ChargerEntity c " +
-//            "JOIN c.chargerState cs")
     @Query("SELECT new com.example.happyDream.DTO.ChargerDetailDTO(" +
             "c.id as chargerId, c.name as name, c.city1 as city1, c.city2 as city2, c.city2Code as city2Code, " +
             "c.addressNew as addressNew, c.addressOld as addressOld, c.addressDetail as addressDetail, " +
