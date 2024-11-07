@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Getter //Setter 미사용
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class UserEntity {
     @Id
@@ -31,14 +30,9 @@ public class UserEntity {
     private String username;
 
     @NotNull
-    @Column(length = 32)
+    @Column(length = 255)
     @Schema(description = "비밀번호")
     private String password;
-
-    @NotNull
-    @Column(length = 64, unique = true)
-    @Schema(description = "이메일")
-    private String email;
 
     //TODO - 추후 Enum 전환하고, 컨버터 추가
     @NotNull
@@ -65,12 +59,23 @@ public class UserEntity {
     @Schema(description = "데이터 삭제 시각")
     private LocalDateTime deletedAt;
 
+    @Builder
+    public UserEntity(Integer id, String username, String password, Byte userType, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deletedYn, LocalDateTime deletedAt) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.userType = userType;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.deletedYn = deletedYn;
+        this.deletedAt = deletedAt;
+    }
+
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .id(id)
                 .username(username)
                 .password(password)
-                .email(email)
                 .userType(userType)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
