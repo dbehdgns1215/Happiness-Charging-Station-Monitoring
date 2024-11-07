@@ -128,4 +128,9 @@ public class ChargerService {
             return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
         }
     }
+
+    // 충전기 추가(단일)
+    public List<Object[]> selectChargerAddress() {
+        return this.chargerRepository.findAddress();
+    }
 }

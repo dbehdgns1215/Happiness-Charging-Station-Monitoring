@@ -44,4 +44,7 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "FROM ChargerEntity c " +
             "JOIN c.chargerState cs")
     List<ChargerDetailDTO> findAllChargerDetail();
+
+    @Query("SELECT DISTINCT c.city1, c.city2 FROM ChargerEntity c")
+    List<Object[]> findAddress();
 }
