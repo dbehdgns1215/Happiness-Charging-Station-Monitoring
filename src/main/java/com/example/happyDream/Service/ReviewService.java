@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ReviewService {
@@ -37,9 +39,11 @@ public class ReviewService {
         this.reviewRepository.deleteAll();
     }
 
-    public void reviewInsert(Integer chargerId, ReviewDTO review) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, review.getUserId(), review.getReviewContent(),
-                    review.getRating());
+    public void reviewInsert(Integer chargerId,
+                             Integer userId,
+                             String content,
+                             Byte rating) {
+        ReviewDTO reviewDTO = createReviewDto(chargerId, userId, content, rating);
         this.reviewRepository.save(reviewDTO.toEntity());
     }
 
@@ -68,6 +72,10 @@ public class ReviewService {
 
     public void reviewDelete(Integer id) {
         this.reviewRepository.deleteById(id);
+    }
+
+    public List<Object[]> reviewAddress() {
+        return this.chargerService.selectChargerAddress();
     }
 
     private ReviewDTO createReviewDto(Integer chargerId,
