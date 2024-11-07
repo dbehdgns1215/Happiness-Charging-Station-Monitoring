@@ -59,7 +59,7 @@ public class ChargerLogRestController implements ChargerLogSwagger {
         ResponseDTO responseDto;
 
         ChargerDTO chargerDto = chargerServiceFacade.chargerSelect(chargerId);
-        List<ChargerLogDTO> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerDto);
+        List<ChargerLogDTO> chargerLogDtoList = chargerServiceFacade.getAllTargetChargerLog(chargerId);
         if (chargerLogDtoList.isEmpty()) {
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_NO_CONTENT, Collections.unmodifiableList(chargerLogDtoList));
         }

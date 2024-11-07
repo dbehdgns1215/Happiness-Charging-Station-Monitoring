@@ -4,10 +4,7 @@ import com.example.happyDream.DTO.UserDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "user") //MYSQL 외 타 DB는 문제 발생할 수 있음(users, member 등 대응)
 @Schema(description = "유저 Entity")
 @Getter //Setter 미사용
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 외부 접근 차단
 @EntityListeners(AuditingEntityListener.class) //Auditing 사용 명시
 public class UserEntity {

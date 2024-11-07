@@ -66,6 +66,7 @@ public class ResponseDTO {
                 .message(jwt)
                 .build();
     }
+
     public static ResponseDTO error(String apiVersion, int responseCode, String message) {
         return builder()
                 .apiVersion(apiVersion)

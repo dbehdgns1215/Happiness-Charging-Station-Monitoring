@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @Schema(description = "유저 DTO")
 public class UserDTO {

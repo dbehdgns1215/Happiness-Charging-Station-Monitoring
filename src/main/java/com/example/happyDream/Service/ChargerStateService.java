@@ -2,6 +2,7 @@ package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerStateDTO;
+import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -40,9 +41,9 @@ public class ChargerStateService {
                 .collect(Collectors.toList());
     }
 
-    // 특정 충전기 상태 조회(엔티티 직접 반환 - 값 변경 시 사용)
+    // 특정 충전기 상태 조회(엔티티 직접 반환 - 값 변경 시 사용) [레거시]
     private ChargerStateEntity getTargetChargerStateLegacy(ChargerDTO chargerDto) {
-        Optional<ChargerStateEntity> entity = this.chargerStateRepository.findByChargerId(chargerDto.toEntity());
+        Optional<ChargerStateEntity> entity = this.chargerStateRepository.findByCharger(chargerDto.toEntity());
         if (entity.isPresent()) {
             return entity.get();
         }
@@ -100,7 +101,14 @@ public class ChargerStateService {
 //            ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
 //            this.chargerStateRepository.save(entity);
 //        }
-        ChargerStateEntity entity = ChargerStateEntity.builder().chargerId(chargerDto.toEntity()).build();
+        ChargerStateEntity entity = ChargerStateEntity.builder().charger(chargerDto.toEntity()).build();
+        this.chargerStateRepository.save(entity);
+    }
+
+    // 특정 충전기 상태 추가 [레거시] - 트랜잭션용
+    @Transactional
+    public void createChargerStateLegacy(ChargerEntity chargerEntity) {
+        ChargerStateEntity entity = ChargerStateEntity.builder().charger(chargerEntity).build();
         this.chargerStateRepository.save(entity);
     }
 
