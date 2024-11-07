@@ -47,4 +47,10 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
 
     @Query("SELECT DISTINCT c.city1, c.city2 FROM ChargerEntity c")
     List<Object[]> findAddress();
+
+    @Query("SELECT c FROM ChargerEntity c WHERE c.city1 = :city")
+    List<ChargerEntity> findByCity(@Param("city") String city);
+
+    @Query("SELECT c FROM ChargerEntity c WHERE c.city1 = :city AND c.city2 = :district")
+    List<ChargerEntity> findByCityAndDistrict(@Param("city") String city, @Param("district") String district);
 }

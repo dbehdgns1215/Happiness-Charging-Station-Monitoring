@@ -28,19 +28,6 @@ public class ChargerService {
         this.chargerRepository = chargerRepository;
     }
 
-    public List<ChargerDTO> convertEntityListToDtoList(List<ChargerEntity> entityList) {
-        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
-        return entityList.stream()
-                .map(ChargerEntity::toDTO) // 각 엔티티를 DTO로 변환
-                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
-    }
-    public List<ChargerEntity> convertDtoListToEntityList(List<ChargerDTO> dtoList) {
-        // Stream을 사용하여 Entity -> Dto 변환 후 리스트로 반환
-        return dtoList.stream()
-                .map(ChargerDTO::toEntity) // 각 엔티티를 DTO로 변환
-                .collect(Collectors.toList());  // 변환된 결과를 리스트로 수집
-    }
-
     // 충전기 추가(단일)
     public ChargerDTO createCharger(ChargerDTO chargerDto) {
         return this.chargerRepository.save(chargerDto.toEntity()).toDTO();
@@ -124,13 +111,23 @@ public class ChargerService {
         if(chargers.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        else{
-            return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
-        }
+        return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
     }
 
-    // 충전기 추가(단일)
+    // 충전기 주소 불러오기
     public List<Object[]> selectChargerAddress() {
         return this.chargerRepository.findAddress();
+    }
+
+    //
+    public List<ChargerEntity> selectChargerCityAnddistrict(String city, String district) {
+        try{
+            if(district == null){
+                return this.chargerRepository.findByCity(city);
+            }
+            return this.chargerRepository.findByCityAndDistrict(city, district);
+        }catch (Exception exception){
+            throw new EntityNotFoundException();
+        }
     }
 }

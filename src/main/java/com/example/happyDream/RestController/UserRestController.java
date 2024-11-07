@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+@RestController
+@RequestMapping("/api/v1")
 public class UserRestController {
     private final UserService userService;
 
