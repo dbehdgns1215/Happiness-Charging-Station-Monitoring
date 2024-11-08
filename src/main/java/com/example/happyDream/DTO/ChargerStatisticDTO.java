@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 public class ChargerStatisticDTO {
     private Long id;
     private Integer chargerId;
-    private LocalDate date;
+    private LocalDateTime startedAt;
+    private LocalDateTime finishedAt;
     private Integer usingSecond;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -27,7 +28,8 @@ public class ChargerStatisticDTO {
         return ChargerStatisticEntity.builder()
                 .id(id)
                 .charger(chargerEntity)
-                .date(date)
+                .startedAt(startedAt)
+                .finishedAt(finishedAt)
                 .usingSecond(usingSecond)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)

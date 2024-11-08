@@ -2,14 +2,12 @@ package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.ChargerStatisticDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,14 +26,17 @@ public class ChargerStatisticEntity {
     @JoinColumn(name = "charger_id")
     private ChargerEntity charger;
 
+    @CreatedDate
     @Column(updatable = false)
-    @NotNull
-    private LocalDate date; // 통계 기준일
+    private LocalDateTime startedAt; // 충전 시작 시각
+
+    @CreatedDate // 일단은 초기화
+    @Column
+    private LocalDateTime finishedAt; // 충전 종료 시각
 
     @ColumnDefault("0")
     @Column
-    @NotNull
-    private Integer usingSecond; // 기준일 총 사용 시간
+    private Integer usingSecond;
 
     @CreatedDate
     @Column(updatable = false)
@@ -49,7 +50,8 @@ public class ChargerStatisticEntity {
         return ChargerStatisticDTO.builder()
                 .id(id)
                 .chargerId(charger.getId())
-                .date(date)
+                .startedAt(startedAt)
+                .finishedAt(finishedAt)
                 .usingSecond(usingSecond)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
