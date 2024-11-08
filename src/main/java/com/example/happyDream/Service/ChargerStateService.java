@@ -122,8 +122,12 @@ public class ChargerStateService {
         try {
             ChargerStateEntity entity = getTargetChargerStateLegacy(chargerId);
 
-            entity.changeUsingYn(chargerStateDto.getUsingYn());
-            entity.changeBrokenYn(chargerStateDto.getBrokenYn());
+            if (entity.getUsingYn() != chargerStateDto.getUsingYn()) {
+                entity.changeUsingYn(chargerStateDto.getUsingYn());
+            }
+            if (entity.getBrokenYn() != chargerStateDto.getBrokenYn()) {
+                entity.changeBrokenYn(chargerStateDto.getBrokenYn());
+            }
         } catch (EntityNotFoundException e) {
             log.error("존재하지 않는 충전기에 대한 상태 업데이트 - 충전기 id: {}", chargerId);
             //throw new EntityNotFoundException(); // 테스트용
