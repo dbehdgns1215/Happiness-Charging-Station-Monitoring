@@ -26,8 +26,10 @@ public class ChargerLogController {
 
     // 전체 충전기 로그 조회
     @GetMapping("/chargers/logs")
-    public String getAllChargerLog() {
-        return "";
+    public String getAllChargerLog(Model model) {
+        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog(false);
+        model.addAttribute("logList", chargerLogDtoList);
+        return "chargerLogAll.html";
     }
     
     // 특정 충전기 로그 조회
@@ -35,7 +37,6 @@ public class ChargerLogController {
     public String getChargerLog(Model model,
                                 @PathVariable("id") Integer chargerId,
                                 @RequestParam(value = "descYn", defaultValue = "true") Boolean descYn) {
-        // TODO - 충전기가 없거나 로그가 없는 경우 웹에서 오류 처리
         ChargerStateDTO chargerStateDto;
         try {
             chargerStateDto = this.chargerServiceFacade.getTargetChargerState(chargerId);
@@ -45,6 +46,6 @@ public class ChargerLogController {
         List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllTargetChargerLog(chargerId, descYn);
         model.addAttribute("logList", chargerLogDtoList);
         model.addAttribute("chargerState", chargerStateDto);
-        return "chargerLog.html";
+        return "chargerLogSeparate.html";
     }
 }
