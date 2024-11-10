@@ -64,6 +64,14 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelectAllDetail();
     }
 
+    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    }
+
+    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
+    }
+
     @Transactional
     public ResponseDTO createChargerFromJson(Boolean initYn, String requestJson) {
         Gson gson = GsonUtil.createGson();
