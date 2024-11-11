@@ -64,7 +64,7 @@
                 }
                 else if (button.value === "location") {
                     if (latitudeInput.value && longitudeInput.value) {
-                        url = `/chargers/near?latitude=${encodeURIComponent(latitudeInput.value)}&longitude=${encodeURIComponent(longitudeInput.value)}`;
+                        url = `/chargers?latitude=${encodeURIComponent(latitudeInput.value)}&longitude=${encodeURIComponent(longitudeInput.value)}`;
                     }
                     else {
                         alert("위도와 경도를 입력하세요.");

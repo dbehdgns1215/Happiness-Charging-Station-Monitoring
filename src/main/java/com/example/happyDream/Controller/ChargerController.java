@@ -28,11 +28,17 @@ public class ChargerController {
     //전체 충전기 조회
     @GetMapping("/chargers")
     public String chargerSelectAll(Model model,
-                                   @RequestParam(value = "address", required = false) String address) {
+                                   @RequestParam(value = "address", required = false) String address,
+                                   @RequestParam(value = "latitude", required = false) Double latitude,
+                                   @RequestParam(value = "longitude", required = false) Double longitude) {
         List<ChargerDTO> chargers;
         if (address != null) {
             log.info(address);
             chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+        }
+        else if (latitude != null && longitude != null) {
+            log.info("{}, {}", latitude, longitude);
+            chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
         }
         else {
             chargers = this.chargerServiceFacade.chargerSelectAll();
@@ -41,6 +47,7 @@ public class ChargerController {
         return "chargers_new";
     }
 
+    /*
     // TODO 추후 chargers에 병합 예정
     @GetMapping("/chargersTest")
     public String chargerSelectAllTest(Model model) {
@@ -81,6 +88,7 @@ public class ChargerController {
         }
         return "chargers";
     }
+    */
 
     //전체 충전기 삭제
     @DeleteMapping("/chargers")
