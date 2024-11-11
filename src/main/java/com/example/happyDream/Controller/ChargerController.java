@@ -5,8 +5,10 @@ import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,17 +34,22 @@ public class ChargerController {
                                    @RequestParam(value = "latitude", required = false) Double latitude,
                                    @RequestParam(value = "longitude", required = false) Double longitude) {
         List<ChargerDTO> chargers;
-        if (address != null) {
-            log.info(address);
-            chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+        try {
+            if (address != null) {
+                log.info(address);
+                chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+            }
+            else if (latitude != null && longitude != null) {
+                log.info("{}, {}", latitude, longitude);
+                chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
+            }
+            else {
+                chargers = this.chargerServiceFacade.chargerSelectAll();
+            }
+        } catch (EntityNotFoundException ignored) {
+            chargers = null;
         }
-        else if (latitude != null && longitude != null) {
-            log.info("{}, {}", latitude, longitude);
-            chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
-        }
-        else {
-            chargers = this.chargerServiceFacade.chargerSelectAll();
-        }
+
         model.addAttribute("chargers", chargers);
         return "chargers_new";
     }

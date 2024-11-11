@@ -33,64 +33,64 @@
     <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
     <script sec:authorize="isAuthenticated()"></script>
 
-    <!--  타임리프 기본 실행 스크립트  -->
-    <script th:inline="javascript">
+    <!--  이벤트 정의 스크립트  -->
+    <script>
+        // 검색 버튼 이벤트
+        const searchButtonClicked = (event) => {
+            let button = event.target;
+            let addressInput = document.querySelector("#formAddress");
+            let latitudeInput = document.querySelector("#formLatitude");
+            let longitudeInput = document.querySelector("#formLongitude");
+
+            // 버튼 클릭 시 div 태그가 입력되는 현상 대응
+            if (button.matches('button') === false) {
+                console.log("버튼이 아닌 요소가 입력됨", button);
+                button = button.closest('button');
+            }
+
+            let url;
+            if (button.value === "address") {
+                if (addressInput.value) {
+                    url = `/chargers?address=${encodeURIComponent(addressInput.value)}`;
+                }
+                else {
+                    alert("주소를 입력하세요.");
+                    return;
+                }
+            }
+            else if (button.value === "location") {
+                if (latitudeInput.value && longitudeInput.value) {
+                    url = `/chargers?latitude=${encodeURIComponent(latitudeInput.value)}&longitude=${encodeURIComponent(longitudeInput.value)}`;
+                }
+                else {
+                    alert("위도와 경도를 입력하세요.");
+                    return;
+                }
+            }
+
+            // 검색중 표시
+            button.querySelector('div').classList.add('visually-hidden');
+            button.querySelector('span.spinner-border').classList.remove('visually-hidden');
+            button.querySelector('span.spinner-text').classList.remove('visually-hidden');
+
+            window.location.href = url; // 해당 URL로 리디렉션
+        }
+
+        // 검색창 닫기/열기 이벤트
+        const searchBoxCollapseEvent = (event) => {
+            let collapseIcon = document.querySelector("#btn-collapse-icon");
+            let expandIcon = document.querySelector("#btn-expand-icon");
+            let button = expandIcon.closest("button");
+            // console.log(event.type); // type으로 이벤트 구분 가능
+
+            collapseIcon.classList.toggle("visually-hidden");
+            expandIcon.classList.toggle("visually-hidden");
+            button.classList.toggle("mb-3");
+        }
+
         window.onload = function() {
             const searchButtons = document.querySelectorAll(".btn-search");
             const searchBox = document.querySelector("#collapseTarget");
-
-            // 검색 버튼 이벤트
-            const searchButtonClicked = (event) => {
-                let button = event.target;
-                let addressInput = document.querySelector("#formAddress");
-                let latitudeInput = document.querySelector("#formLatitude");
-                let longitudeInput = document.querySelector("#formLongitude");
-
-                // 버튼 클릭 시 div 태그가 입력되는 현상 대응
-                if (button.matches('button') === false) {
-                    console.log("버튼이 아닌 요소가 입력됨", button);
-                    button = button.closest('button');
-                }
-
-                let url;
-                if (button.value === "address") {
-                    if (addressInput.value) {
-                        url = `/chargers?address=${encodeURIComponent(addressInput.value)}`;
-                    }
-                    else {
-                        alert("주소를 입력하세요.");
-                        return;
-                    }
-                }
-                else if (button.value === "location") {
-                    if (latitudeInput.value && longitudeInput.value) {
-                        url = `/chargers?latitude=${encodeURIComponent(latitudeInput.value)}&longitude=${encodeURIComponent(longitudeInput.value)}`;
-                    }
-                    else {
-                        alert("위도와 경도를 입력하세요.");
-                        return;
-                    }
-                }
-
-                // 검색중 표시
-                button.querySelector('div').classList.add('visually-hidden');
-                button.querySelector('span.spinner-border').classList.remove('visually-hidden');
-                button.querySelector('span.spinner-text').classList.remove('visually-hidden');
-
-                window.location.href = url; // 해당 URL로 리디렉션
-            }
-
-            // 검색창 닫기/열기 이벤트
-            const searchBoxCollapseEvent = (event) => {
-                let collapseIcon = document.querySelector("#btn-collapse-icon");
-                let expandIcon = document.querySelector("#btn-expand-icon");
-                let button = expandIcon.closest("button");
-                // console.log(event.type); // type으로 이벤트 구분 가능
-
-                collapseIcon.classList.toggle("visually-hidden");
-                expandIcon.classList.toggle("visually-hidden");
-                button.classList.toggle("mb-3");
-            }
 
             // 이벤트 추가
             // 검색 버튼 이벤트 추가
@@ -102,6 +102,11 @@
             searchBox.addEventListener('show.bs.collapse', searchBoxCollapseEvent);
             searchBox.addEventListener('hide.bs.collapse', searchBoxCollapseEvent);
         }
+    </script>
+
+    <!--  타임리프 기본 실행 스크립트  -->
+    <script th:inline="javascript">
+
     </script>
 
     <!-- 검색 영역 -->
