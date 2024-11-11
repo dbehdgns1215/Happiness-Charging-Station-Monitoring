@@ -1,18 +1,14 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Entity.ChargerLogEntity;
 import com.example.happyDream.Repository.ChargerLogRepository;
 import com.example.happyDream.Util.Converter;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,14 +21,21 @@ public class ChargerLogService {
     }
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
-        List<ChargerLogDTO> dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAll(), ChargerLogEntity::toDTO);
+    public List<ChargerLogDTO> getAllChargerLog(Boolean join, Boolean descYn) {
+        List<ChargerLogDTO> dtoList;
 //        if (join == false) {
 //            for (ChargerLogDTO dto : dtoList) {
 //                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId()).build();
 //                dto.setChargerId(chargerDto);
 //            }
 //        }
+
+        if (descYn) {
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByOrderByIdDesc(), ChargerLogEntity::toDTO);
+        }
+        else {
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAll(), ChargerLogEntity::toDTO);
+        }
         return dtoList;
     }
 

@@ -30,7 +30,7 @@ public class ChargerController {
     public String chargerSelectAll(Model model) {
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
         model.addAttribute("chargers", chargers);
-        return "chargers";
+        return "chargers_new";
     }
 
     // TODO 추후 chargers에 병합 예정

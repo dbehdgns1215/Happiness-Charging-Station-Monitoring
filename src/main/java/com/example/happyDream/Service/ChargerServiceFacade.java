@@ -189,8 +189,8 @@ public class ChargerServiceFacade {
     /* ===== ChargerLogService ===== */
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
-        return this.chargerLogService.getAllChargerLog(join);
+    public List<ChargerLogDTO> getAllChargerLog(Boolean join, Boolean descYn) {
+        return this.chargerLogService.getAllChargerLog(join, descYn);
     }
 
     // 전체 충전 로그 삭제

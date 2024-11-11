@@ -27,7 +27,7 @@ public class ChargerLogController {
     // 전체 충전기 로그 조회
     @GetMapping("/chargers/logs")
     public String getAllChargerLog(Model model) {
-        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog(false);
+        List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog(false, true);
         model.addAttribute("logList", chargerLogDtoList);
         return "chargerLogAll.html";
     }

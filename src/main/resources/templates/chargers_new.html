@@ -1,0 +1,300 @@
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="container text-left">
+    <meta charset="UTF-8">
+    <title>충전소 지도</title>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tg2jn30hid"></script>
+    <script type="text/javascript" src="/MarkerClustering.js"></script>
+    <style>
+        .container {
+            max-width: 100%;
+            height: calc(100vh - 57px);
+            padding: 0;
+        }
+
+        .searchContainer {
+            position: absolute;
+            z-index: 1;
+            width: 320px;
+            background: #FFFFFF;
+        }
+
+        #map {
+            position: relative;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+    <!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
+    <script sec:authorize="isAuthenticated()"></script>
+
+    <!--  타임리프 기본 실행 스크립트  -->
+    <script th:inline="javascript">
+        window.onload = function() {
+            const searchButtons = document.querySelectorAll(".btn-search");
+            const searchBox = document.querySelector("#collapseTarget");
+
+            // 검색 버튼 이벤트
+            const searchButtonClicked = (event) => {
+                let button = event.target;
+                let addressInput = document.querySelector("#formAddress");
+                let latitudeInput = document.querySelector("#formLatitude");
+                let longitudeInput = document.querySelector("#formLongitude");
+
+                // 버튼 클릭 시 div 태그가 입력되는 현상 대응
+                if (button.matches('button') === false) {
+                    console.log("버튼이 아닌 요소가 입력됨", button);
+                    button = button.closest('button');
+                }
+
+                let url;
+                if (button.value === "address") {
+                    if (addressInput.value) {
+                        url = `/chargers/address?address=${encodeURIComponent(addressInput.value)}`;
+                    }
+                    else {
+                        alert("주소를 입력하세요.");
+                        return;
+                    }
+                }
+                else if (button.value === "location") {
+                    if (latitudeInput.value && longitudeInput.value) {
+                        url = `/chargers/near?latitude=${encodeURIComponent(latitudeInput.value)}&longitude=${encodeURIComponent(longitudeInput.value)}`;
+                    }
+                    else {
+                        alert("위도와 경도를 입력하세요.");
+                        return;
+                    }
+                }
+
+                // 검색중 표시
+                button.querySelector('div').classList.add('visually-hidden');
+                button.querySelector('span.spinner-border').classList.remove('visually-hidden');
+                button.querySelector('span.spinner-text').classList.remove('visually-hidden');
+
+                window.location.href = url; // 해당 URL로 리디렉션
+            }
+
+            // 검색창 닫기/열기 이벤트
+            const searchBoxCollapseEvent = (event) => {
+                let collapseIcon = document.querySelector("#btn-collapse-icon");
+                let expandIcon = document.querySelector("#btn-expand-icon");
+                let button = expandIcon.closest("button");
+                // console.log(event.type); // type으로 이벤트 구분 가능
+
+                collapseIcon.classList.toggle("visually-hidden");
+                expandIcon.classList.toggle("visually-hidden");
+                button.classList.toggle("mb-3");
+            }
+
+            // 이벤트 추가
+            // 검색 버튼 이벤트 추가
+            searchButtons.forEach((button) => {
+                button.addEventListener('click', searchButtonClicked);
+            });
+
+            // 검색창 닫기/열기 이벤트 추가
+            searchBox.addEventListener('show.bs.collapse', searchBoxCollapseEvent);
+            searchBox.addEventListener('hide.bs.collapse', searchBoxCollapseEvent);
+        }
+    </script>
+
+    <!-- 주소 입력 및 검색 버튼 추가 -->
+    <div class="searchContainer m-1 px-3 pt-3 rounded">
+        <form class="form collapse show" id="collapseTarget">
+            <div class="mb-2 addressInputBox">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="formAddress" name="address" placeholder="주소" required>
+                    <label for="formAddress">주소</label>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mb-2 locationInputBox">
+                <div class="flex-fill form-floating">
+                    <input type="text" class="form-control" id="formLatitude" name="address" placeholder="위도">
+                    <label for="formLatitude">위도</label>
+                </div>
+                <div class="flex-fill form-floating">
+                    <input type="text" class="form-control" id="formLongitude" name="address" placeholder="경도">
+                    <label for="formLongitude">경도</label>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="flex-fill btn btn-outline-secondary btn-search" type="button" value="location">
+                    <div>좌표 검색</div>
+                    <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
+                    <span class="spinner-text visually-hidden" role="status">검색중</span>
+                </button>
+                <button class="flex-fill btn btn-primary btn-search" type="button" value="address">
+                    <div>주소 검색</div>
+                    <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
+                    <span class="spinner-text visually-hidden" role="status">검색중</span>
+                </button>
+            </div>
+        </form>
+        <div class="d-flex searchBoxCollapse">
+            <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#collapseTarget" data-bs-target="#collapseTarget">
+                <svg id="btn-collapse-icon" class="flex-shrink-0 me-2 bi bi-chevron-up" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-up"/></svg>
+                <svg id="btn-expand-icon" class="flex-shrink-0 me-2 bi bi-chevron-down visually-hidden" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-down"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // 지도 초기화
+        const map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.978), // 기본 위치 (서울)
+            zoom: 8
+        });
+
+        let markers = [];
+        let cluster;
+        let chargerData = /*[[${chargers}]]*/ []; // 서버에서 받은 충전소 데이터
+        let openInfoWindow = null;
+
+        chargerData.forEach(charger => {
+            const marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(charger.latitude, charger.longitude),
+                map: null,
+                title: charger.name
+            });
+
+            const contentString = `
+                <div class="info-window">
+                    <h3>${charger.name}</h3>
+                    <p><strong>도로명주소:</strong> ${charger.addressNew}</p>
+                    <p><strong>주소:</strong> ${charger.addressOld}</p>
+                    <p><strong>평일 운영 시간:</strong> ${charger.weekdayOpen} ~ ${charger.weekdayClose}</p>
+                    <p><strong>토요일 운영 시간:</strong> ${charger.saturdayOpen} ~ ${charger.saturdayClose}</p>
+                    <p><strong>일요일 운영 시간:</strong> ${charger.holidayOpen} ~ ${charger.holidayClose}</p>
+                    <p><strong>전화번호:</strong> ${charger.callNumber}</p>
+                </div>
+            `;
+
+            // 마커 클릭시 정보창 표시
+            const infowindow = new naver.maps.InfoWindow({
+                content: contentString
+            });
+
+            naver.maps.Event.addListener(marker, 'click', function() {
+                infowindow.open(map, marker.getPosition());
+            });
+
+            // 정보창 중복 방지 처리
+            naver.maps.Event.addListener(marker, 'click', () => {
+                // 정보창이 열려있는 상태에서 다른 정보창 선택시
+                if (openInfoWindow) {
+                    openInfoWindow.close();
+                }
+                infowindow.open(map, marker); // 마커 위치에서 정보창 띄우기
+                openInfoWindow = infowindow;
+            });
+
+            // 지도 클릭 시 열린 정보창 닫기
+            naver.maps.Event.addListener(map, 'click', () => {
+                if (openInfoWindow) {
+                    openInfoWindow.close();  // 열린 정보창 닫기
+                    openInfoWindow = null;  // 상태 초기화
+                }
+            });
+
+            // 마커 생성
+            markers.push(marker);
+        });
+
+        // 클러스터 생성 함수, 마커 생성 이후에 동작해야함.
+        createCluster(map, markers);
+        /*]]>*/
+
+        function searchChargers() {
+            const address = document.getElementById('addressInput').value;
+            if (address) {
+                // 주소로 URL 설정
+                const url = `/chargers/address?address=${encodeURIComponent(address)}`;
+                window.location.href = url; // 해당 URL로 리디렉션
+            } else {
+                alert("주소를 입력하세요.");
+            }
+        }
+
+        function searchNearbyChargers() {
+            const latitude = document.getElementById('latitudeInput').value;
+            const longitude = document.getElementById('longitudeInput').value;
+
+            if (latitude && longitude) {
+                // 위도와 경도로 URL 설정
+                const url = `/chargers/near?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`;
+                window.location.href = url; // 해당 URL로 리디렉션
+            } else {
+                alert("위도와 경도를 입력하세요.");
+            }
+        }
+
+        // FIXME API 호출 해보면서 성능 차이 비교할 필요 있음. 체감상 현재는 많이 개선됐고 클러스터 아이콘과 관련된 코드가 중복되는 느낌이 있으나 분리하지 않으면 해결이 안됨.
+        function createCluster(map, markers) {
+            if (cluster) {
+                // 기존 클러스터들 초기화
+                cluster.setMap(null);
+            }
+
+            cluster = new MarkerClustering({
+                minClusterSize: 2,  // 최소 클러스터 크기, 마커 3개부터 클러스터링
+                maxZoom: 19,        // 줌 레벨이 19 이상일 때, 클러스터 해제
+                map: map,
+                markers: markers,
+                gridSize: 150,      // 군집도 조절
+                disableClickZoom: true,
+                icons: createClusterIcons(),
+                stylingFunction: (clusterMarker, count) => {
+                    const element = clusterMarker.getElement();
+                    element.innerHTML = `
+                <div style="
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 40px;
+                    height: 40px;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    transform: translateY(40px);
+                    box-sizing: border-box;
+                    z-index: 99;">
+                    ${count}
+                </div>`;
+                }
+            });
+
+            function createClusterIcons() {
+                return [{
+                    content: `
+                <div style="
+                    position: absolute;
+                    width: 40px;
+                    height: 40px;
+                    background: url('/cluster-marker.png') no-repeat center;
+                    background-size: cover;
+                    border-radius: 50%;
+                    border: 2px solid white;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                    transform: translateX(-2px);
+                    z-index: 1;">
+                </div>`,
+                    size: new naver.maps.Size(40, 40),
+                    anchor: new naver.maps.Point(20, 20),
+                }];
+            }
+        }
+    </script>
+</div>
+</html>
