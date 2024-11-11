@@ -55,7 +55,7 @@
                 let url;
                 if (button.value === "address") {
                     if (addressInput.value) {
-                        url = `/chargers/address?address=${encodeURIComponent(addressInput.value)}`;
+                        url = `/chargers?address=${encodeURIComponent(addressInput.value)}`;
                     }
                     else {
                         alert("주소를 입력하세요.");
@@ -104,8 +104,8 @@
         }
     </script>
 
-    <!-- 주소 입력 및 검색 버튼 추가 -->
-    <div class="searchContainer m-1 px-3 pt-3 rounded">
+    <!-- 검색 영역 -->
+    <div class="searchContainer m-2 px-3 pt-3 rounded">
         <form class="form collapse show" id="collapseTarget">
             <div class="mb-2 addressInputBox">
                 <div class="form-floating">
@@ -144,6 +144,7 @@
         </div>
     </div>
 
+    <!--  지도 영역  -->
     <div id="map"></div>
 
     <script th:inline="javascript">
@@ -212,30 +213,6 @@
         // 클러스터 생성 함수, 마커 생성 이후에 동작해야함.
         createCluster(map, markers);
         /*]]>*/
-
-        function searchChargers() {
-            const address = document.getElementById('addressInput').value;
-            if (address) {
-                // 주소로 URL 설정
-                const url = `/chargers/address?address=${encodeURIComponent(address)}`;
-                window.location.href = url; // 해당 URL로 리디렉션
-            } else {
-                alert("주소를 입력하세요.");
-            }
-        }
-
-        function searchNearbyChargers() {
-            const latitude = document.getElementById('latitudeInput').value;
-            const longitude = document.getElementById('longitudeInput').value;
-
-            if (latitude && longitude) {
-                // 위도와 경도로 URL 설정
-                const url = `/chargers/near?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`;
-                window.location.href = url; // 해당 URL로 리디렉션
-            } else {
-                alert("위도와 경도를 입력하세요.");
-            }
-        }
 
         // FIXME API 호출 해보면서 성능 차이 비교할 필요 있음. 체감상 현재는 많이 개선됐고 클러스터 아이콘과 관련된 코드가 중복되는 느낌이 있으나 분리하지 않으면 해결이 안됨.
         function createCluster(map, markers) {

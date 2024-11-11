@@ -27,8 +27,16 @@ public class ChargerController {
 
     //전체 충전기 조회
     @GetMapping("/chargers")
-    public String chargerSelectAll(Model model) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
+    public String chargerSelectAll(Model model,
+                                   @RequestParam(value = "address", required = false) String address) {
+        List<ChargerDTO> chargers;
+        if (address != null) {
+            log.info(address);
+            chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+        }
+        else {
+            chargers = this.chargerServiceFacade.chargerSelectAll();
+        }
         model.addAttribute("chargers", chargers);
         return "chargers_new";
     }
