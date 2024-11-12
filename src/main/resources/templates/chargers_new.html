@@ -17,14 +17,9 @@
             width: 320px;
         }
 
-        .searchContainer {
-            background: #FFFFFF;
-        }
-
         .boundChargerContainer {
             height: inherit;
             max-height: calc(100vh - 57px - (225px + 16px) - 8px);
-            background: #FFFFFF;
         }
 
         .chargerListBox {
@@ -221,12 +216,13 @@
         }
     </script>
 
-    <!--  타임리프 기본 실행 스크립트  -->
+    <!--  타임리프 기본 실행 스크립트(데이터 관련 작업만 수행)  -->
     <script th:inline="javascript">
         // TODO - DTO 변경시 반드시 수정!!!
         const chargerList = [[${chargers}]]; // 데이터 저장
+        let chargerIdIndex = []; // chargerId 검색을 위한 인덱스
 
-        let chargerIdIndex = [];
+        // 인덱스 생성
         chargerList.forEach((charger) => {
            chargerIdIndex.push(charger.id);
         });
@@ -240,7 +236,10 @@
             chargerIdList.forEach((chargerId) => {
                 let index = chargerIdIndex.indexOf(chargerId);
                 if (index !== -1) {
-                    resultChargerList.push(chargerList[index])
+                    resultChargerList.push(chargerList[index]); // -1인 경우 찾을 수 없음
+                }
+                else {
+                    console.log(chargerId + "를 charger 인덱스에서 찾을 수 없음");
                 }
             });
             return resultChargerList;
@@ -249,7 +248,7 @@
 
     <div class="leftContainer m-2">
         <!-- 검색 영역 -->
-        <div class="searchContainer mb-2 px-3 pt-3 rounded">
+        <div class="searchContainer mb-2 px-3 pt-3 rounded bg-white">
             <form class="form collapse show" id="searchCollapse">
                 <div class="mb-2 addressInputBox">
                     <div class="form-floating">
@@ -288,7 +287,7 @@
             </div>
         </div>
 
-        <div class="boundChargerContainer d-flex flex-column px-3 pt-3 rounded">
+        <div class="boundChargerContainer d-flex flex-column px-3 pt-3 rounded bg-white">
             <div class="alert alert-secondary mb-2 d-flex align-items-center">
                 <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
                 <div id="chargerCountText"><span>주변 충전기 수: {  }개</span></div>
