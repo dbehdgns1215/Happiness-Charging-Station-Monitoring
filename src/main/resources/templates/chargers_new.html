@@ -11,11 +11,21 @@
             padding: 0;
         }
 
-        .searchContainer {
+        .leftContainer {
             position: absolute;
             z-index: 1;
             width: 320px;
+        }
+
+        .searchContainer {
             background: #FFFFFF;
+        }
+
+        .boundChargerContainer {
+            height: inherit;
+            max-height: calc(100vh - 57px - (225px + 16px) - 8px);
+            background: #FFFFFF;
+            overflow-y: auto;
         }
 
         #map {
@@ -87,7 +97,7 @@
             collapseIcon.classList.toggle('visually-hidden');
             expandIcon.classList.toggle('visually-hidden');
             button.classList.toggle('mb-3');
-            searchContainer.classList.toggle('opacity-50')
+            searchContainer.classList.toggle('opacity-75')
         }
 
         // 로딩 시 검색창 초기화
@@ -109,6 +119,34 @@
                 latitudeInput.value = param.get('latitude');
                 longitudeInput.value = param.get('longitude');
             }
+        }
+
+        function updateBoundChargerBox(chargerIdList) {
+            let cls = [];
+            cls.push(chargerIdList);
+            console.log(chargerIdList);
+
+            const container = document.querySelector(".boundChargerContainer");
+
+            // TODO - 추후 chagerList를 하위 컨테이너로 이동하면 활성화(조건 불필요)
+            // while (container.firstChild) {
+            //     container.removeChild(container.firstChild);
+            // }
+
+            for (let i = container.children.length - 1; i >= 0; i--) {
+                const child = container.children[i];
+                if (!child.classList.contains("alert")) {
+                    container.removeChild(child);
+                }
+            }
+
+            // TODO - chargerIdList를 먼저 chargerList로 만들어야 함
+            chargerIdList.forEach((chargerId) => {
+                const newDiv = document.createElement('div');
+                newDiv.appendChild(document.createTextNode(chargerId));
+                container.appendChild(newDiv);
+            })
+
         }
 
         window.onload = function() {
@@ -133,43 +171,52 @@
     <!--  타임리프 기본 실행 스크립트  -->
     <script th:inline="javascript"></script>
 
-    <!-- 검색 영역 -->
-    <div class="searchContainer m-2 px-3 pt-3 rounded">
-        <form class="form collapse show" id="collapseTarget">
-            <div class="mb-2 addressInputBox">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="formAddress" name="address" placeholder="주소" required>
-                    <label for="formAddress">주소</label>
+    <div class="leftContainer m-2">
+        <!-- 검색 영역 -->
+        <div class="searchContainer mb-2 px-3 pt-3 rounded">
+            <form class="form collapse show" id="collapseTarget">
+                <div class="mb-2 addressInputBox">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="formAddress" name="address" placeholder="주소" required>
+                        <label for="formAddress">주소</label>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex gap-2 mb-2 locationInputBox">
-                <div class="flex-fill form-floating">
-                    <input type="text" class="form-control" id="formLatitude" name="address" placeholder="위도">
-                    <label for="formLatitude">위도</label>
+                <div class="d-flex gap-2 mb-2 locationInputBox">
+                    <div class="flex-fill form-floating">
+                        <input type="text" class="form-control" id="formLatitude" name="address" placeholder="위도">
+                        <label for="formLatitude">위도</label>
+                    </div>
+                    <div class="flex-fill form-floating">
+                        <input type="text" class="form-control" id="formLongitude" name="address" placeholder="경도">
+                        <label for="formLongitude">경도</label>
+                    </div>
                 </div>
-                <div class="flex-fill form-floating">
-                    <input type="text" class="form-control" id="formLongitude" name="address" placeholder="경도">
-                    <label for="formLongitude">경도</label>
+                <div class="d-flex gap-2">
+                    <button class="flex-fill btn btn-outline-secondary btn-search" type="button" value="location">
+                        <div>좌표 검색</div>
+                        <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
+                        <span class="spinner-text visually-hidden" role="status">검색중</span>
+                    </button>
+                    <button class="flex-fill btn btn-primary btn-search" type="button" value="address">
+                        <div>주소 검색</div>
+                        <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
+                        <span class="spinner-text visually-hidden" role="status">검색중</span>
+                    </button>
                 </div>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="flex-fill btn btn-outline-secondary btn-search" type="button" value="location">
-                    <div>좌표 검색</div>
-                    <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
-                    <span class="spinner-text visually-hidden" role="status">검색중</span>
+            </form>
+            <div class="d-flex searchBoxCollapse">
+                <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#collapseTarget" data-bs-target="#collapseTarget">
+                    <svg id="btn-collapse-icon" class="flex-shrink-0 me-2 bi bi-chevron-up" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-up"/></svg>
+                    <svg id="btn-expand-icon" class="flex-shrink-0 me-2 bi bi-chevron-down visually-hidden" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-down"/></svg>
                 </button>
-                <button class="flex-fill btn btn-primary btn-search" type="button" value="address">
-                    <div>주소 검색</div>
-                    <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
-                    <span class="spinner-text visually-hidden" role="status">검색중</span>
-                </button>
             </div>
-        </form>
-        <div class="d-flex searchBoxCollapse">
-            <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#collapseTarget" data-bs-target="#collapseTarget">
-                <svg id="btn-collapse-icon" class="flex-shrink-0 me-2 bi bi-chevron-up" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-up"/></svg>
-                <svg id="btn-expand-icon" class="flex-shrink-0 me-2 bi bi-chevron-down visually-hidden" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-down"/></svg>
-            </button>
+        </div>
+
+        <div class="boundChargerContainer p-3 rounded">
+            <div class="alert alert-secondary mb-2 d-flex align-items-center">
+                <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
+                <div> 주변 충전기 수: {  }개</div>
+            </div>
         </div>
     </div>
 
@@ -177,6 +224,24 @@
     <div id="map"></div>
 
     <script th:inline="javascript">
+        // 현재 Bound된 Marker에서 chargerId 추출
+        function getChargerIdList () {
+            let mapBounds = map.getBounds();
+            let boundMakers = [];
+            let chargerIds = [];
+
+            markers.forEach((marker) => {
+                let position = marker.getPosition();
+                if (mapBounds.hasLatLng(position)) {
+                    boundMakers.push(marker);
+                    chargerIds.push(marker.id);
+                }
+            });
+
+            // console.log(chargerIds);
+            return chargerIds;
+        }
+
         /*<![CDATA[*/
         // 지도 초기화
         const map = new naver.maps.Map('map', {
@@ -193,7 +258,9 @@
             const marker = new naver.maps.Marker({
                 position: new naver.maps.LatLng(charger.latitude, charger.longitude),
                 map: null,
-                title: charger.name
+                title: charger.name,
+                //https://developers.naver.com/forum/posts/20414
+                id: charger.id
             });
 
             const contentString = `
@@ -239,6 +306,12 @@
             markers.push(marker);
         });
 
+        // 지도 움직임 종료(IDLE) 시 Bound된 충전기 목록 갱신
+        naver.maps.Event.addListener(map, 'idle', () => {
+            let chargerIdList = getChargerIdList()
+            updateBoundChargerBox(chargerIdList);
+        });
+
         // 클러스터 생성 함수, 마커 생성 이후에 동작해야함.
         createCluster(map, markers);
         /*]]>*/
@@ -258,49 +331,163 @@
                 gridSize: 150,      // 군집도 조절
                 disableClickZoom: true,
                 icons: createClusterIcons(),
-                stylingFunction: (clusterMarker, count) => {
-                    const element = clusterMarker.getElement();
-                    element.innerHTML = `
-                <div style="
-                    position: relative;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 40px;
-                    height: 40px;
-                    color: white;
-                    font-size: 14px;
-                    font-weight: bold;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    transform: translateY(40px);
-                    box-sizing: border-box;
-                    z-index: 99;">
-                    ${count}
-                </div>`;
-                }
+                    stylingFunction: (clusterMarker, count) => {
+                        const element = clusterMarker.getElement();
+                        element.innerHTML = `
+                            <div style="
+                                position: relative;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: 40px;
+                                height: 40px;
+                                color: white;
+                                font-size: 14px;
+                                font-weight: bold;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                transform: translateY(40px);
+                                box-sizing: border-box;
+                                z-index: 99;">
+                                ${count}
+                            </div>`;
+                    }
             });
 
             function createClusterIcons() {
                 return [{
                     content: `
-                <div style="
-                    position: absolute;
-                    width: 40px;
-                    height: 40px;
-                    background: url('/cluster-marker.png') no-repeat center;
-                    background-size: cover;
-                    border-radius: 50%;
-                    border: 2px solid white;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-                    transform: translateX(-2px);
-                    z-index: 1;">
-                </div>`,
+                        <div style="
+                            position: absolute;
+                            width: 40px;
+                            height: 40px;
+                            background: url('/cluster-marker.png') no-repeat center;
+                            background-size: cover;
+                            border-radius: 50%;
+                            border: 2px solid white;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                            transform: translateX(-2px);
+                            z-index: 1;">
+                        </div>`,
                     size: new naver.maps.Size(40, 40),
                     anchor: new naver.maps.Point(20, 20),
                 }];
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+        // var HOME_PATH = window.HOME_PATH || '.';
+        // var MARKER_SPRITE_X_OFFSET = 29,
+        //     MARKER_SPRITE_Y_OFFSET = 50,
+        //     MARKER_SPRITE_POSITION = {
+        //         "A0": [0, 0],
+        //         "B0": [MARKER_SPRITE_X_OFFSET, 0],
+        //         "C0": [MARKER_SPRITE_X_OFFSET*2, 0],
+        //         "D0": [MARKER_SPRITE_X_OFFSET*3, 0],
+        //         "E0": [MARKER_SPRITE_X_OFFSET*4, 0],
+        //         "F0": [MARKER_SPRITE_X_OFFSET*5, 0],
+        //         "G0": [MARKER_SPRITE_X_OFFSET*6, 0],
+        //         "H0": [MARKER_SPRITE_X_OFFSET*7, 0],
+        //         "I0": [MARKER_SPRITE_X_OFFSET*8, 0],
+        //
+        //         "A1": [0, MARKER_SPRITE_Y_OFFSET],
+        //         "B1": [MARKER_SPRITE_X_OFFSET, MARKER_SPRITE_Y_OFFSET],
+        //         "C1": [MARKER_SPRITE_X_OFFSET*2, MARKER_SPRITE_Y_OFFSET],
+        //         "D1": [MARKER_SPRITE_X_OFFSET*3, MARKER_SPRITE_Y_OFFSET],
+        //         "E1": [MARKER_SPRITE_X_OFFSET*4, MARKER_SPRITE_Y_OFFSET],
+        //         "F1": [MARKER_SPRITE_X_OFFSET*5, MARKER_SPRITE_Y_OFFSET],
+        //         "G1": [MARKER_SPRITE_X_OFFSET*6, MARKER_SPRITE_Y_OFFSET],
+        //         "H1": [MARKER_SPRITE_X_OFFSET*7, MARKER_SPRITE_Y_OFFSET],
+        //         "I1": [MARKER_SPRITE_X_OFFSET*8, MARKER_SPRITE_Y_OFFSET],
+        //
+        //         "A2": [0, MARKER_SPRITE_Y_OFFSET*2],
+        //         "B2": [MARKER_SPRITE_X_OFFSET, MARKER_SPRITE_Y_OFFSET*2],
+        //         "C2": [MARKER_SPRITE_X_OFFSET*2, MARKER_SPRITE_Y_OFFSET*2],
+        //         "D2": [MARKER_SPRITE_X_OFFSET*3, MARKER_SPRITE_Y_OFFSET*2],
+        //         "E2": [MARKER_SPRITE_X_OFFSET*4, MARKER_SPRITE_Y_OFFSET*2],
+        //         "F2": [MARKER_SPRITE_X_OFFSET*5, MARKER_SPRITE_Y_OFFSET*2],
+        //         "G2": [MARKER_SPRITE_X_OFFSET*6, MARKER_SPRITE_Y_OFFSET*2],
+        //         "H2": [MARKER_SPRITE_X_OFFSET*7, MARKER_SPRITE_Y_OFFSET*2],
+        //         "I2": [MARKER_SPRITE_X_OFFSET*8, MARKER_SPRITE_Y_OFFSET*2]
+        //     };
+        //
+        // var map = new naver.maps.Map('map', {
+        //     center: new naver.maps.LatLng(37.3595704, 127.105399),
+        //     zoom: 10
+        // });
+        //
+        // var bounds = map.getBounds(),
+        //     southWest = bounds.getSW(),
+        //     northEast = bounds.getNE(),
+        //     lngSpan = northEast.lng() - southWest.lng(),
+        //     latSpan = northEast.lat() - southWest.lat();
+        //
+        // var markers = [];
+        //
+        // for (var key in MARKER_SPRITE_POSITION) {
+        //
+        //     var position = new naver.maps.LatLng(
+        //         southWest.lat() + latSpan * Math.random(),
+        //         southWest.lng() + lngSpan * Math.random());
+        //
+        //     var marker = new naver.maps.Marker({
+        //         map: map,
+        //         position: position,
+        //         title: key,
+        //         icon: {
+        //             url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
+        //             size: new naver.maps.Size(24, 37),
+        //             anchor: new naver.maps.Point(12, 37),
+        //             origin: new naver.maps.Point(MARKER_SPRITE_POSITION[key][0], MARKER_SPRITE_POSITION[key][1])
+        //         },
+        //         zIndex: 100
+        //     });
+        //
+        //     markers.push(marker);
+        // };
+        //
+        // naver.maps.Event.addListener(map, 'idle', function() {
+        //     updateMarkers(map, markers);
+        // });
+        //
+        // function updateMarkers(map, markers) {
+        //
+        //     var mapBounds = map.getBounds();
+        //     var marker, position;
+        //
+        //     for (var i = 0; i < markers.length; i++) {
+        //
+        //         marker = markers[i]
+        //         position = marker.getPosition();
+        //
+        //         if (mapBounds.hasLatLng(position)) {
+        //             showMarker(map, marker);
+        //         } else {
+        //             hideMarker(map, marker);
+        //         }
+        //     }
+        // }
+        //
+        // function showMarker(map, marker) {
+        //
+        //     if (marker.getMap()) return;
+        //     marker.setMap(map);
+        // }
+        //
+        // function hideMarker(map, marker) {
+        //
+        //     if (!marker.getMap()) return;
+        //     marker.setMap(null);
+        // }
     </script>
 </div>
 </html>
