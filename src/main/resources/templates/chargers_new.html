@@ -148,19 +148,43 @@
         function updateBoundChargerBox(chargerIdList) {
             const container = document.querySelector(".chargerListBox");
             const chargerCountDiv = document.querySelector("#chargerCountText");
+            const boundChargerList = getChargerListByIdList(chargerIdList); // chargerId로 charger 획득
 
             // 충전기 목록 전체 삭제
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
             }
 
-            // TODO - chargerIdList를 먼저 chargerList로 만들어야 함
+            container.scrollTo(0, 0); // 최상단으로 이동
+
             // 충전기 목록 추가
-            chargerIdList.forEach((chargerId) => {
-                const newDiv = document.createElement('div');
-                newDiv.appendChild(document.createTextNode(chargerId));
-                container.appendChild(newDiv);
-            })
+            boundChargerList.forEach((charger) => {
+                // 동적 요소 추가 부분
+                // 디자인 변경 시 수정 영역
+                // 상위 요소(컨테이너) 생성
+                const chargerDiv = document.createElement('div');
+                chargerDiv.classList.add('chargerBox');
+
+                // 하위 요소 생성
+                const chargerName = document.createElement('div');
+                chargerName.classList.add('chargerName', 'fw-bold', 'mb-1');
+                chargerName.appendChild(document.createTextNode(charger.name));
+
+                const chargerAddressDetail = document.createElement('div');
+                chargerAddressDetail.classList.add('chargerAddressDetail');
+                chargerAddressDetail.appendChild(document.createTextNode(charger.addressDetail));
+
+                const divisionLine = document.createElement('hr');
+                divisionLine.classList.add('border', 'border-1', 'border-secondary');
+
+                // 하위 요소  추가
+                chargerDiv.appendChild(chargerName);
+                chargerDiv.appendChild(chargerAddressDetail);
+
+                // 상위 요소(컨테이너) 추가
+                container.appendChild(chargerDiv);
+                container.appendChild(divisionLine);
+            });
 
             // 충전기 개수 표시 텍스트 삭제
             while (chargerCountDiv.firstChild) {
@@ -191,7 +215,7 @@
             // 검색창 닫기/열기 이벤트 추가
             searchContainer.addEventListener('show.bs.collapse', searchBoxCollapseEvent);
             searchContainer.addEventListener('hide.bs.collapse', searchBoxCollapseEvent);
-
+            // 충전기 목록 닫기/열기 이벤트 추가
             chargerListBox.addEventListener('show.bs.collapse', chargerListBoxCollapseEvent);
             chargerListBox.addEventListener('hide.bs.collapse', chargerListBoxCollapseEvent);
         }
@@ -199,7 +223,28 @@
 
     <!--  타임리프 기본 실행 스크립트  -->
     <script th:inline="javascript">
+        // TODO - DTO 변경시 반드시 수정!!!
+        const chargerList = [[${chargers}]]; // 데이터 저장
 
+        let chargerIdIndex = [];
+        chargerList.forEach((charger) => {
+           chargerIdIndex.push(charger.id);
+        });
+
+        function getChargerList() {
+            return chargerList;
+        }
+
+        function getChargerListByIdList(chargerIdList) {
+            let resultChargerList = [];
+            chargerIdList.forEach((chargerId) => {
+                let index = chargerIdIndex.indexOf(chargerId);
+                if (index !== -1) {
+                    resultChargerList.push(chargerList[index])
+                }
+            });
+            return resultChargerList;
+        }
     </script>
 
     <div class="leftContainer m-2">
