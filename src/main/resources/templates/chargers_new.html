@@ -25,7 +25,13 @@
             height: inherit;
             max-height: calc(100vh - 57px - (225px + 16px) - 8px);
             background: #FFFFFF;
+            -ms-overflow-style: none; /* for Internet Explorer, Edge */
+            scrollbar-width: none; /* for Firefox */
             overflow-y: auto;
+        }
+
+        .boundChargerContainer::-webkit-scrollbar {
+            display: none; /* for Chrome, Safari, and Opera */
         }
 
         #map {
