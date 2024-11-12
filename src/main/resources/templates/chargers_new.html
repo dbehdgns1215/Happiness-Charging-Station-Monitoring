@@ -25,12 +25,15 @@
             height: inherit;
             max-height: calc(100vh - 57px - (225px + 16px) - 8px);
             background: #FFFFFF;
+        }
+
+        .chargerListBox {
             -ms-overflow-style: none; /* for Internet Explorer, Edge */
             scrollbar-width: none; /* for Firefox */
             overflow-y: auto;
         }
 
-        .boundChargerContainer::-webkit-scrollbar {
+        .chargerListBox::-webkit-scrollbar {
             display: none; /* for Chrome, Safari, and Opera */
         }
 
@@ -106,6 +109,21 @@
             searchContainer.classList.toggle('opacity-75')
         }
 
+        // 충전기 목록 닫기/열기 이벤트
+        const chargerListBoxCollapseEvent = (event) => {
+            let chargerListContainer = document.querySelector('.boundChargerContainer');
+            let collapseIcon = document.querySelector('#charger-btn-collapse-icon');
+            let expandIcon = document.querySelector('#charger-btn-expand-icon');
+            let alertBox = chargerListContainer.querySelector('.alert')
+            // console.log(event.type); // type으로 이벤트 구분 가능
+
+            collapseIcon.classList.toggle('visually-hidden');
+            expandIcon.classList.toggle('visually-hidden');
+            alertBox.classList.toggle('mb-2');
+            alertBox.classList.toggle('mb-0');
+            //chargerListContainer.classList.toggle('opacity-75')
+        }
+
         // 로딩 시 검색창 초기화
         const initSearchFromUrl = () => {
             let addressInput = document.querySelector('#formAddress');
@@ -128,36 +146,38 @@
         }
 
         function updateBoundChargerBox(chargerIdList) {
-            let cls = [];
-            cls.push(chargerIdList);
-            console.log(chargerIdList);
+            const container = document.querySelector(".chargerListBox");
+            const chargerCountDiv = document.querySelector("#chargerCountText");
 
-            const container = document.querySelector(".boundChargerContainer");
-
-            // TODO - 추후 chagerList를 하위 컨테이너로 이동하면 활성화(조건 불필요)
-            // while (container.firstChild) {
-            //     container.removeChild(container.firstChild);
-            // }
-
-            for (let i = container.children.length - 1; i >= 0; i--) {
-                const child = container.children[i];
-                if (!child.classList.contains("alert")) {
-                    container.removeChild(child);
-                }
+            // 충전기 목록 전체 삭제
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
 
             // TODO - chargerIdList를 먼저 chargerList로 만들어야 함
+            // 충전기 목록 추가
             chargerIdList.forEach((chargerId) => {
                 const newDiv = document.createElement('div');
                 newDiv.appendChild(document.createTextNode(chargerId));
                 container.appendChild(newDiv);
             })
 
+            // 충전기 개수 표시 텍스트 삭제
+            while (chargerCountDiv.firstChild) {
+                chargerCountDiv.removeChild(chargerCountDiv.firstChild);
+            }
+
+            // 충전기 개수 갱신
+            const newSpan = document.createElement('span');
+            let countString = "주변 충전기 수: " + chargerIdList.length + "개";
+            newSpan.appendChild(document.createTextNode(countString));
+            chargerCountDiv.appendChild(newSpan);
         }
 
         window.onload = function() {
             const searchButtons = document.querySelectorAll('.btn-search');
-            const collapseTarget = document.querySelector('#collapseTarget');
+            const searchContainer = document.querySelector('#searchCollapse');
+            const chargerListBox = document.querySelector('#chargerListCollapse');
 
             // 초기화
             initSearchFromUrl();
@@ -169,18 +189,23 @@
             });
 
             // 검색창 닫기/열기 이벤트 추가
-            collapseTarget.addEventListener('show.bs.collapse', searchBoxCollapseEvent);
-            collapseTarget.addEventListener('hide.bs.collapse', searchBoxCollapseEvent);
+            searchContainer.addEventListener('show.bs.collapse', searchBoxCollapseEvent);
+            searchContainer.addEventListener('hide.bs.collapse', searchBoxCollapseEvent);
+
+            chargerListBox.addEventListener('show.bs.collapse', chargerListBoxCollapseEvent);
+            chargerListBox.addEventListener('hide.bs.collapse', chargerListBoxCollapseEvent);
         }
     </script>
 
     <!--  타임리프 기본 실행 스크립트  -->
-    <script th:inline="javascript"></script>
+    <script th:inline="javascript">
+
+    </script>
 
     <div class="leftContainer m-2">
         <!-- 검색 영역 -->
         <div class="searchContainer mb-2 px-3 pt-3 rounded">
-            <form class="form collapse show" id="collapseTarget">
+            <form class="form collapse show" id="searchCollapse">
                 <div class="mb-2 addressInputBox">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="formAddress" name="address" placeholder="주소" required>
@@ -211,17 +236,26 @@
                 </div>
             </form>
             <div class="d-flex searchBoxCollapse">
-                <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#collapseTarget" data-bs-target="#collapseTarget">
+                <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#searchCollapse" data-bs-target="#searchCollapse">
                     <svg id="btn-collapse-icon" class="flex-shrink-0 me-2 bi bi-chevron-up" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-up"/></svg>
                     <svg id="btn-expand-icon" class="flex-shrink-0 me-2 bi bi-chevron-down visually-hidden" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-down"/></svg>
                 </button>
             </div>
         </div>
 
-        <div class="boundChargerContainer p-3 rounded">
+        <div class="boundChargerContainer d-flex flex-column px-3 pt-3 rounded">
             <div class="alert alert-secondary mb-2 d-flex align-items-center">
                 <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
-                <div> 주변 충전기 수: {  }개</div>
+                <div id="chargerCountText"><span>주변 충전기 수: {  }개</span></div>
+            </div>
+            <div class="chargerListBox collapse show align-self-stretch" id="chargerListCollapse">
+
+            </div>
+            <div class="d-flex chargerListCollapse">
+                <button class="flex-fill btn text-secondary" data-bs-toggle="collapse" aria-expanded="true" aria-controls="#chargerListCollapse" data-bs-target="#chargerListCollapse">
+                    <svg id="charger-btn-collapse-icon" class="flex-shrink-0 me-2 bi bi-chevron-up" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-up"/></svg>
+                    <svg id="charger-btn-expand-icon" class="flex-shrink-0 me-2 bi bi-chevron-down visually-hidden" width="20" height="20" fill="#currentColor" role="img"><use xlink:href="#chevron-down"/></svg>
+                </button>
             </div>
         </div>
     </div>

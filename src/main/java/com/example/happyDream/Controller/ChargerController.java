@@ -54,49 +54,6 @@ public class ChargerController {
         return "chargers_new";
     }
 
-    /*
-    // TODO 추후 chargers에 병합 예정
-    @GetMapping("/chargersTest")
-    public String chargerSelectAllTest(Model model) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
-        model.addAttribute("chargers", chargers);
-        return "chargersTest";
-    }
-
-    //충전기 주소 조회
-    @GetMapping("/chargers/address")
-    public String chargerSelect(Model model,
-                                @RequestParam(value = "address", required = false) String address) {
-        if(address == null || address.isBlank()) {
-            log.warn("주소 파라미터 누락됨");
-            // TODO - 뷰 쪽 예외 처리 필요
-        }
-        else {
-            log.info(address);
-            List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
-            model.addAttribute("chargers", chargers);
-        }
-
-        return "chargers";
-    }
-
-    //주변 충전기 조회
-    @GetMapping("/chargers/near")
-    public String chargerSelectNear(Model model,
-                                    @RequestParam(value = "latitude", required = false) Double latitude,
-                                    @RequestParam(value = "longitude", required = false) Double longitude) {
-        if (latitude == null || longitude == null) {
-            log.warn("위도 또는 경도 파라미터 누락됨");
-            // TODO - 뷰 쪽 예외 처리 필요
-        }
-        else {
-            List<ChargerDTO> chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
-            model.addAttribute("chargers", chargers);
-        }
-        return "chargers";
-    }
-    */
-
     //전체 충전기 삭제
     @DeleteMapping("/chargers")
     public String chargerDeleteAll() {
