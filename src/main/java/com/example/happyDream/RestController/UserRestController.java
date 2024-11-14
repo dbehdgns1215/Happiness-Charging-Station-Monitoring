@@ -43,8 +43,16 @@ public class UserRestController {
     //사용자 추가 (회원가입)
     @PostMapping("/users")
     public ResponseDTO userInsert(@RequestBody UserDTO userDTO) {
-        userService.userInsert(userDTO.getUsername(), userDTO.getPassword());
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, "회원가입 성공");
+        try {
+            userService.userInsert(userDTO.getUsername(), userDTO.getPassword());
+            return ResponseDTO.success("v1", HttpServletResponse.SC_OK, "회원가입 성공");
+        } catch (IllegalArgumentException e) {
+            // 아이디 중복 시
+            return ResponseDTO.error("v1", HttpServletResponse.SC_CONFLICT, e.getMessage());
+        } catch (Exception e) {
+            // 기타 서버 오류 시
+            return ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
+        }
     }
 
     @PostMapping("/login")
