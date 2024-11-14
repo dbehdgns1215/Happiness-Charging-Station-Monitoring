@@ -46,10 +46,7 @@
     <!--  Chart.js  -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
-    <script sec:authorize="isAuthenticated()"></script>
-
-    <!--  함수 정의 스크립트  -->
+    <!--  함수 정의 스크립트(최상단)  -->
     <script>
         function isListNotEmpty(array) {
             // 배열이고, 길이가 0이 아닌 경우
@@ -57,10 +54,10 @@
         }
 
         // 충전기 목록 업데이트 함수(지도 IDLE 시 실행)
-        function updateBoundChargerBox(chargerIdList) {
+        function updateBindingChargerBox(chargerIds) {
             const container = document.querySelector(".chargerListBox");
             const chargerCountDiv = document.querySelector("#chargerCountText");
-            const boundChargerList = getChargerListByIdList(chargerIdList); // chargerId로 charger 획득
+            const bindingChargers = getChargersByChargerIds(chargerIds); // chargerId로 charger 획득
 
             // 충전기 목록 전체 삭제
             while (container.firstChild) {
@@ -70,8 +67,8 @@
             container.scrollTo(0, 0); // 최상단으로 이동
 
             // 충전기 목록 추가
-            if (isListNotEmpty(boundChargerList)) {
-                boundChargerList.forEach((charger) => {
+            if (isListNotEmpty(bindingChargers)) {
+                bindingChargers.forEach((charger) => {
                     // 동적 요소 추가 부분
                     // 디자인 변경 시 수정 영역
                     // 상위 요소(컨테이너) 생성
@@ -107,13 +104,13 @@
 
             // 충전기 개수 갱신
             const newSpan = document.createElement('span');
-            let countString = "주변 충전기 수: " + chargerIdList.length + "개";
+            let countString = "주변 충전기 수: " + chargerIds.length + "개";
             newSpan.appendChild(document.createTextNode(countString));
             chargerCountDiv.appendChild(newSpan);
         }
     </script>
 
-    <!--  이벤트 정의 스크립트  -->
+    <!--  이벤트 정의 스크립트(지도 제외)  -->
     <script>
         // 검색 버튼 이벤트
         const searchButtonClicked = (event) => {
@@ -121,6 +118,7 @@
             let addressInput = document.querySelector('#formAddress');
             let latitudeInput = document.querySelector('#formLatitude');
             let longitudeInput = document.querySelector('#formLongitude');
+            let url;
 
             // 버튼 클릭 시 div 태그가 입력되는 현상 대응
             if (button.matches('button') === false) {
@@ -128,7 +126,6 @@
                 button = button.closest('button');
             }
 
-            let url;
             if (button.value === "address") {
                 if (addressInput.value) {
                     url = `/chargers?address=${encodeURIComponent(addressInput.value)}`;
@@ -229,48 +226,57 @@
         }
     </script>
 
+    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
+    <script sec:authorize="isAuthenticated()"></script>
+
     <!--  타임리프 기본 실행 스크립트(데이터 관련 작업만 수행)  -->
     <script th:inline="javascript">
         // TODO - DTO 변경시 반드시 수정!!!
-        const chargerListObject = [[${chargers}]]; // 타임리프로 받아온 데이터 저장
-        let chargerList = []; // Object가 아닌 Array로 변환된 충전기 리스트
-        let chargerIdIndex = []; // chargerId 검색을 위한 인덱스
+        const chargerObjects = [[${chargers}]]; // 타임리프로 받아온 데이터 저장
+        let chargerArray = []; // Object가 아닌 Array로 변환된 충전기 리스트
+        let chargerIdArray = []; // chargerId 검색을 위한 인덱스
 
-        // console.log(chargerListObject);
-        if (Object.keys(chargerListObject).length) {
+        // console.log(chargerObjects);
+        if (Object.keys(chargerObjects).length) {
             // 충전기 Array 생성
-            chargerListObject.forEach((charger) => {
-                chargerList.push(charger);
+            chargerObjects.forEach((charger) => {
+                chargerArray.push(charger);
             })
 
             // 인덱스 생성
-            if (isListNotEmpty(chargerList)) {
-                chargerList.forEach((charger) => {
-                    chargerIdIndex.push(charger.id);
+            if (isListNotEmpty(chargerArray)) {
+                chargerArray.forEach((charger) => {
+                    chargerIdArray.push(charger.id);
                 });
             }
         }
 
+        // 문제 발생 시 테스트 코드
+        // console.log(Array.isArray(chargerArray));
+        // console.log(chargerArray.length);
+        // console.log(Array.isArray(chargerIdArray));
+        // console.log(chargerIdArray.length);
+
         // 충전기 리스트 Getter
-        function getChargerList() {
-            return chargerList;
+        function getChargers() {
+            return chargerArray;
         }
 
         // 충전기 Id 리스트 -> 충전기 리스트
-        function getChargerListByIdList(chargerIdList) {
-            let resultChargerList = [];
-            if (isListNotEmpty(chargerIdList)) {
-                chargerIdList.forEach((chargerId) => {
-                    let index = chargerIdIndex.indexOf(chargerId);
+        function getChargersByChargerIds(chargerIds) {
+            let resultChargers = [];
+            if (isListNotEmpty(chargerIds)) {
+                chargerIds.forEach((chargerId) => {
+                    let index = chargerIds.indexOf(chargerId);
                     if (index !== -1) {
-                        resultChargerList.push(chargerList[index]); // -1인 경우 찾을 수 없음
+                        resultChargers.push(chargerArray[index]); // -1인 경우 찾을 수 없음
                     }
                     else {
                         console.log(chargerId + "를 charger 인덱스에서 찾을 수 없음");
                     }
                 });
             }
-            return resultChargerList;
+            return resultChargers;
         }
     </script>
 
@@ -335,39 +341,27 @@
     <!--  지도 영역  -->
     <div id="map"></div>
 
+    <!--  지도 관련 스크립트  -->
     <script>
-        // 현재 바인딩된 마커에서 chargerId 획득
-        function getChargerIdList () {
-            let mapBounds = map.getBounds();
-            let boundMakers = []; // 지도에 바인딩된 마커 리스트
-            let chargerIds = []; // 마커에서 추출한 충전기 id
-
-            if (isListNotEmpty(markers)) {
-                markers.forEach((marker) => {
-                    let position = marker.getPosition();
-                    if (mapBounds.hasLatLng(position)) {
-                        boundMakers.push(marker);
-                        chargerIds.push(marker.id);
-                    }
-                });
-            }
-
-            return chargerIds;
-        }
-
         // 지도 초기화
         const map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5665, 126.978), // 기본 위치 (서울)
             zoom: 11
         });
 
+        // 바인딩된 충전기 목록 갱신 호출
+        const mapIdleEvent = () => {
+            let chargerIds = getBindingChargerIds()
+            updateBindingChargerBox(chargerIds);
+        }
+
+        let chargers = getChargers();
         let markers = [];
         let cluster;
-        let chargerData = getChargerList();
         let openInfoWindow = null;
 
-        if (isListNotEmpty(chargerData)) {
-            chargerData.forEach(charger => {
+        if (isListNotEmpty(chargers)) {
+            chargers.forEach((charger) => {
                 const marker = new naver.maps.Marker({
                     position: new naver.maps.LatLng(charger.latitude, charger.longitude),
                     map: null,
@@ -422,16 +416,31 @@
 
         // 지도 움직임 종료(IDLE) 시 Bound된 충전기 목록 갱신
         naver.maps.Event.addListener(map, 'idle', () => {
-            let chargerIdList = getChargerIdList();
-            updateBoundChargerBox(chargerIdList);
+            mapIdleEvent();
         });
 
         // 클러스터 생성 함수, 마커 생성 이후에 동작해야함.
         createCluster(map, markers);
+        mapIdleEvent();
 
-        // 충전기 목록 초기화
-        let chargerIdList = getChargerIdList()
-        updateBoundChargerBox(chargerIdList);
+        // 현재 바인딩된 마커에서 chargerId 획득
+        function getBindingChargerIds () {
+            let mapBounds = map.getBounds();
+            let boundMakers = []; // 지도에 바인딩된 마커 리스트
+            let chargerIds = []; // 마커에서 추출한 충전기 id
+
+            if (isListNotEmpty(markers)) {
+                markers.forEach((marker) => {
+                    let position = marker.getPosition();
+                    if (mapBounds.hasLatLng(position)) {
+                        boundMakers.push(marker);
+                        chargerIds.push(marker.id);
+                    }
+                });
+            }
+
+            return chargerIds;
+        }
 
         // FIXME API 호출 해보면서 성능 차이 비교할 필요 있음. 체감상 현재는 많이 개선됐고 클러스터 아이콘과 관련된 코드가 중복되는 느낌이 있으나 분리하지 않으면 해결이 안됨.
         function createCluster(map, markers) {
