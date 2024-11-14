@@ -35,6 +35,9 @@ public class UserService {
 
     // 회원가입
     public void userInsert(String username, String password) {
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
         // 비밀번호 암호화
         String encryptedPassword = passwordEncoder.encode(password);
         System.out.println("암호화된 비밀번호: " + encryptedPassword);
