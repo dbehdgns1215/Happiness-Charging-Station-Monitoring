@@ -65,12 +65,12 @@ public class ChargerRestController implements ChargerSwagger {
         ResponseDTO responseDto;
 
         if (usingYn != null) {
-            List<ChargerDetailDTO> ChargerDetailDtoList = this.chargerServiceFacade.chargerSelectByUsingYn(usingYn);
+            List<ChargerDetailDTO> ChargerDetailDtoList = this.chargerServiceFacade.chargerSelectDetailByUsingYn(usingYn);
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, ChargerDetailDtoList);
             return responseDto;
         }
         else if (brokenYn != null) {
-            List<ChargerDetailDTO> chargerDtoList = this.chargerServiceFacade.chargerSelectByBrokenYn(brokenYn);
+            List<ChargerDetailDTO> chargerDtoList = this.chargerServiceFacade.chargerSelectDetailByBrokenYn(brokenYn);
             responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, chargerDtoList);
             return responseDto;
         }

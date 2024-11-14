@@ -1,5 +1,6 @@
 package com.example.happyDream.Repository;
 
+import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerDetailDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,12 +37,19 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "-radians(:userLongitude))+sin(radians(:userLatitude))*sin(radians(c.latitude)))) <= 3")
     List<ChargerEntity> findChargersByNear(@Param("userLatitude") Double userLatitude, @Param("userLongitude") Double userLongitude);
 
+    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.usingYn = :usingYn")
+    List<ChargerEntity> findAllChargerByUsingYn(Boolean usingYn);
+
+    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.usingYn = :brokenYn")
+    List<ChargerEntity> findAllChargerByBrokenYn(Boolean brokenYn);
+
+    // 단순 조회용 ChargerDetailDTO
     @Query(CHARGER_DETAIL_JOIN_QUERY)
     List<ChargerDetailDTO> findAllChargerDetail();
 
-    @Query(CHARGER_DETAIL_JOIN_QUERY +  " WHERE cs.usingYn = :usingYn")
-    List<ChargerDetailDTO> findAllChargerByUsingYn(Boolean usingYn);
+    @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.usingYn = :usingYn")
+    List<ChargerDetailDTO> findAllChargerDetailByUsingYn(Boolean usingYn);
 
-    @Query(CHARGER_DETAIL_JOIN_QUERY +  " WHERE cs.brokenYn = :brokenYn")
-    List<ChargerDetailDTO> findAllChargerByBrokenYn(Boolean brokenYn);
+    @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.brokenYn = :brokenYn")
+    List<ChargerDetailDTO> findAllChargerDetailByBrokenYn(Boolean brokenYn);
 }

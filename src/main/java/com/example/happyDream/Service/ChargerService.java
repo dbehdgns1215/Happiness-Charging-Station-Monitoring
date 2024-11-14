@@ -5,17 +5,10 @@ import com.example.happyDream.DTO.ChargerDetailDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Repository.ChargerRepository;
 import com.example.happyDream.Util.Converter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.happyDream.DTO.ChargerDTO;
 
-import java.io.FileReader;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,6 +50,7 @@ public class ChargerService {
         this.chargerRepository.saveAll(chargerEntityList);
     }
 
+    // 전체 충전기 조회
     public List<ChargerDTO> chargerSelectAll(){
         List<ChargerEntity> entityList = this.chargerRepository.findAll();
         List<ChargerDTO> dtoList = Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
@@ -64,19 +58,34 @@ public class ChargerService {
         return dtoList;
     }
 
+    // 충전중인 충전기 조회 - ChargerDTO
+    public List<ChargerDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        List<ChargerEntity> entityList = this.chargerRepository.findAllChargerByUsingYn(usingYn);
+        return Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
+    }
+
+    // 고장난 충전기 조회 - ChargerDTO
+    public List<ChargerDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        List<ChargerEntity> entityList = this.chargerRepository.findAllChargerByBrokenYn(brokenYn);
+        return Converter.EntityListToDtoList(entityList, ChargerEntity::toDTO);
+    }
+
+    // 전체 충전기 상세 정보 조회(State 포함 정보)
     public List<ChargerDetailDTO> chargerSelectAllDetail(){
         List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerDetail();
         System.out.println("가져온 충전기 수: " + dtoList.size());
         return dtoList;
     }
 
-    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
-        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerByUsingYn(usingYn);
+    // 충전중인 충전기 조회 - ChargerDetailDTO
+    public List<ChargerDetailDTO> chargerSelectDetailByUsingYn(Boolean usingYn) {
+        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerDetailByUsingYn(usingYn);
         return dtoList;
     }
 
-    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
-        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerByBrokenYn(brokenYn);
+    // 고장난 충전기 조회 - ChargerDetailDTO
+    public List<ChargerDetailDTO> chargerSelectDetailByBrokenYn(Boolean brokenYn) {
+        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerDetailByBrokenYn(brokenYn);
         return dtoList;
     }
 

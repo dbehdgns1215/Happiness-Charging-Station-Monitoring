@@ -1,0 +1,34 @@
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content" class="container text-center my-3">
+    <style></style>
+
+<!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
+    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
+    <script sec:authorize="isAuthenticated()"></script>
+
+    <!--  타임리프 기본 실행 스크립트  -->
+    <script th:inline="javascript"></script>
+
+    <div class="d-block mb-3 text-start">
+        <H2 class="fw-bold">DASHBOARD</H2>
+    </div>
+
+    <!--  경고 출력  -->
+<!--    <div class="alert alert-secondary mb-2 d-flex align-items-center" th:if="${#lists.isEmpty(logList)==true}">-->
+<!--        <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>-->
+<!--        <div>표시할 로그가 없습니다.</div>-->
+<!--    </div>-->
+<!--    <div class="alert alert-secondary mb-2 d-flex align-items-center" th:if="${#lists.isEmpty(logList)==false}">-->
+<!--        <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>-->
+<!--        <div th:text="|등록 로그 수: ${logList.size}개|">Info</div>-->
+<!--    </div>-->
+
+    <div class="mb-1"></div>
+
+    <div th:text="|전체 충전기: ${chargerCount}|"></div>
+    <div th:text="|사용중인 충전기: ${usingChargerCount}|"></div>
+    <div th:text="|고장 충전기: ${brokenChargerCount}|"></div>
+</div>
+</html>

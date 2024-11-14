@@ -23,7 +23,6 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,16 +59,29 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelectAll();
     }
 
+    // 충전 중인 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    }
+
+    // 고장 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
+    }
+
+    // 전체 충전기 상세 정보 조회(State 포함 정보)
     public List<ChargerDetailDTO> chargerSelectAllDetail(){
         return this.chargerService.chargerSelectAllDetail();
     }
 
-    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
-        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    // 충전 중인 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDetailDTO> chargerSelectDetailByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectDetailByUsingYn(usingYn);
     }
 
-    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
-        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
+    // 고장 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDetailDTO> chargerSelectDetailByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectDetailByBrokenYn(brokenYn);
     }
 
     @Transactional
