@@ -65,7 +65,7 @@ public class UserRestController {
             return ResponseDTO.success("v1", HttpServletResponse.SC_OK, token);
         } else {
             // 인증 실패 시 오류 응답 반환
-            return ResponseDTO.error("v1", HttpServletResponse.SC_UNAUTHORIZED, "로그인 실패");
+            return ResponseDTO.error("v1", HttpServletResponse.SC_UNAUTHORIZED, "아이디 또는 비밀번호가 존재하지 않습니다.");
         }
     }
 
