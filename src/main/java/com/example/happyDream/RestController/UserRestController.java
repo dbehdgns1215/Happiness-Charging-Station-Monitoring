@@ -60,22 +60,27 @@ public class UserRestController {
         String username = userDTO.getUsername();
         String password = userDTO.getPassword();
 
-        // 사용자 인증
-        if (userService.validateUser(username, password)) {
-            Optional<UserEntity> userEntity = userService.findUsername(username);
+        try {
+            // 사용자 인증
+            if (userService.validateUser(username, password)) {
+                Optional<UserEntity> userEntity = userService.findUsername(username);
+                Integer userId = userEntity.get().getId();  // userId 추출
 
-            Integer userId = userEntity.get().getId();  // userId 추출
+                // JWT 발급 (username과 userId 포함)
+                String token = jwtUtil.generateToken(username, userId);
 
-            // JWT 발급 (username과 userId 포함)
-            String token = jwtUtil.generateToken(username, userId);
-
-            // 클라이언트에 성공 응답과 함께 JWT 토큰 반환
-            return ResponseDTO.success("v1", HttpServletResponse.SC_OK, token);
-        } else {
-            // 인증 실패 시 오류 응답 반환
-            return ResponseDTO.error("v1", HttpServletResponse.SC_UNAUTHORIZED, "아이디 또는 비밀번호가 존재하지 않습니다.");
+                // 클라이언트에 성공 응답과 함께 JWT 토큰 반환
+                return ResponseDTO.success("v1", HttpServletResponse.SC_OK, token);
+            } else {
+                // 인증 실패 시 오류 응답 반환
+                return ResponseDTO.error("v1", HttpServletResponse.SC_UNAUTHORIZED, "비밀번호가 틀렸습니다.");
+            }
+        } catch (IllegalArgumentException e) {
+            // 예외 발생 시 오류 응답 반환
+            return ResponseDTO.error("v1", HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
+
 
 
     //특정 사용자 조회
