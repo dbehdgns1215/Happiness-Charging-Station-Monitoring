@@ -70,6 +70,16 @@ public class ChargerService {
         return dtoList;
     }
 
+    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerByUsingYn(usingYn);
+        return dtoList;
+    }
+
+    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        List<ChargerDetailDTO> dtoList = this.chargerRepository.findAllChargerByBrokenYn(brokenYn);
+        return dtoList;
+    }
+
     // 전체 충전기 삭제
     public void chargerDeleteAll(){
         this.chargerRepository.deleteAll();

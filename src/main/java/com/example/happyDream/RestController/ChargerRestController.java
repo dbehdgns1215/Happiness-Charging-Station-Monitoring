@@ -53,7 +53,33 @@ public class ChargerRestController implements ChargerSwagger {
         return responseDto;
     }
 
-    // 비동기 처리 고려해봐야 함
+    // 충전기 검색
+    @GetMapping("/chargers/search")
+    public ResponseDTO getAllSearchedCharger(@RequestParam(required = false) Boolean usingYn,
+                                             @RequestParam(required = false) Boolean brokenYn) {
+        if (usingYn == null && brokenYn == null) {
+            log.info("요청에 파라미터가 모두 누락됨");
+            return this.getAllChargers();
+        }
+
+        ResponseDTO responseDto;
+
+        if (usingYn != null) {
+            List<ChargerDetailDTO> ChargerDetailDtoList = this.chargerServiceFacade.chargerSelectByUsingYn(usingYn);
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, ChargerDetailDtoList);
+            return responseDto;
+        }
+        else if (brokenYn != null) {
+            List<ChargerDetailDTO> chargerDtoList = this.chargerServiceFacade.chargerSelectByBrokenYn(brokenYn);
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, chargerDtoList);
+            return responseDto;
+        }
+
+        responseDto = ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "처리되지 않음");
+        return responseDto;
+    }
+
+    // 충전기 생성
     @PostMapping("/chargers")
     public ResponseDTO createCharger(@RequestParam(required = false) Boolean initYn,
                                      @RequestBody String requestJson) {

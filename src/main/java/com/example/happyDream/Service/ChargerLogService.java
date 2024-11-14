@@ -1,17 +1,14 @@
 package com.example.happyDream.Service;
 
-import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerLogDTO;
 import com.example.happyDream.Entity.ChargerLogEntity;
 import com.example.happyDream.Repository.ChargerLogRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.happyDream.Util.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -23,37 +20,22 @@ public class ChargerLogService {
         this.chargerLogRepository = chargerLogRepository;
     }
 
-    // ChargerLogEntity List → ChargerLogDTO List
-    private List<ChargerLogDTO> convertEntityListToDtoList(List<ChargerLogEntity> entityList) {
-        if (entityList.isEmpty()) {
-            log.warn("DTO list가 비어있음");
-            return new ArrayList<>();
-        }
-        return entityList.stream()
-                .map(ChargerLogEntity::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ChargerLogDTO List → ChargerLogEntity List
-    private List<ChargerLogEntity> convertDtoListToEntityList(List<ChargerLogDTO> dtoList) {
-        if (dtoList.isEmpty()) {
-            log.warn("Entity list가 비어있음");
-            throw new EntityNotFoundException();
-        }
-        return dtoList.stream()
-                .map(ChargerLogDTO::toEntity)
-                .collect(Collectors.toList());
-    }
-
     // 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
-        List<ChargerLogDTO> dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAll());
+    public List<ChargerLogDTO> getAllChargerLog(Boolean join, Boolean descYn) {
+        List<ChargerLogDTO> dtoList;
 //        if (join == false) {
 //            for (ChargerLogDTO dto : dtoList) {
 //                ChargerDTO chargerDto = ChargerDTO.builder().id(dto.getChargerId()).build();
 //                dto.setChargerId(chargerDto);
 //            }
 //        }
+
+        if (descYn) {
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByOrderByIdDesc(), ChargerLogEntity::toDTO);
+        }
+        else {
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAll(), ChargerLogEntity::toDTO);
+        }
         return dtoList;
     }
 
@@ -70,10 +52,10 @@ public class ChargerLogService {
     public List<ChargerLogDTO> getAllTargetChargerLog(Integer chargerId, Boolean descYn) {
         List<ChargerLogDTO> dtoList;
         if (descYn) {
-            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId));
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByChargerIdOrderByDesc(chargerId), ChargerLogEntity::toDTO);
         }
         else {
-            dtoList = convertEntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId));
+            dtoList = Converter.EntityListToDtoList(this.chargerLogRepository.findAllByChargerId(chargerId), ChargerLogEntity::toDTO);
         }
         return dtoList;
     }

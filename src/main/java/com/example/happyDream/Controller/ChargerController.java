@@ -5,8 +5,10 @@ import com.example.happyDream.Entity.ChargerEntity;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,51 +29,29 @@ public class ChargerController {
 
     //전체 충전기 조회
     @GetMapping("/chargers")
-    public String chargerSelectAll(Model model) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
+    public String chargerSelectAll(Model model,
+                                   @RequestParam(value = "address", required = false) String address,
+                                   @RequestParam(value = "latitude", required = false) Double latitude,
+                                   @RequestParam(value = "longitude", required = false) Double longitude) {
+        List<ChargerDTO> chargers;
+        try {
+            if (address != null) {
+                log.info(address);
+                chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
+            }
+            else if (latitude != null && longitude != null) {
+                log.info("{}, {}", latitude, longitude);
+                chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
+            }
+            else {
+                chargers = this.chargerServiceFacade.chargerSelectAll();
+            }
+        } catch (EntityNotFoundException ignored) {
+            chargers = null;
+        }
+
         model.addAttribute("chargers", chargers);
-        return "chargers";
-    }
-
-    // TODO 추후 chargers에 병합 예정
-    @GetMapping("/chargersTest")
-    public String chargerSelectAllTest(Model model) {
-        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
-        model.addAttribute("chargers", chargers);
-        return "chargersTest";
-    }
-
-    //충전기 주소 조회
-    @GetMapping("/chargers/address")
-    public String chargerSelect(Model model,
-                                @RequestParam(value = "address", required = false) String address) {
-        if(address == null || address.isBlank()) {
-            log.warn("주소 파라미터 누락됨");
-            // TODO - 뷰 쪽 예외 처리 필요
-        }
-        else {
-            log.info(address);
-            List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectByAddress(address);
-            model.addAttribute("chargers", chargers);
-        }
-
-        return "chargers";
-    }
-
-    //주변 충전기 조회
-    @GetMapping("/chargers/near")
-    public String chargerSelectNear(Model model,
-                                    @RequestParam(value = "latitude", required = false) Double latitude,
-                                    @RequestParam(value = "longitude", required = false) Double longitude) {
-        if (latitude == null || longitude == null) {
-            log.warn("위도 또는 경도 파라미터 누락됨");
-            // TODO - 뷰 쪽 예외 처리 필요
-        }
-        else {
-            List<ChargerDTO> chargers = this.chargerServiceFacade.chagerSelectNear(latitude, longitude);
-            model.addAttribute("chargers", chargers);
-        }
-        return "chargers";
+        return "chargers_new";
     }
 
     //전체 충전기 삭제

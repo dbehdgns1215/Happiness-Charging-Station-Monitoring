@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +33,12 @@ import java.util.Map;
 @Slf4j
 @Service
 public class ChargerServiceFacade {
+    // JSON 파싱 관련 데이터
     private static final String CHARGER_JSON_PATH = "src/main/resources/data/chargerList.json";
     private static final String CHARGER_MAPPING_JSON_PATH = "src/main/resources/data/chargerDataGovernmentMapping.json";
+
+    // Log-State 간 연계 관련 데이터
+    private static final Double STATE_TOGGLE_THRESHOLD = 10.0;
 
     private final ChargerService chargerService;
     private final ChargerStateService chargerStateService;
@@ -57,6 +62,14 @@ public class ChargerServiceFacade {
 
     public List<ChargerDetailDTO> chargerSelectAllDetail(){
         return this.chargerService.chargerSelectAllDetail();
+    }
+
+    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    }
+
+    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
     }
 
     @Transactional
@@ -176,8 +189,8 @@ public class ChargerServiceFacade {
     /* ===== ChargerLogService ===== */
 
     // 전체 충전 로그 조회
-    public List<ChargerLogDTO> getAllChargerLog(Boolean join) {
-        return this.chargerLogService.getAllChargerLog(join);
+    public List<ChargerLogDTO> getAllChargerLog(Boolean join, Boolean descYn) {
+        return this.chargerLogService.getAllChargerLog(join, descYn);
     }
 
     // 전체 충전 로그 삭제
@@ -191,12 +204,24 @@ public class ChargerServiceFacade {
     }
 
     // 특정 충전기 충전 로그 추가
+    @Transactional
     public void createTargetChargerLog(ChargerLogDTO chargerLogDto) {
         // FK(ChargerId) 존재 여부 1차 확인 후 PK(ChargerLogId) 부존재 여부 2차 확인
         try {
-            this.chargerService.chargerSelect(chargerLogDto.getChargerId()); // 검증용 호출, 반환값 ignored
-            this.chargerLogService.createTargetChargerLog(chargerLogDto);
-        } catch (EntityNotFoundException ignored) { }
+            this.chargerSelect(chargerLogDto.getChargerId()); // 충전기 조회 여부 검증용 호출, 반환값 ignored
+            this.chargerLogService.createTargetChargerLog(chargerLogDto); // 충전기 로그 추가
+
+            ChargerStateDTO chargerStateDto = this.getTargetChargerState(chargerLogDto.getChargerId());
+            if (!chargerStateDto.getUsingYn() & chargerLogDto.getAmpere() > STATE_TOGGLE_THRESHOLD) {
+                chargerStateDto.setUsingYn(true);
+            }
+            else if (chargerStateDto.getUsingYn() & chargerLogDto.getAmpere() < STATE_TOGGLE_THRESHOLD) {
+                chargerStateDto.setUsingYn(false);
+            }
+            this.changeTargetChargerState(chargerStateDto);
+        } catch (EntityNotFoundException e) {
+            log.error("존재하지 않는 충전기의 로그 추가 - 충전기 id: {} {}", chargerLogDto.getChargerId(), e.getStackTrace());
+        }
     }
 
     /* ===== ChargerStateService ===== */
