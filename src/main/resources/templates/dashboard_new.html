@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{common/layout}" xmlns:th="http://www.thymeleaf.org">
 <div layout:fragment="content" class="container text-center my-3">
     <style>
         .dashboardTable { width: 800px; }
@@ -10,6 +10,10 @@
             height: 25px;
         }
 
+        .fillGreen { fill: #408558; }
+        .fillGray { fill: #BDBDBD; }
+        .fillRed { fill: #E15241; }
+        .fillYellow { fill: #F6C343; }
         .progressGreen { background: #408558; }
         .progressGray { background: #BDBDBD; }
         .progressRed { background: #E15241; }
@@ -20,10 +24,11 @@
     <!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 
     <script>
-        const totalChargerHref = "";
-        const idleChargerHref = "/chargers";
+        const totalChargerHref = "/chargers/list";
+        const idleChargerHref = "#";
         const usingChargerHref = "#";
         const brokenChargerHref = "#";
+        const totalReviewHref = "#";
         const inProgressReportHref = "#"
         const completedReportHref = "#";
         const notRequestRecentlyChargerHref = "#";
@@ -72,7 +77,7 @@
                 <tr>
                     <td rowspan="4">충전기 현황</td>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#408558" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
                         <span class="align-middle">전체 충전기</span>
                     </td>
                     <td><div th:text="${totalChargerCount}"></div></td>
@@ -85,7 +90,7 @@
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#BDBDBD" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillGray" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
                         <span class="align-middle">유휴 충전기</span>
                     </td>
                     <td><div th:text="${idleChargerCount}"></div></td>
@@ -98,7 +103,7 @@
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#F6C343" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
                         <span class="align-middle">사용중인 충전기</span>
                     </td>
                     <td><div th:text="${usingChargerCount}"></div></td>
@@ -111,7 +116,7 @@
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#E15241" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
                         <span class="align-middle">고장난 충전기</span>
                     </td>
                     <td><div th:text="${brokenChargerCount}"></div></td>
@@ -122,11 +127,25 @@
                     </td>
                     <td><button class="btn btn-sm btn-outline-primary" type="button" onclick="location.href=brokenChargerHref">바로가기</button></td>
                 </tr>
+                <tr>
+                    <td>리뷰 현황</td>
+                    <td class="text-start">
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillGreen" role="img"><use xlink:href="#star-fill"/></svg>
+                        <span class="align-middle">전체 리뷰</span>
+                    </td>
+                    <td><div th:text="${reviewCount}"></div></td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </td>
+                    <td><button class="btn btn-sm btn-outline-primary" type="button" onclick="location.href=totalReviewHref">바로가기</button></td>
+                </tr>
                 <!--  신고 처리 현황(2 Row)  -->
                 <tr>
                     <td rowspan="2">신고 처리 현황</td>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#E15241" role="img"><use xlink:href="#file-earmark-text-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillRed" role="img"><use xlink:href="#file-earmark-text-fill"/></svg>
                         <span class="align-middle">처리중인 고장 신고</span>
                     </td>
                     <td><div th:text="${inProgressReportCount}"></div></td>
@@ -140,7 +159,7 @@
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#BDBDBD" role="img"><use xlink:href="#check-circle-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillGray" role="img"><use xlink:href="#check-circle-fill"/></svg>
                         <span class="align-middle">처리 완료된 고장 신고</span>
                     </td>
                     <td><div th:text="${completedReportCount}"></div></td>
@@ -150,7 +169,7 @@
                 <tr>
                     <td rowspan="2">추가 모니터링<br>항목</td>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#F6C343" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillYellow" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
                         <span class="align-middle">직전 30분간 로그를 전송하지 않은 충전기</span>
                     </td>
                     <td><div th:text="${notRequestRecentlyChargerCount}"></div></td>
@@ -163,7 +182,7 @@
                 </tr>
                 <tr>
                     <td class="text-start">
-                        <svg class="rowIcon bi flex-shrink-0 me-2" fill="#F6C343" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                        <svg class="rowIcon bi flex-shrink-0 me-2 fillYellow" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
                         <span class="align-middle">오늘 단 한번도 사용되지 않은 충전기</span>
                     </td>
                     <td><div th:text="${notUsingTodayCharger}"></div></td>

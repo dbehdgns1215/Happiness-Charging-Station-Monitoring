@@ -35,6 +35,7 @@ public class DashboardController {
         model.addAttribute("completedReportCount", 9); // TODO - 추가 예쩡
         model.addAttribute("notRequestRecentlyChargerCount", notRequestRecentlyCharger.size());
         model.addAttribute("notUsingTodayCharger", 0);
+        model.addAttribute("reviewCount", 0);
 
         return "dashboard_new";
     }
