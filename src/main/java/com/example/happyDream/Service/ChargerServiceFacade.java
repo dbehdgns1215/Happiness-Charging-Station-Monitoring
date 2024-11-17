@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,6 +197,15 @@ public class ChargerServiceFacade {
     // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerService.chargerDelete(id);
+    }
+
+    public List<ChargerDTO> chargerSelectWithoutLogInPeriod(Integer minute) {
+        LocalDateTime fromAt = LocalDateTime.now().minusMinutes(minute);
+        LocalDateTime toAt = LocalDateTime.now();
+
+        fromAt = LocalDateTime.parse("2024-11-01T00:00:00");
+        toAt = LocalDateTime.parse("2024-11-01T00:30:00");
+        return this.chargerService.chargerSelectWithoutLogInPeriod(fromAt, toAt);
     }
 
     /* ===== ChargerLogService ===== */

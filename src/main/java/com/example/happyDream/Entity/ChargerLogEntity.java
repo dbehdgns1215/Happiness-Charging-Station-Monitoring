@@ -24,7 +24,7 @@ public class ChargerLogEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY) //충전기 1대 당 로그 여러개
-    @JoinColumn/*(name = "charger_id")*/ //키 매핑 에러 시 고려
+    @JoinColumn(name = "charger_id") //키 매핑 에러 시 고려
     private ChargerEntity charger;
 
     @NotNull

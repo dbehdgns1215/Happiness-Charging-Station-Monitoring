@@ -1,12 +1,12 @@
 package com.example.happyDream.Repository;
 
-import com.example.happyDream.DTO.ChargerDTO;
 import com.example.happyDream.DTO.ChargerDetailDTO;
 import com.example.happyDream.Entity.ChargerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer> {
@@ -40,7 +40,7 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
     @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.usingYn = :usingYn")
     List<ChargerEntity> findAllChargerByUsingYn(Boolean usingYn);
 
-    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.usingYn = :brokenYn")
+    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.brokenYn = :brokenYn")
     List<ChargerEntity> findAllChargerByBrokenYn(Boolean brokenYn);
 
     // 단순 조회용 ChargerDetailDTO
@@ -52,4 +52,10 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
 
     @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.brokenYn = :brokenYn")
     List<ChargerDetailDTO> findAllChargerDetailByBrokenYn(Boolean brokenYn);
+
+    @Query("SELECT c FROM ChargerEntity c LEFT JOIN ChargerLogEntity cl ON c.id = cl.charger.id " +
+            "WHERE c.id NOT IN " +
+            "(SELECT cl2.charger.id FROM ChargerLogEntity cl2 " +
+            "WHERE cl2.requestAt BETWEEN :fromAt AND :toAt)")
+    List<ChargerEntity> findAllChargerWithoutLogInPeriod(LocalDateTime fromAt, LocalDateTime toAt);
 }

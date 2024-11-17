@@ -85,4 +85,18 @@ public class ChargerRestController implements ChargerSwagger {
                                      @RequestBody String requestJson) {
         return this.chargerServiceFacade.createChargerFromJson(initYn, requestJson);
     }
+
+    @GetMapping("/chargers/test")
+    public ResponseDTO getAllChargerWithoutLogInPeriod() {
+        List<ChargerDTO> chargerDtoList = this.chargerServiceFacade.chargerSelectWithoutLogInPeriod(30);
+
+        ResponseDTO responseDto;
+        if (chargerDtoList.isEmpty()) {
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_NO_CONTENT, Collections.unmodifiableList(chargerDtoList));
+        }
+        else {
+            responseDto = ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.unmodifiableList(chargerDtoList));
+        }
+        return responseDto;
+    }
 }

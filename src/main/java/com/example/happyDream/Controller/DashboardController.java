@@ -24,13 +24,18 @@ public class DashboardController {
     public String index(Model model) {
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
         List<ChargerDTO> usingChargers = this.chargerServiceFacade.chargerSelectByUsingYn(true);
-        List<ChargerDTO> idelChargers = this.chargerServiceFacade.chargerSelectByUsingYn(false);
+        List<ChargerDTO> idleChargers = this.chargerServiceFacade.chargerSelectByUsingYn(false);
         List<ChargerDTO> brokenChargers = this.chargerServiceFacade.chargerSelectByBrokenYn(true);
-        model.addAttribute("chargerCount", chargers.size());
+        List<ChargerDTO> notRequestRecentlyCharger = this.chargerServiceFacade.chargerSelectWithoutLogInPeriod(30);
+        model.addAttribute("totalChargerCount", chargers.size());
         model.addAttribute("usingChargerCount", usingChargers.size());
-        model.addAttribute("idleChargerCount", idelChargers.size());
+        model.addAttribute("idleChargerCount", idleChargers.size());
         model.addAttribute("brokenChargerCount", brokenChargers.size());
+        model.addAttribute("inProgressReportCount", 2); // TODO - 추가 예쩡
+        model.addAttribute("completedReportCount", 9); // TODO - 추가 예쩡
+        model.addAttribute("notRequestRecentlyChargerCount", notRequestRecentlyCharger.size());
+        model.addAttribute("notUsingTodayCharger", 0);
 
-        return "dashboard";
+        return "dashboard_new";
     }
 }
