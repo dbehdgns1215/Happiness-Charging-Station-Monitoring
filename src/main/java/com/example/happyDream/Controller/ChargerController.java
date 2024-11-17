@@ -19,12 +19,10 @@ import java.util.List;
 @Controller
 public class ChargerController {
     private final ChargerServiceFacade chargerServiceFacade;
-    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ChargerController(ChargerServiceFacade chargerServiceFacade, ObjectMapper objectMapper) {
+    public ChargerController(ChargerServiceFacade chargerServiceFacade) {
         this.chargerServiceFacade = chargerServiceFacade;
-        this.objectMapper = objectMapper;
     }
 
     //전체 충전기 조회
@@ -82,5 +80,15 @@ public class ChargerController {
     public String chargerDelete(@PathVariable("id") Integer id) {
         this.chargerServiceFacade.chargerDelete(id);
         return " ";
+    }
+
+    @GetMapping("/chargers/lists")
+    public String chargerList(Model model,
+                              @RequestParam(value = "usingYn", required = false) Boolean usingYn,
+                              @RequestParam(value = "brokenYn", required = false) Boolean brokenYn) {
+        List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
+
+        model.addAttribute("chargers", chargers);
+        return  "";
     }
 }

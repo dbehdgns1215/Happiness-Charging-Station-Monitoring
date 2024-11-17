@@ -1,6 +1,10 @@
 <html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
 <div layout:fragment="content" class="container text-center my-3">
-    <style></style>
+    <style>
+        .chargersCard {
+            flex: 1;
+        }
+    </style>
 
 <!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
 <!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
@@ -27,8 +31,34 @@
 
     <div class="mb-1"></div>
 
-    <div th:text="|전체 충전기: ${chargerCount}|"></div>
-    <div th:text="|사용중인 충전기: ${usingChargerCount}|"></div>
-    <div th:text="|고장 충전기: ${brokenChargerCount}|"></div>
+    <div class="d-flex flex-wrap gap-3 align-items-center align-items-stretch">
+        <div class="chargersCard card pt-3 bg-light">
+            <div class="card-img">
+                <svg class="bi flex-shrink-0" width="60" height="60" fill="#408558" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-title fs-2 fw-bold">유휴 충전기</div>
+                <div class="card-text" th:text="${idleChargerCount}"></div>
+            </div>
+        </div>
+        <div class="chargersCard card pt-3 bg-light">
+            <div class="card-img">
+                <svg class="bi flex-shrink-0" width="60" height="60" fill="#F6C343" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-title fs-2 fw-bold">사용 충전기</div>
+                <div class="card-text" th:text="${usingChargerCount}"></div>
+            </div>
+        </div>
+        <div class="chargersCard card pt-3 bg-light">
+            <div class="card-img">
+                <svg class="bi flex-shrink-0" width="60" height="60" fill="#E15241" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-title fs-2 fw-bold">고장 충전기</div>
+                <div class="card-text" th:text="${brokenChargerCount}"></div>
+            </div>
+        </div>
+    </div>
 </div>
 </html>
