@@ -45,7 +45,7 @@ public class ChargerController {
         }
 
         model.addAttribute("chargers", chargers);
-        return "chargers_new";
+        return "chargers_V2";
     }
 
     //전체 충전기 삭제

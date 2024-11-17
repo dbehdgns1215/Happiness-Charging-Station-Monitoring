@@ -37,6 +37,6 @@ public class DashboardController {
         model.addAttribute("notUsingTodayCharger", 0);
         model.addAttribute("reviewCount", 0);
 
-        return "dashboard_new";
+        return "dashboard_V2";
     }
 }
