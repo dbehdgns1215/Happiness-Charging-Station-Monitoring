@@ -71,4 +71,16 @@ public class ChargerStateRestController implements ChargerStateSwagger {
         this.chargerServiceFacade.changeTargetChargerState(chargerStateDTO); // TODO - 상태 반환
         return ResponseDTO.error("v1", HttpServletResponse.SC_NOT_IMPLEMENTED, "미구현");
     }
+
+    // 전체 충전기 상태 변경 - 테스트용 코드
+    @PutMapping("/chargers/test/states")
+    public ResponseDTO changeAllChargerState() {
+        try {
+            this.chargerServiceFacade.changeAllChargerState();
+            return ResponseDTO.success("v1", HttpServletResponse.SC_OK, "전체 충전기 상태 변경 성공");
+        } catch (Exception e) {
+            log.error("전체 충전기 상태 변경 실패: {}\n{}", e.getMessage(), e.getStackTrace());
+            return ResponseDTO.error("v1", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "전체 충전기 상태 변경 실패");
+        }
+    }
 }
