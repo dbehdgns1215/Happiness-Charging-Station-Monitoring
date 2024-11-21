@@ -21,18 +21,18 @@ public class ReportDTO {
     private Integer chargerId; // 충전소 ID
     private String reportContent; // 고장 내용
     private LocalDateTime createdAt; // 데이터 생성 시각
-    private boolean checkedReport;
-    private boolean reportState;
+    private Boolean checkedReport;
+    private Boolean reportState;
 
     // 빌더 패턴을 사용하여 객체 생성
     @Builder
-    public ReportDTO(Integer id, String reportReason, Integer chargerId, String reportContent, LocalDateTime createdAt, boolean checkedReport, boolean reportState) {
+    public ReportDTO(Integer id, String reportReason, Integer chargerId, String reportContent, LocalDateTime createdAt, Boolean checkedReport, Boolean reportState) {
         this.id = id;
         this.reportReason = reportReason;
         this.chargerId = chargerId;
         this.reportContent = reportContent;
         this.createdAt = createdAt;
-        this.checkedReport =
+        this.checkedReport = checkedReport;
         this.reportState = reportState;
     }
 

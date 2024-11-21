@@ -34,6 +34,9 @@ public class ReportRestController {
     @GetMapping("/reports")
     public ResponseDTO reportSelectAll(Model model) {
         List<ReportDTO> reports = this.reportService.reportSelectAll();
+        for (ReportDTO report : reports) {
+            System.out.println(report);
+        }
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reports);
     }
 
