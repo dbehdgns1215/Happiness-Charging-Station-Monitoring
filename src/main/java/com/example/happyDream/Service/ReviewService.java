@@ -43,8 +43,8 @@ public class ReviewService {
         this.reviewRepository.deleteAll();
     }
 
-    public void reviewInsert(Integer chargerId, ReviewDTO review) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, review.getUserId(), review.getReviewContent(),
+    public void reviewInsert(ReviewDTO review) {
+        ReviewDTO reviewDTO = createReviewDto(review.getId(), review.getUserId(), review.getReviewContent(),
                 review.getRating());
         this.reviewRepository.save(reviewDTO.toEntity());
     }
