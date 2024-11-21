@@ -11,10 +11,12 @@
     .report-content { margin-top: 15px; }
     .search-bar { margin: 20px 0; display: flex; align-items: center; gap: 10px; }
     .button-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .btn-complete { color: white; background-color: #57965c; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
-    .btn-complete:hover { background-color: #4a7c4b; }
+    .btn-repair { color: white; background-color: #57965c; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+    .btn-repair:hover { background-color: #4a7c4b; }
     .btn-fault { color: white; background-color: rgb(201, 79, 79); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
     .btn-fault:hover { background-color: #c94f4f; }
+    .btn-complete { color: black; background-color: #777; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+    .btn-complete:hover { background-color: #777; }
     .no-reports { text-align: center; color: #999; font-size: 1.2em; margin-top: 40px; }
     .statistics { text-align: center; margin: 20px 0; }
     .checked-report { font-weight: bold; color: #777; }
@@ -55,13 +57,6 @@
   <!-- 고장 신고 리스트 -->
   <div id="reports-list"></div>
   <p class="no-reports" id="no-reports-message" style="display:none;">등록된 고장 신고가 없습니다.</p>
-
-  <!-- 고장 기록 및 통계 -->
-  <div class="statistics">
-    <h2>고장 기록 및 통계</h2>
-    <button class="btn btn-secondary" onclick="downloadReport('pdf')">PDF 다운로드</button>
-    <button class="btn btn-secondary" onclick="downloadReport('excel')">Excel 다운로드</button>
-  </div>
 </div>
 
 <!-- Scripts -->
@@ -127,8 +122,10 @@
                   <span class="checked-report ${checkedClass}">${checkedReport}</span> | 충전소 ID: ${report.chargerId} | 고장 원인: ${report.reportReason} | 보고 일시: ${report.createdAt}
                 </div>
                 <div class="button-group">
-                  ${report.chargerState ?
-                          `<button class="btn-complete"  onclick="completeReport(${report.id}, this)" disabled>수리 완료</button>` :
+                  ${report.checkedReport ?
+                          (report.reportState ?
+                                  `<button class="btn-complete" onClick="completeReport(${report.id}, this)" disabled>수리 완료</button>` :
+                                  `<button class="btn-repair" onclick="completeReport(${report.id}, this)">수리 완료</button>`) :
                           `<button class="btn-fault" onclick="faultReport(${report.id}, this)">고장 처리</button>`
                   }
                 </div>
@@ -157,7 +154,7 @@
                 reportItem.querySelector('.checked-report').classList.add('fault');
                 button.textContent = '수리 완료';
                 button.classList.remove('btn-fault');
-                button.classList.add('btn-complete');
+                button.classList.add('btn-repair');
                 button.setAttribute('disabled', true);
                 button.onclick = function () { completeReport(reportId, button); };
               } else {
@@ -218,16 +215,24 @@
                 reports.forEach(report => {
                   const reportItem = document.createElement('div');
                   reportItem.classList.add('report-item');
+
+                  const checkedReport = report.checkedReport
+                          ? (report.reportState ? '수리 완료' : '수리 필요')
+                          : '';
+                  const checkedClass = report.checkedReport
+                          ? (report.reportState ? 'complete' : 'fault')
+                          : '';
+
                   reportItem.innerHTML = `
               <div class="report-header">
                 <div>
-                  <span class="checked-report ${report.reportState ? 'complete' : 'fault'}">
-                    ${report.reportState ? '수리 완료' : '수리 필요'}
-                  </span> | 충전소 ID: ${report.chargerId} | 고장 원인: ${report.reportReason} | 보고 일시: ${report.createdAt}
+                  <span class="checked-report ${checkedClass}">${checkedReport}</span> | 충전소 ID: ${report.chargerId} | 고장 원인: ${report.reportReason} | 보고 일시: ${report.createdAt}
                 </div>
                 <div class="button-group">
-                  ${report.reportState ?
-                          `<button class="btn-complete" onclick="completeReport(${report.id}, this)" disabled>수리 완료</button>` :
+                  ${report.checkedReport ?
+                          (report.reportState ?
+                                  `<button class="btn-complete" onClick="completeReport(${report.id}, this)" disabled>수리 완료</button>` :
+                                  `<button class="btn-repair" onclick="completeReport(${report.id}, this)">수리 완료</button>`) :
                           `<button class="btn-fault" onclick="faultReport(${report.id}, this)">고장 처리</button>`
                   }
                 </div>
@@ -240,7 +245,7 @@
                 });
               }
             })
-            .catch(error => console.error('Error searching reports:', error));
+            .catch(error => console.error('Error fetching fault reports:', error));
   }
 
   // 페이지 로드 시 고장 신고 리스트 불러오기

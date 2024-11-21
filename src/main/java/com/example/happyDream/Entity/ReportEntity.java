@@ -51,18 +51,18 @@ public class ReportEntity {
     @Column
     private LocalDateTime createdAt; //데이터 생성 시각
 
-    @Column(nullable = false)
-    private boolean checkedReport; // 리포트 확인 상태
+    @Column(columnDefinition = "TINYINT(1) UNSIGNED")
+    private Boolean checkedReport; // 리포트 확인 상태
 
-    @Column(nullable = false)
-    private boolean reportState; // 리포트 상태 (boolean)
+    @Column(columnDefinition = "TINYINT(1) UNSIGNED")
+    private Boolean reportState; // 리포트 상태 (boolean)
 
-    public void updateCheckedReport(boolean newState) {
+    public void updateCheckedReport(Boolean newState) {
         this.checkedReport = newState;
     }
 
     // 상태 변경 메서드 (필요에 따라 수정 가능)
-    public void updateReportState(boolean newState) {
+    public void updateReportState(Boolean newState) {
         this.reportState = newState;
     }
 

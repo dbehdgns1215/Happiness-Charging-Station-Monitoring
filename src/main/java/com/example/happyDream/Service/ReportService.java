@@ -31,6 +31,11 @@ public class ReportService {
 
     public List<ReportDTO> reportSelectAll() {
         List<ReportEntity> entityList = this.reportRepository.findAll();
+        for (ReportEntity entity : entityList) {
+            System.out.println(entity.getReportContent());
+            System.out.println(entity.getCheckedReport());
+            System.out.println(entity.getReportState());
+        }
         return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
     }
 
