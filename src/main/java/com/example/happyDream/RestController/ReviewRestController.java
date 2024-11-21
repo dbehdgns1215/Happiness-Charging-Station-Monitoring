@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/api/v1")
 public class ReviewRestController {
 
     private final ReviewService reviewService;
@@ -66,6 +66,24 @@ public class ReviewRestController {
     public ResponseDTO reviewSelect(@PathVariable("id") Integer id) {
         ReviewDTO review = this.reviewService.reviewSelect(id);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(review));
+    }
+
+    // 리뷰 검색
+    @GetMapping("/reviews/search")
+    public ResponseDTO reviewSelectAsSearch(
+            @RequestParam(value = "city", required = false) String city,
+            @RequestParam(value = "district", required = false) String district,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        // 주소 및 검색어로 필터링된 리뷰 목록을 가져오는 서비스 메서드 호출
+        List<ReviewDTO> reviews = reviewService.reviewSelectAsSearch(city, district, keyword);
+
+        for(ReviewDTO review : reviews){
+            System.out.println("review : " + review);
+        }
+
+        // 성공적으로 가져온 리뷰를 클라이언트에 반환
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reviews);
     }
 
     // 특정 리뷰 삭제
