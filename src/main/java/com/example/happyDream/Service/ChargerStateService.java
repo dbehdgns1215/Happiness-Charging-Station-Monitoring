@@ -7,6 +7,7 @@ import com.example.happyDream.Entity.ChargerStateEntity;
 import com.example.happyDream.Repository.ChargerStateRepository;
 import com.example.happyDream.Util.Converter;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,5 +133,32 @@ public class ChargerStateService {
             log.error("존재하지 않는 충전기에 대한 상태 업데이트 - 충전기 id: {}", chargerId);
             //throw new EntityNotFoundException(); // 테스트용
         }
+    }
+
+    // 상태 변경 테스트용 코드
+    public void updateAllChargerStates() {
+        List<ChargerStateEntity> chargerStates = chargerStateRepository.findAll();
+
+        Random random = new Random();
+        for (ChargerStateEntity chargerState : chargerStates) {
+            int randomState = random.nextInt(3) + 1;
+
+            switch (randomState) {
+                case 1: // 사용 가능
+                    chargerState.changeUsingYn(false);
+                    chargerState.changeBrokenYn(false);
+                    break;
+                case 2: // 사용 중
+                    chargerState.changeUsingYn(true);
+                    chargerState.changeBrokenYn(false);
+                    break;
+                case 3: // 고장
+                    chargerState.changeUsingYn(false);
+                    chargerState.changeBrokenYn(true);
+                    break;
+            }
+        }
+
+        chargerStateRepository.saveAll(chargerStates);
     }
 }

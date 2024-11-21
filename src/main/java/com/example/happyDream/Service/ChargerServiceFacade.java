@@ -2,6 +2,7 @@ package com.example.happyDream.Service;
 
 import com.example.happyDream.DTO.*;
 import com.example.happyDream.Entity.ChargerEntity;
+import com.example.happyDream.Repository.ChargerStateRepository;
 import com.example.happyDream.Util.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -250,4 +251,7 @@ public class ChargerServiceFacade {
         this.chargerStateService.changeTargetChargerState(chargerStateDto);
     }
 
+    public void changeAllChargerState() {
+        chargerStateService.updateAllChargerStates();
+    }
 }
