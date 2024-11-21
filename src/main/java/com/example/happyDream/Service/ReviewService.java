@@ -74,9 +74,9 @@ public class ReviewService {
 
 
     @Transactional
-    public void reviewUpdate(Integer chargerId, ReviewDTO reviewDTO) {
+    public void reviewUpdate(ReviewDTO reviewDTO) {
         ReviewEntity reviewEntity = reviewRepository.findByChargerIdAndUserId(
-                chargerId, reviewDTO.getUserId()
+                reviewDTO.getChargerId(), reviewDTO.getUserId()
         ).orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
         /*
         reviewEntity.setReviewContent(reviewDTO.getReviewContent());

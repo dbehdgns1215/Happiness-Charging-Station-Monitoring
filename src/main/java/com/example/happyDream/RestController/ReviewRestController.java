@@ -35,22 +35,20 @@ public class ReviewRestController {
 
     // 리뷰 추가
     @PostMapping("/reviews")
-    public ResponseDTO reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
-                                    @RequestBody ReviewDTO review) {
-        System.out.println("charger_id : " + chargerId);
+    public ResponseDTO reviewInsert(@RequestBody ReviewDTO review) {
+        System.out.println("charger_id : " + review.getChargerId());
         System.out.println("userId : " + review.getUserId());
         System.out.println("content : " + review.getReviewContent());
         System.out.println("rating : " + review.getRating());
 
-        this.reviewService.reviewInsert(chargerId, review);
+        this.reviewService.reviewInsert(review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
     // 특정 리뷰 수정
     @PostMapping("/reviews/{id}")
-    public ResponseDTO reviewUpdate(@RequestParam(value="charger_id") Integer chargerId,
-                                    @RequestBody ReviewDTO review) {
-        this.reviewService.reviewUpdate(chargerId, review);
+    public ResponseDTO reviewUpdate(@RequestBody ReviewDTO review) {
+        this.reviewService.reviewUpdate(review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
