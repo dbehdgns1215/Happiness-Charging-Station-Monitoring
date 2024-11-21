@@ -60,16 +60,29 @@ public class ChargerServiceFacade {
         return this.chargerService.chargerSelectAll();
     }
 
+    // 충전 중인 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDTO> chargerSelectByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    }
+
+    // 고장 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
+    }
+
+    // 전체 충전기 상세 정보 조회(State 포함 정보)
     public List<ChargerDetailDTO> chargerSelectAllDetail(){
         return this.chargerService.chargerSelectAllDetail();
     }
 
-    public List<ChargerDetailDTO> chargerSelectByUsingYn(Boolean usingYn) {
-        return this.chargerService.chargerSelectByUsingYn(usingYn);
+    // 충전 중인 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDetailDTO> chargerSelectDetailByUsingYn(Boolean usingYn) {
+        return this.chargerService.chargerSelectDetailByUsingYn(usingYn);
     }
 
-    public List<ChargerDetailDTO> chargerSelectByBrokenYn(Boolean brokenYn) {
-        return this.chargerService.chargerSelectByBrokenYn(brokenYn);
+    // 고장 충전기 상세 정보 조회(State 포함 정보)
+    public List<ChargerDetailDTO> chargerSelectDetailByBrokenYn(Boolean brokenYn) {
+        return this.chargerService.chargerSelectDetailByBrokenYn(brokenYn);
     }
 
     @Transactional
@@ -184,6 +197,15 @@ public class ChargerServiceFacade {
     // 특정 충전기 삭제
     public void chargerDelete(Integer id){
         this.chargerService.chargerDelete(id);
+    }
+
+    public List<ChargerDTO> chargerSelectWithoutLogInPeriod(Integer minute) {
+        LocalDateTime fromAt = LocalDateTime.now().minusMinutes(minute);
+        LocalDateTime toAt = LocalDateTime.now();
+
+        fromAt = LocalDateTime.parse("2024-11-01T00:00:00");
+        toAt = LocalDateTime.parse("2024-11-01T00:30:00");
+        return this.chargerService.chargerSelectWithoutLogInPeriod(fromAt, toAt);
     }
 
     /* ===== ChargerLogService ===== */

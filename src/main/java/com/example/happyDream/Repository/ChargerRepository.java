@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer> {
@@ -36,12 +37,25 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "-radians(:userLongitude))+sin(radians(:userLatitude))*sin(radians(c.latitude)))) <= 3")
     List<ChargerEntity> findChargersByNear(@Param("userLatitude") Double userLatitude, @Param("userLongitude") Double userLongitude);
 
+    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.usingYn = :usingYn")
+    List<ChargerEntity> findAllChargerByUsingYn(Boolean usingYn);
+
+    @Query("SELECT c FROM ChargerEntity c JOIN c.chargerState cs WHERE cs.brokenYn = :brokenYn")
+    List<ChargerEntity> findAllChargerByBrokenYn(Boolean brokenYn);
+
+    // 단순 조회용 ChargerDetailDTO
     @Query(CHARGER_DETAIL_JOIN_QUERY)
     List<ChargerDetailDTO> findAllChargerDetail();
 
-    @Query(CHARGER_DETAIL_JOIN_QUERY +  " WHERE cs.usingYn = :usingYn")
-    List<ChargerDetailDTO> findAllChargerByUsingYn(Boolean usingYn);
+    @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.usingYn = :usingYn")
+    List<ChargerDetailDTO> findAllChargerDetailByUsingYn(Boolean usingYn);
 
-    @Query(CHARGER_DETAIL_JOIN_QUERY +  " WHERE cs.brokenYn = :brokenYn")
-    List<ChargerDetailDTO> findAllChargerByBrokenYn(Boolean brokenYn);
+    @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.brokenYn = :brokenYn")
+    List<ChargerDetailDTO> findAllChargerDetailByBrokenYn(Boolean brokenYn);
+
+    @Query("SELECT c FROM ChargerEntity c LEFT JOIN ChargerLogEntity cl ON c.id = cl.charger.id " +
+            "WHERE c.id NOT IN " +
+            "(SELECT cl2.charger.id FROM ChargerLogEntity cl2 " +
+            "WHERE cl2.requestAt BETWEEN :fromAt AND :toAt)")
+    List<ChargerEntity> findAllChargerWithoutLogInPeriod(LocalDateTime fromAt, LocalDateTime toAt);
 }
