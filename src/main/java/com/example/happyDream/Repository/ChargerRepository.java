@@ -58,6 +58,7 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "(SELECT cl2.charger.id FROM ChargerLogEntity cl2 " +
             "WHERE cl2.requestAt BETWEEN :fromAt AND :toAt)")
     List<ChargerEntity> findAllChargerWithoutLogInPeriod(LocalDateTime fromAt, LocalDateTime toAt);
+
     @Query("SELECT DISTINCT c.city1, c.city2 FROM ChargerEntity c")
     List<Object[]> findAddress();
 

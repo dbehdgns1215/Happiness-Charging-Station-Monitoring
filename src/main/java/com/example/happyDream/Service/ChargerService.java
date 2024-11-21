@@ -134,9 +134,10 @@ public class ChargerService {
         return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
     }
 
-    public List<ChargerDTO> chargerSelectWithoutLogInPeriod(LocalDateTime fromAt, LocalDateTime toAt){
+    public List<ChargerDTO> chargerSelectWithoutLogInPeriod(LocalDateTime fromAt, LocalDateTime toAt) {
         List<ChargerEntity> chargers = this.chargerRepository.findAllChargerWithoutLogInPeriod(fromAt, toAt);
         return Converter.EntityListToDtoList(chargers, ChargerEntity::toDTO);
+    }
 
     // 충전기 주소 불러오기
     public List<Object[]> selectChargerAddress() {
