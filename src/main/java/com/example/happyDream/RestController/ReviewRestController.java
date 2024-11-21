@@ -41,7 +41,7 @@ public class ReviewRestController {
         System.out.println("content : " + review.getReviewContent());
         System.out.println("rating : " + review.getRating());
 
-        this.reviewService.reviewInsert(review.getChargerId(), review);
+        this.reviewService.reviewInsert(review);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
