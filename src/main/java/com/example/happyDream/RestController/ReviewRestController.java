@@ -34,7 +34,7 @@ public class ReviewRestController {
     }
 
     // 리뷰 추가
-    @PostMapping
+    @PostMapping("/reviews")
     public ResponseDTO reviewInsert(@RequestParam(value="charger_id") Integer chargerId,
                                     @RequestBody ReviewDTO review) {
         System.out.println("charger_id : " + chargerId);

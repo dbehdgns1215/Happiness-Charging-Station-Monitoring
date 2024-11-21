@@ -155,7 +155,6 @@
                 button.textContent = '수리 완료';
                 button.classList.remove('btn-fault');
                 button.classList.add('btn-repair');
-                button.setAttribute('disabled', true);
                 button.onclick = function () { completeReport(reportId, button); };
               } else {
                 alert('고장 처리에 실패했습니다.');
@@ -180,7 +179,7 @@
 
                 // 버튼 상태 업데이트
                 button.setAttribute('disabled', true);
-                button.classList.remove('btn-fault');
+                button.classList.remove('btn-repair');
                 button.classList.add('btn-complete');
                 button.textContent = '수리 완료'; // 버튼 텍스트 변경
               } else {
