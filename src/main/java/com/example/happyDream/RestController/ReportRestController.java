@@ -50,14 +50,16 @@ public class ReportRestController {
     }
 
     @PostMapping("/reports")
-    public ResponseDTO reportInsert(@RequestParam(value="charger_id") Integer chargerId,
-                                    @RequestBody ReviewDTO review) {
-        System.out.println("charger_id : " + chargerId);
-        System.out.println("userId : " + review.getUserId());
-        System.out.println("content : " + review.getReviewContent());
-        System.out.println("rating : " + review.getRating());
-        // user 테이블 완성 후 DB에 추가하는 로직 반영
-        // this.reviewService.reviewInsert(chargerId, review);
+    public ResponseDTO reportInsert(@RequestBody ReportDTO reportRequest) {
+        ReportDTO reportDTO = ReportDTO.builder()
+                .chargerId(reportRequest.getChargerId())
+                .reportContent(reportRequest.getReportContent())
+                .createdAt(LocalDateTime.now())
+                .checkedReport(false)
+                .checkedRepair(false)
+                .build();
+
+        this.reportService.insertReport(reportDTO);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 

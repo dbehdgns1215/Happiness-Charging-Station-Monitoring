@@ -117,21 +117,6 @@ public class ReviewService {
         return createUniqueCities(this.chargerService.selectChargerAddress());
     }
 
-    private ReviewDTO createReviewDto(Integer chargerId,
-                                      Integer userId,
-                                      String content,
-                                      Byte rating) {
-        ChargerEntity chargerEntity = chargerService.chargerSelect(chargerId).toEntity();
-        UserEntity userEntity = userService.userSelect(userId).toEntity();
-
-        return ReviewDTO.builder()
-                .chargerId(chargerEntity.getId())
-                .userId(userEntity.getId())
-                .reviewContent(content)
-                .rating(rating)
-                .build();
-    }
-
     private Map<String, List<String>> createUniqueCities (List<Object[]> cities){
         Map<String, List<String>> uniqueCities = cities.stream()
                 .filter(city -> city.length > 1 && city[0] instanceof String && city[1] instanceof String)

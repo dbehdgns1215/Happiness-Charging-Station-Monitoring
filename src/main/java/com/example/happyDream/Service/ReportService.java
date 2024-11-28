@@ -29,6 +29,11 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
 
+    public void insertReport(ReportDTO reportDTO) {
+        ReportEntity reportEntity = reportDTO.toEntity();
+        reportRepository.save(reportEntity);
+    }
+
     public List<ReportDTO> reportSelectAll() {
         List<ReportEntity> entityList = this.reportRepository.findAllOrdered();
         return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
