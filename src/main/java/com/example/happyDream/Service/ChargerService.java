@@ -145,12 +145,12 @@ public class ChargerService {
     }
 
     //
-    public List<ChargerEntity> selectChargerCityAnddistrict(String city, String district) {
+    public List<ChargerEntity> selectChargerCityAnddistrict(String city, String normalizeCity, String district) {
         try{
             if(district == null){
-                return this.chargerRepository.findByCity(city);
+                return this.chargerRepository.findByCity(city, normalizeCity);
             }
-            return this.chargerRepository.findByCityAndDistrict(city, district);
+            return this.chargerRepository.findByCityAndDistrict(city, normalizeCity, district);
         }catch (Exception exception){
             throw new EntityNotFoundException();
         }

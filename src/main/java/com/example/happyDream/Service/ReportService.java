@@ -30,12 +30,22 @@ public class ReportService {
     }
 
     public List<ReportDTO> reportSelectAll() {
-        List<ReportEntity> entityList = this.reportRepository.findAll();
-        for (ReportEntity entity : entityList) {
-            System.out.println(entity.getReportContent());
-            System.out.println(entity.getCheckedReport());
-            System.out.println(entity.getReportState());
-        }
+        List<ReportEntity> entityList = this.reportRepository.findAllOrdered();
+        return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
+    }
+
+    public List<ReportDTO> reportSelectByNotCheckedReport(){
+        List<ReportEntity> entityList = this.reportRepository.findByNotCheckedReport();
+        return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
+    }
+
+    public List<ReportDTO> reportSelectByCheckedReport(){
+        List<ReportEntity> entityList = this.reportRepository.findByCheckedReport();
+        return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
+    }
+
+    public List<ReportDTO> reportSelectByCheckedRepair(){
+        List<ReportEntity> entityList = this.reportRepository.findByCheckedRepair();
         return Converter.EntityListToDtoList(entityList, ReportEntity::toDTO);
     }
 
@@ -49,7 +59,7 @@ public class ReportService {
     public void reportRepair(Integer reportId) {
         ReportEntity report = this.reportRepository.findById(reportId)
                 .orElseThrow(() -> new IllegalArgumentException("신고를 찾을 수 없습니다."));
-        report.updateReportState(true);
+        report.updateCheckedRepair(true);
         this.reportRepository.save(report);
     }
 
@@ -57,10 +67,11 @@ public class ReportService {
         return createUniqueCities(this.chargerService.selectChargerAddress());
     }
 
-    public List<ReportDTO> reportSelectAsSearch(String city, String district, Integer chargerId, Integer reportReason,
+    public List<ReportDTO> reportSelectAsSearch(String city, String district, Integer chargerId,
                                                 LocalDateTime startDate, LocalDateTime endDate) {
-        List<ChargerEntity> chargerIdList = this.chargerService.selectChargerCityAnddistrict(city, district);
-        Specification<ReportEntity> spec = ReportSpecification.combineConditions(chargerIdList, chargerId, reportReason, startDate, endDate);
+        String normalizeCity = reverseNormalizeProvinceName(city);
+        List<ChargerEntity> chargerIdList = this.chargerService.selectChargerCityAnddistrict(city, normalizeCity, district);
+        Specification<ReportEntity> spec = ReportSpecification.combineConditions(chargerIdList, chargerId, startDate, endDate);
         return Converter.EntityListToDtoList(reportRepository.findAll(spec), ReportEntity::toDTO);
     }
 
@@ -86,6 +97,18 @@ public class ReportService {
         }
         if ("강원특별자치도".equals(provinceName)) {
             return "강원도";
+        }
+        return provinceName; // 그대로 반환
+    }
+
+    // 도시 이름을 역정규화하는 메서드
+    private String reverseNormalizeProvinceName(String provinceName) {
+        // 전북특별자치도 -> 전라북도, 강원특별자치도 -> 강원도
+        if ("전라북도".equals(provinceName)) {
+            return "전북특별자치도";
+        }
+        if ("강원도".equals(provinceName)) {
+            return "강원특별자치도";
         }
         return provinceName; // 그대로 반환
     }

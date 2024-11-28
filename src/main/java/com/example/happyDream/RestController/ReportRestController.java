@@ -34,9 +34,6 @@ public class ReportRestController {
     @GetMapping("/reports")
     public ResponseDTO reportSelectAll(Model model) {
         List<ReportDTO> reports = this.reportService.reportSelectAll();
-        for (ReportDTO report : reports) {
-            System.out.println(report);
-        }
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reports);
     }
 
@@ -64,23 +61,17 @@ public class ReportRestController {
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
     }
 
-    // 리뷰 검색
+    // 신고 검색
     @GetMapping("/reports/search")
     public ResponseDTO reportSelectAsSearch(
             @RequestParam(value = "city", required = false) String city,
             @RequestParam(value = "district", required = false) String district,
             @RequestParam(value = "chargerId", required = false) Integer chargerId,
-            @RequestParam(value = "reportReason", required = false) Integer reportReason,
             @RequestParam(value = "startDate", required = false) LocalDateTime startDate,
             @RequestParam(value = "endDate", required = false) LocalDateTime endDate) {
 
         // 주소 및 검색어로 필터링된 리뷰 목록을 가져오는 서비스 메서드 호출
-        List<ReportDTO> reports = reportService.reportSelectAsSearch(city, district, chargerId, reportReason, startDate, endDate);
-        for(ReportDTO report : reports){
-            System.out.println("review : " + report);
-        }
-
-        // 성공적으로 가져온 리뷰를 클라이언트에 반환
+        List<ReportDTO> reports = reportService.reportSelectAsSearch(city, district, chargerId, startDate, endDate);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reports);
     }
 
