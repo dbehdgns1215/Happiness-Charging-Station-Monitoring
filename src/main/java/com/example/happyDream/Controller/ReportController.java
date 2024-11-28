@@ -1,5 +1,6 @@
 package com.example.happyDream.Controller;
 
+import com.example.happyDream.DTO.ReportDTO;
 import com.example.happyDream.Service.ReportService;
 import com.example.happyDream.Service.ReviewService;
 import java.util.List;
@@ -21,7 +22,15 @@ public class ReportController {
     @GetMapping("/reports")
     public String reviewSelectAll(Model model) {
         Map<String, List<String>> uniqueCities = reportService.reportAddress();
+        List<ReportDTO> reports = reportService.reportSelectAll();
+        List<ReportDTO> notReportChargers = reportService.reportSelectByNotCheckedReport();
+        List<ReportDTO> reportChargers = reportService.reportSelectByCheckedReport();
+        List<ReportDTO> repairChargers = reportService.reportSelectByCheckedRepair();
         model.addAttribute("cities", uniqueCities);
+        model.addAttribute("reports", reports.size());
+        model.addAttribute("notReportChargersCount", notReportChargers.size());
+        model.addAttribute("reportChargersCount", reportChargers.size());
+        model.addAttribute("repairChargersCount", repairChargers.size());
         return "reports";
     }
 }

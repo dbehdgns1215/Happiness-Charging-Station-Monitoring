@@ -27,15 +27,6 @@ public class ReportSpecification {
         };
     }
 
-    public static Specification<ReportEntity> withReportReason(Integer reportReason) {
-        return (root, query, criteriaBuilder) -> {
-            if (reportReason == null) {
-                return criteriaBuilder.conjunction(); // 조건 없음
-            }
-            return criteriaBuilder.equal(root.get("reportReason"), reportReason);
-        };
-    }
-
     public static Specification<ReportEntity> withDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         return (root, query, criteriaBuilder) -> {
             if (startDate == null || endDate == null) {
@@ -46,7 +37,7 @@ public class ReportSpecification {
     }
 
     public static Specification<ReportEntity> combineConditions(List<ChargerEntity> chargerIdList, Integer chargerId,
-                                                                Integer reportReason, LocalDateTime startDate, LocalDateTime endDate) {
+                                                                LocalDateTime startDate, LocalDateTime endDate) {
         Specification<ReportEntity> spec = Specification.where(null);
 
         if (chargerIdList != null && !chargerIdList.isEmpty()) {
@@ -55,10 +46,6 @@ public class ReportSpecification {
 
         if (chargerId != null) {
             spec = spec.and(withChargerId(chargerId));
-        }
-
-        if (reportReason != null) {
-            spec = spec.and(withReportReason(reportReason));
         }
 
         if (startDate != null && endDate != null) {
