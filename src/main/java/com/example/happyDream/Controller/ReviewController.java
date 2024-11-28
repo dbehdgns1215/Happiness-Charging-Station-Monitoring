@@ -31,7 +31,11 @@ public class ReviewController {
         List<ReviewDTO> ratingThree = reviewService.reviewSelectByRatingThree();
         List<ReviewDTO> ratingTwo = reviewService.reviewSelectByRatingTwo();
         List<ReviewDTO> ratingOne = reviewService.reviewSelectByRatingOne();
-        float ratingAverage = (float) ((ratingFive.size() * 5) + (ratingFive.size()*4) + (ratingFour.size()*3) + (ratingThree.size()*2) + ratingOne.size()) / reviews.size();
+        float ratingAverage = (float) ((ratingFive.size() * 5) +
+                (ratingFour.size() * 4) +
+                (ratingThree.size() * 3) +
+                (ratingTwo.size() * 2) +
+                (ratingOne.size() * 1)) / reviews.size();
         ratingAverage = Math.round(ratingAverage * 10) / 10.0f;
         model.addAttribute("cities", uniqueCities);
         model.addAttribute("reviews", reviews.size());
