@@ -26,6 +26,24 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
             "FROM ChargerEntity c " +
             "JOIN c.chargerState cs";
 
+    String CHARGER_DETAIL_JOIN_QUERY_WITH_RATING = "SELECT new com.example.happyDream.DTO.ChargerDetailDTO(" +
+            "c.id as chargerId, c.name as name, c.city1 as city1, c.city2 as city2, c.city2Code as city2Code, " +
+            "c.addressNew as addressNew, c.addressOld as addressOld, c.addressDetail as addressDetail, " +
+            "c.latitude as latitude, c.longitude as longitude, " +
+            "c.weekdayOpen as weekdayOpen, c.saturdayOpen as saturdayOpen, c.holidayOpen as holidayOpen, " +
+            "c.weekdayClose as weekdayClose, c.saturdayClose as saturdayClose, c.holidayClose as holidayClose, " +
+            "c.chargerCount as chargerCount, c.chargeAirYn as chargeAirYn, c.chargePhoneYn as chargePhoneYn, " +
+            "c.callNumber as callNumber, " +
+            "c.updatedDate as updatedDate, c.createdAt as chargerCreatedAt, c.modifiedAt as chargerModifiedAt, " +
+            "c.deletedYn as deletedYn, c.deletedAt as deletedAt, " +
+            "cs.id as chargerStateId, cs.usingYn as usingYn, cs.brokenYn as brokenYn, " +
+            "cs.usingAt as usingAt, cs.brokenAt as brokenAt, " +
+            "cs.createdAt as chargerStateCreatedAt, cs.modifiedAt as chargerStateModifiedAt, " +
+            "(SELECT AVG(r.rating) FROM ReviewEntity r WHERE r.chargerId.id = c.id) as rating) " + // 별점 추가
+            "FROM ChargerEntity c " +
+            "JOIN c.chargerState cs";
+
+
     @Query("SELECT c " +
             "FROM ChargerEntity c " +
             "WHERE c.addressOld LIKE %:address% OR c.addressNew LIKE %:address% OR c.name LIKE %:address%")
@@ -44,7 +62,7 @@ public interface ChargerRepository extends JpaRepository<ChargerEntity, Integer>
     List<ChargerEntity> findAllChargerByBrokenYn(Boolean brokenYn);
 
     // 단순 조회용 ChargerDetailDTO
-    @Query(CHARGER_DETAIL_JOIN_QUERY)
+    @Query(CHARGER_DETAIL_JOIN_QUERY_WITH_RATING)
     List<ChargerDetailDTO> findAllChargerDetail();
 
     @Query(CHARGER_DETAIL_JOIN_QUERY + " WHERE cs.usingYn = :usingYn")

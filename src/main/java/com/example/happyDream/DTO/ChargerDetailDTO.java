@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class ChargerDetailDTO {
     // 츙전기 기본 데이터(Charger)
     private Integer chargerId;
+
     //private ChargerStateEntity chargerState;
     private String name;
     private String city1;
@@ -56,4 +57,7 @@ public class ChargerDetailDTO {
     private LocalDateTime brokenAt;
     private LocalDateTime chargerStateCreatedAt;
     private LocalDateTime chargerStateModifiedAt;
+
+    // 충전기 리뷰 관련 데이터 (Review)
+    private Double rating;
 }
