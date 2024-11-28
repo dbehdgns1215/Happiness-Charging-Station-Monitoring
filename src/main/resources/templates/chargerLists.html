@@ -1,0 +1,74 @@
+<html layout:decorate="~{common/layout}" xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content" class="container text-center my-3">
+    <style>
+        .chargerTableContainer {
+            overflow-x: scroll;
+        }
+        .table {
+            overflow-x: scroll;
+        }
+
+    </style>
+
+<!--    <link rel="stylesheet" th:href="@{/css/CSS_NAME.css}">-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
+    <script sec:authorize="isAuthenticated()"></script>
+
+    <!--  타임리프 기본 실행 스크립트  -->
+    <script th:inline="javascript">
+        const chargers = [[${chargers}]]; // 데이터 저장
+    </script>
+
+    <div class="d-block mb-3 text-start">
+        <H2 class="fw-bold">충전기 조회</H2>
+    </div>
+
+    <!--  경고 출력  -->
+    <div class="alert alert-secondary mb-2 d-flex align-items-center" th:if="${#lists.isEmpty(chargers)==true}">
+        <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
+        <div>표시할 충전기가 없습니다.</div>
+    </div>
+    <div class="alert alert-secondary mb-2 d-flex align-items-center" th:if="${#lists.isEmpty(chargers)==false}">
+        <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Success:"><use xlink:href="#info-fill"/></svg>
+        <div th:text="|등록 충전기 수: ${chargers.size}개|">Info</div>
+    </div>
+
+    <div class="mb-1"></div>
+
+    <div class="chargerTableContainer">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+            <tr>
+                <th>충전기 id</th>
+                <th>충전기명</th>
+                <th>시도명</th>
+                <th>시군구명</th>
+                <th>위도</th>
+                <th>경도</th>
+                <th>동시 충전</th>
+                <th>공기 주입</th>
+                <th>휴대폰 충전</th>
+                <th>관리 기관 연락처</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="charger : ${chargers}">
+                <td th:text="${charger.id}">id</td>
+                <td th:text="${charger.name}">충전기명</td>
+                <td th:text="${charger.city1}">시도명</td>
+                <td th:text="${charger.city2}">시군구명</td>
+                <td th:text="${charger.latitude}">위도</td>
+                <td th:text="${charger.longitude}">경도</td>
+                <td th:text="${charger.chargerCount}">동시 충전</td>
+                <td th:text="${charger.chargeAirYn}">공기 주입</td>
+                <td th:text="${charger.chargePhoneYn}">휴대폰 충전</td>
+                <td th:text="${charger.callNumber}">관리 기관 연락처</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</html>
