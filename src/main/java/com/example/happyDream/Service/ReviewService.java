@@ -43,10 +43,8 @@ public class ReviewService {
         this.reviewRepository.deleteAll();
     }
 
-    public void reviewInsert(Integer chargerId, ReviewDTO review) {
-        ReviewDTO reviewDTO = createReviewDto(chargerId, review.getUserId(), review.getReviewContent(),
-                review.getRating());
-        this.reviewRepository.save(reviewDTO.toEntity());
+    public void reviewInsert(ReviewDTO review) {
+        this.reviewRepository.save(review.toEntity());
     }
 
     public ReviewDTO reviewSelect(Integer id) {
@@ -58,13 +56,14 @@ public class ReviewService {
     }
 
     public List<ReviewDTO> reviewSelectAsSearch(String city, String district, String keyword) {
+        String normalizeCity = reverseNormalizeProvinceName(city);
         if (city == null && district == null && keyword == null) {
             return Converter.EntityListToDtoList(this.reviewRepository.findAll(), ReviewEntity::toDTO);
         }
         if (city == null && district == null) {
             return Converter.EntityListToDtoList(this.reviewRepository.findBySubject(keyword), ReviewEntity::toDTO);
         }
-        List<ChargerEntity> chargerDTOList = this.chargerService.selectChargerCityAnddistrict(city, district);
+        List<ChargerEntity> chargerDTOList = this.chargerService.selectChargerCityAnddistrict(city, normalizeCity, district);
         if (keyword == null || keyword.isEmpty()) {
             return Converter.EntityListToDtoList(this.reviewRepository.findByAddress(chargerDTOList), ReviewEntity::toDTO);
         }
@@ -72,6 +71,30 @@ public class ReviewService {
                 ReviewEntity::toDTO);
     }
 
+    public List<ReviewDTO> reviewSelectByRatingFive(){
+        List<ReviewEntity> entityList = this.reviewRepository.findByRatingFive();
+        return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
+    }
+
+    public List<ReviewDTO> reviewSelectByRatingFour(){
+        List<ReviewEntity> entityList = this.reviewRepository.findByRatingFour();
+        return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
+    }
+
+    public List<ReviewDTO> reviewSelectByRatingThree(){
+        List<ReviewEntity> entityList = this.reviewRepository.findByRatingThree();
+        return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
+    }
+
+    public List<ReviewDTO> reviewSelectByRatingTwo(){
+        List<ReviewEntity> entityList = this.reviewRepository.findByRatingTwo();
+        return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
+    }
+
+    public List<ReviewDTO> reviewSelectByRatingOne(){
+        List<ReviewEntity> entityList = this.reviewRepository.findByRatingOne();
+        return Converter.EntityListToDtoList(entityList, ReviewEntity::toDTO);
+    }
 
     @Transactional
     public void reviewUpdate(ReviewDTO reviewDTO) {
@@ -131,6 +154,18 @@ public class ReviewService {
         }
         if ("강원특별자치도".equals(provinceName)) {
             return "강원도";
+        }
+        return provinceName; // 그대로 반환
+    }
+
+    // 도시 이름을 역정규화하는 메서드
+    private String reverseNormalizeProvinceName(String provinceName) {
+        // 전북특별자치도 -> 전라북도, 강원특별자치도 -> 강원도
+        if ("전라북도".equals(provinceName)) {
+            return "전북특별자치도";
+        }
+        if ("강원도".equals(provinceName)) {
+            return "강원특별자치도";
         }
         return provinceName; // 그대로 반환
     }
