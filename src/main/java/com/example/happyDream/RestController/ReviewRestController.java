@@ -66,6 +66,14 @@ public class ReviewRestController {
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(review));
     }
 
+    // 특정 충전소 id 리뷰 조회
+    @GetMapping("/reviews/charger/{id}")
+    public ResponseDTO reviewSelectByChargerId(@PathVariable("id") Integer id) {
+        List<ReviewDTO> reviews = this.reviewService.reviewSelectByChargerId(id);
+        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reviews);
+    }
+
+
     // 리뷰 검색
     @GetMapping("/reviews/search")
     public ResponseDTO reviewSelectAsSearch(

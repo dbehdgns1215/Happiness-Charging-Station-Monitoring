@@ -55,6 +55,13 @@ public class ReviewService {
         return entity.get().toDTO();
     }
 
+    public List<ReviewDTO> reviewSelectByChargerId(Integer chargerId) {
+        List<ReviewEntity> reviewEntities = reviewRepository.findByChargerId(chargerId);
+        return reviewEntities.stream()
+                .map(ReviewEntity::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<ReviewDTO> reviewSelectAsSearch(String city, String district, String keyword) {
         String normalizeCity = reverseNormalizeProvinceName(city);
         if (city == null && district == null && keyword == null) {
