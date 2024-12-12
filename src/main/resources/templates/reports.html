@@ -141,10 +141,10 @@
       <option value="">구 선택</option>
     </select>
 
-    <input type="number" class="form-control" name="chargerId" placeholder="충전소 ID" min="1">
+    <input id="chargerId" type="number" class="form-control" name="chargerId" placeholder="충전소 ID" min="1">
 
-    <input type="date" class="form-control" name="startDate">
-    <input type="date" class="form-control" name="endDate">
+    <input id="startDate" type="date" class="form-control" name="startDate">
+    <input id="endDate" type="date" class="form-control" name="endDate">
 
     <button type="button" class="btn btn-primary" onclick="searchReports(event)">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -288,9 +288,9 @@
 
     const city = document.getElementById('city').value;
     const district = document.getElementById('district').value;
-    const chargerId = document.querySelector('input[name="chargerId"]')?.value;
-    const startDate = document.querySelector('input[name="startDate"]')?.value;
-    const endDate = document.querySelector('input[name="endDate"]')?.value;
+    const chargerId = document.getElementById('chargerId').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
 
     let url = '/api/v1/reports/search'; // 기본 URL
 
@@ -335,16 +335,32 @@
                   reportItem.classList.add('report-item');
 
                   const checkedReport = report.checkedReport
-                          ? (report.checkedRepair ? '<svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 완료</span>' : '<svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 필요</span>')
-                          : '<svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>처리 필요</span>';
+                          ? (report.checkedRepair ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-hammer fillGreen" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>수리 완료</span>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-hammer fillYellow" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>수리 필요</span>')
+                          : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillRed" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>처리 필요</span>';
                   const checkedClass = report.checkedReport
                           ? (report.checkedRepair ? 'complete' : 'fault')
                           : 'report';
 
                   reportItem.innerHTML = `
               <div class="report-header">
-                <div>
-                  <span class="checked-report ${checkedClass}">${checkedReport}</span> | 충전소 ID: ${report.chargerId} | 보고 일시: ${report.createdAt}
+                <div class="report-info">
+                  <span class="checked-report ${checkedClass}">${checkedReport}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap align-middle">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                  충전소 ID: ${report.chargerId}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar align-middle">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  ${report.createdAt.split('T')[0]}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock align-middle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  ${report.createdAt.split('T')[1]}
                 </div>
                 <div class="button-group">
                   ${report.checkedReport ?
@@ -356,7 +372,7 @@
                 </div>
               </div>
               <div class="report-content">
-                ${report.reportContent ? `<p>상세 설명: ${report.reportContent}</p>` : ''}
+                ${report.reportContent ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle me-1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span>${report.reportContent}</span>` : ''}
               </div>
             `;
                   reportsListContainer.appendChild(reportItem);

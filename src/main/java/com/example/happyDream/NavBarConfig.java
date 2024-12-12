@@ -12,16 +12,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class NavBarConfig {
     private final ReportService reportService;
-    private final List<ReportDTO> totalBreakdownReport;
 
     @Autowired
     public NavBarConfig(ReportService reportService) {
         this.reportService = reportService;
-        totalBreakdownReport = reportService.reportSelectByNotCheckedReport();
     }
 
     @ModelAttribute("totalAlertCount")
     public int addTotalAlertCount() {
+        List<ReportDTO> totalBreakdownReport = reportService.reportSelectByNotCheckedReport();
         int totalAlertCount = 0;
         if(!totalBreakdownReport.isEmpty()){
             totalAlertCount = 1;
@@ -31,6 +30,7 @@ public class NavBarConfig {
 
     @ModelAttribute("totalBreakdownReportCount")
     public int addTotalBreakdownReportCount() {
+        List<ReportDTO> totalBreakdownReport = reportService.reportSelectByNotCheckedReport();
         return totalBreakdownReport.size();
     }
 }

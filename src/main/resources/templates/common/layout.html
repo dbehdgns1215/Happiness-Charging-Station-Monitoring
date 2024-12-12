@@ -4,6 +4,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
     <!-- JQuery -->
     <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
     <!-- Bootstrap JS -->
@@ -23,8 +25,6 @@
     <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
     <link rel="canonical" href="https://demo-basic.adminkit.io/" />
-
-    <title>AdminKit Demo - Bootstrap 5 Admin Template</title>
 
     <link th:href="@{/css/app.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -67,6 +67,8 @@
 
     .dropdown-menu-custom{
         width: 325px;
+        right: 0;
+        left: auto;
     }
     .table-background{
         border-radius: 8px;
@@ -140,6 +142,8 @@
     document.querySelector('#alertsDropdown').addEventListener('click', function(event) {
         // 이미 열려있는 상태에서 다시 클릭하면 닫히도록 처리
         const dropdownMenu = document.querySelector('#alertsDropdown + .dropdown-menu');
+
+        console.log(dropdownMenu);
 
         // 메뉴가 열린 상태에서 클릭 시, 닫히도록 toggle
         if (dropdownMenu.classList.contains('show')) {
