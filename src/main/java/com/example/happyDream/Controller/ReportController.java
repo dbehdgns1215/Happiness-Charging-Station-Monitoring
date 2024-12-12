@@ -5,6 +5,8 @@ import com.example.happyDream.Service.ReportService;
 import com.example.happyDream.Service.ReviewService;
 import java.util.List;
 import java.util.Map;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,7 @@ public class ReportController {
     }
 
     @GetMapping("/reports")
-    public String reviewSelectAll(Model model) {
+    public String reviewSelectAll(Model model, HttpServletRequest request) {
         Map<String, List<String>> uniqueCities = reportService.reportAddress();
         List<ReportDTO> reports = reportService.reportSelectAll();
         List<ReportDTO> notReportChargers = reportService.reportSelectByNotCheckedReport();
@@ -31,6 +33,7 @@ public class ReportController {
         model.addAttribute("notReportChargersCount", notReportChargers.size());
         model.addAttribute("reportChargersCount", reportChargers.size());
         model.addAttribute("repairChargersCount", repairChargers.size());
+        model.addAttribute("currentUri", request.getRequestURI());
         return "reports";
     }
 }

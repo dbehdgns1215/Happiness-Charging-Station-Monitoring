@@ -7,6 +7,7 @@ import com.example.happyDream.Service.ChargerServiceFacade;
 import com.example.happyDream.Service.ReportService;
 import com.example.happyDream.Service.ReviewService;
 import groovy.util.logging.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class DashboardController {
     }
     
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, HttpServletRequest request) {
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
         List<ChargerDTO> usingChargers = this.chargerServiceFacade.chargerSelectByUsingYn(true);
         List<ChargerDTO> idleChargers = this.chargerServiceFacade.chargerSelectByUsingYn(false);
@@ -47,6 +48,7 @@ public class DashboardController {
         model.addAttribute("notRequestRecentlyChargerCount", notRequestRecentlyCharger.size());
         model.addAttribute("notUsingTodayCharger", 0);
         model.addAttribute("reviewCount", reviews.size());
+        model.addAttribute("currentUri", request.getRequestURI());
 
         return "dashboard_V2";
     }

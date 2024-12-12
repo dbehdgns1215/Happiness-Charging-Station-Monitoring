@@ -6,6 +6,7 @@ import com.example.happyDream.DTO.ChargerStateDTO;
 import com.example.happyDream.Service.ChargerLogService;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +27,10 @@ public class ChargerLogController {
 
     // 전체 충전기 로그 조회
     @GetMapping("/chargers/logs")
-    public String getAllChargerLog(Model model) {
+    public String getAllChargerLog(Model model, HttpServletRequest request) {
         List<ChargerLogDTO> chargerLogDtoList = this.chargerServiceFacade.getAllChargerLog(false, true);
         model.addAttribute("logList", chargerLogDtoList);
+        model.addAttribute("currentUri", request.getRequestURI());
         return "chargerLogAll.html";
     }
     

@@ -5,6 +5,8 @@ import com.example.happyDream.Service.UserService;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String reviewSelectAll() {
+    public String reviewSelectAll(Model model, HttpServletRequest request) {
+        model.addAttribute("currentUri", request.getRequestURI());
         return "userManagement";
     }
 }
