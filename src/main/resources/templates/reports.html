@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html layout:decorate="~{common/layout}" xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content" class="container my-3">
 <head>
   <meta charset="UTF-8">
-  <title>고장 관리 페이지</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <title>고장 신고 관리</title>
   <style>
-    .container { max-width: 1100px; margin: auto; padding: 20px; }
-    .report-item { border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-    .report-header { display: flex; justify-content: space-between; align-items: center; }
+    .container { max-width: 1100px; margin: auto; padding: 20px;}
+    .report-item { border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background: white;}
+    .report-header { display: flex; justify-content: space-between; align-items: center;}
     .report-content { margin-top: 15px; }
     .search-bar { margin: 20px 0; display: flex; align-items: center; gap: 10px; }
     .button-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -22,32 +23,46 @@
     .statistics { text-align: center; margin: 20px 0; }
     .checked-report { font-weight: bold; color: #777; }
     .checked-report.complete { color: #57965c; }
-    .checked-report.fault { color: rgb(201, 79, 79); }
+    .checked-report.fault { color: #F6C343; }
+    .checked-report.report { color: #c94f4f;}
 
-    .dashboardTable { width: 800px; }
+    .dashboardTable { width: 1100px; }
     .ratioTd { width: 100px; }
     .rowIcon {
       width: 25px;
       height: 25px;
     }
     .fillGreen { fill: #57965c; }
-    .fillGray { fill: #BDBDBD; }
+    .fillBlue { fill: #007bff;}
     .fillRed { fill: #c94f4f; }
     .fillYellow { fill: #F6C343; }
     .progressGreen { background: #57965c; }
-    .progressGray { background: #BDBDBD; }
     .progressRed { background: #c94f4f; }
     .progressYellow { background: #F6C343; }
+
+    .td-small {
+      width: 15%; /* 첫 번째 열 */
+    }
+    .td-medium {
+      width: 35%; /* 중간 열 */
+    }
+    .td-large {
+      width: 50%; /* 마지막 열 */
+    }
+
+    .report-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
   </style>
 </head>
-<body>
+<body style="background-color:#f4f6fa">
 <div class="container">
-  <h1 class="text-center my-4">고장 관리 페이지</h1>
-
-  <div class="container d-flex justify-content-center">
-    <table class="dashboardTable table table-bordered">
-      <thead class="table-light">
-      <tr>
+  <div class="d-flex justify-content-center">
+    <table class="dashboardTable table table-bordered table-background">
+      <thead class="table-borderless table-primary">
+      <tr class="text-center fw-bold">
         <td>항목</td>
         <td>개수</td>
         <td class="ratioTd">비율</td>
@@ -55,48 +70,48 @@
       </thead>
       <tbody class="align-middle">
       <tr>
-        <td class="text-start">
-          <svg class="rowIcon bi flex-shrink-0 me-2 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+        <td class="text-start td-large">
+          <svg class="rowIcon bi flex-shrink-0 fillBlue" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
           <span class="align-middle">전체 고장 신고</span>
         </td>
-        <td><div th:text="${reports}"></div></td>
-        <td>
+        <td class="text-center td-small"><div th:text="${reports}"></div></td>
+        <td class="td-medium">
           <div class="progress">
             <div class="progress-bar w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </td>
       </tr>
       <tr>
-        <td class="text-start">
-          <svg class="rowIcon bi flex-shrink-0 me-2 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+        <td class="text-start td-large">
+          <svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
           <span class="align-middle">고장 신고된 충전기</span>
         </td>
-        <td><div th:text="${notReportChargersCount}"></div></td>
-        <td>
+        <td class="text-center td-small"><div th:text="${notReportChargersCount}"></div></td>
+        <td class="td-medium">
           <div class="progress">
             <div class="progress-bar progressRed" th:style="'width:' + ${#numbers.formatDecimal(notReportChargersCount * 100 / reports,0,0)} + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </td>
       </tr>
       <tr>
-        <td class="text-start">
-          <svg class="rowIcon bi flex-shrink-0 me-2 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+        <td class="text-start td-large">
+          <svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
           <span class="align-middle">수리가 필요한 충전기</span>
         </td>
-        <td><div th:text="${reportChargersCount}"></div></td>
-        <td>
+        <td class="text-center td-small"><div th:text="${reportChargersCount}"></div></td>
+        <td class="td-medium">
           <div class="progress">
             <div class="progress-bar progressYellow" th:style="'width:' + ${#numbers.formatDecimal(reportChargersCount * 100 / reports,0,0)} + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </td>
       </tr>
       <tr>
-        <td class="text-start">
-          <svg class="rowIcon bi flex-shrink-0 me-2 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+        <td class="text-start td-large">
+          <svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
           <span class="align-middle">수리 완료된 충전기</span>
         </td>
-        <td><div th:text="${repairChargersCount}"></div></td>
-        <td>
+        <td class="text-center td-small"><div th:text="${repairChargersCount}"></div></td>
+        <td class="td-medium">
           <div class="progress">
             <div class="progress-bar progressGreen" th:style="'width:' + ${#numbers.formatDecimal(repairChargersCount * 100 / reports,0,0)} + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
@@ -123,7 +138,10 @@
     <input type="date" class="form-control" name="startDate">
     <input type="date" class="form-control" name="endDate">
 
-    <button type="button" class="btn btn-primary" onclick="searchReports(event)">검색</button>
+    <button type="button" class="btn btn-primary" onclick="searchReports(event)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg></button>
   </form>
 
   <!-- 고장 신고 리스트 -->
@@ -182,16 +200,32 @@
                   reportItem.classList.add('report-item');
 
                   const checkedReport = report.checkedReport
-                          ? (report.checkedRepair ? '수리 완료' : '수리 필요')
-                          : '';
+                          ? (report.checkedRepair ? '<svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 완료</span>' : '<svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 필요</span>')
+                          : '<svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>처리 필요</span>';
                   const checkedClass = report.checkedReport
                           ? (report.checkedRepair ? 'complete' : 'fault')
-                          : '';
+                          : 'report';
 
                   reportItem.innerHTML = `
               <div class="report-header">
-                <div>
-                  <span class="checked-report ${checkedClass}">${checkedReport}</span> | 충전소 ID: ${report.chargerId} | 보고 일시: ${report.createdAt}
+                <div class="report-info">
+                  <span class="checked-report ${checkedClass}">${checkedReport}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap align-middle">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                  충전소 ID: ${report.chargerId}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar align-middle">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  ${report.createdAt.split('T')[0]}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock align-middle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  ${report.createdAt.split('T')[1]}
                 </div>
                 <div class="button-group">
                   ${report.checkedReport ?
@@ -203,7 +237,7 @@
                 </div>
               </div>
               <div class="report-content">
-                ${report.reportContent ? `<p>상세 설명: ${report.reportContent}</p>` : ''}
+                ${report.reportContent ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle me-1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span>${report.reportContent}</span>` : ''}
               </div>
             `;
                   reportsListContainer.appendChild(reportItem);
@@ -293,11 +327,11 @@
                   reportItem.classList.add('report-item');
 
                   const checkedReport = report.checkedReport
-                          ? (report.checkedRepair ? '수리 완료' : '수리 필요')
-                          : '';
+                          ? (report.checkedRepair ? '<svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 완료</span>' : '<svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 필요</span>')
+                          : '<svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>처리 필요</span>';
                   const checkedClass = report.checkedReport
                           ? (report.checkedRepair ? 'complete' : 'fault')
-                          : '';
+                          : 'report';
 
                   reportItem.innerHTML = `
               <div class="report-header">
@@ -328,4 +362,5 @@
   loadReports();
 </script>
 </body>
+</div>
 </html>

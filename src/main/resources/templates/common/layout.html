@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,13 +12,85 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
     <!-- User CSS -->
 <!--    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+    <link rel="canonical" href="https://demo-basic.adminkit.io/" />
+
+    <title>AdminKit Demo - Bootstrap 5 Admin Template</title>
+
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- 네비게이션바 -->
-    <nav th:replace="~{common/navbar :: navbarFragment}"></nav>
-    <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-    <th:block layout:fragment="content"></th:block>
-    <!-- 기본 템플릿 안에 삽입될 내용 End -->
+<style>
+    .wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: 20px;
+        background-color: #f4f6fa;
+        transition: margin-left 0.3s ease; /* 사이드바가 열리고 닫힐 때 본문 영역이 부드럽게 이동 */
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px; /* 사이드바 숨기기 */
+        width: 250px;
+        height: 100%;
+        background-color: #343a40;
+        transition: left 0.3s ease; /* 부드럽게 열릴 때 부드럽게 움직이도록 설정 */
+    }
+
+    .sidebar a {
+        text-decoration: none;
+    }
+
+    .sidebar a:hover {
+        text-decoration: none; /* 커서를 올려도 밑줄 제거 */
+    }
+
+    /* 사이드바가 열렸을 때 */
+    .sidebar.open {
+        left: 0; /* 사이드바 열기 */
+    }
+
+    .dropdown-menu-custom{
+        width: 325px;
+    }
+    .table-background{
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+    }
+</style>
+<body style="background-color:#f4f6fa">
+    <!-- 메인 레이아웃 -->
+    <div class="wrapper d-flex">
+        <!-- 왼쪽 사이드바 -->
+        <nav th:replace="~{common/leftSideBar :: sidebarFragment}"></nav>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="content flex-grow-1">
+            <!-- 상단 네비게이션 바 -->
+            <nav th:replace="~{common/navbar :: navbarFragment}"></nav>
+
+            <!-- 페이지별 콘텐츠 -->
+            <main class="container-fluid">
+                <th:block layout:fragment="content"></th:block>
+            </main>
+        </div>
+    </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" viewBox="0 0 16 16">
@@ -50,4 +122,44 @@
         </symbol>
     </svg>
 </body>
+<script>
+    document.querySelector('.js-sidebar-toggle').addEventListener('click', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+
+        // 사이드바에 'open' 클래스를 토글
+        sidebar.classList.toggle('open');
+
+        // 사이드바가 열렸는지 확인하고 본문 영역의 너비를 조정
+        if (sidebar.classList.contains('open')) {
+            content.style.marginLeft = '250px';  // 사이드바가 열리면 본문을 밀어냄
+        } else {
+            content.style.marginLeft = '0';  // 사이드바가 닫히면 본문을 원래대로 돌림
+        }
+    });
+    document.querySelector('#alertsDropdown').addEventListener('click', function(event) {
+        // 이미 열려있는 상태에서 다시 클릭하면 닫히도록 처리
+        const dropdownMenu = document.querySelector('#alertsDropdown + .dropdown-menu');
+
+        // 메뉴가 열린 상태에서 클릭 시, 닫히도록 toggle
+        if (dropdownMenu.classList.contains('show')) {
+            dropdownMenu.classList.remove('show');
+        } else {
+            dropdownMenu.classList.add('show');
+        }
+
+        // 클릭한 요소의 기본 동작을 막기 위한 event.stopPropagation() 추가
+        event.stopPropagation();
+    });
+
+    // 클릭 시 드롭다운 외부 클릭 시 닫히게 처리
+    document.addEventListener('click', function(event) {
+        const dropdownMenu = document.querySelector('#alertsDropdown + .dropdown-menu');
+
+        // 드롭다운 외부 클릭 시 메뉴 닫기
+        if (!dropdownMenu.contains(event.target) && !event.target.matches('#alertsDropdown')) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+</script>
 </html>
