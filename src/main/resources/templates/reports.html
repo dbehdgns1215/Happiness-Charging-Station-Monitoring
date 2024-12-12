@@ -71,7 +71,9 @@
       <tbody class="align-middle">
       <tr>
         <td class="text-start td-large">
-          <svg class="rowIcon bi flex-shrink-0 fillBlue" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillBlue" viewBox="0 0 16 16">
+            <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/>
+          </svg>
           <span class="align-middle">전체 고장 신고</span>
         </td>
         <td class="text-center td-small"><div th:text="${reports}"></div></td>
@@ -83,8 +85,10 @@
       </tr>
       <tr>
         <td class="text-start td-large">
-          <svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
-          <span class="align-middle">고장 신고된 충전기</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillRed" viewBox="0 0 16 16">
+            <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/>
+          </svg>
+          <span class="align-middle">고장 신고 충전기</span>
         </td>
         <td class="text-center td-small"><div th:text="${notReportChargersCount}"></div></td>
         <td class="td-medium">
@@ -95,8 +99,10 @@
       </tr>
       <tr>
         <td class="text-start td-large">
-          <svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
-          <span class="align-middle">수리가 필요한 충전기</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillYellow" viewBox="0 0 16 16">
+            <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/>
+          </svg>
+          <span class="align-middle">수리 필요 충전기</span>
         </td>
         <td class="text-center td-small"><div th:text="${reportChargersCount}"></div></td>
         <td class="td-medium">
@@ -107,8 +113,10 @@
       </tr>
       <tr>
         <td class="text-start td-large">
-          <svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg>
-          <span class="align-middle">수리 완료된 충전기</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillGreen" viewBox="0 0 16 16">
+            <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/>
+          </svg>
+          <span class="align-middle">수리 완료 충전기</span>
         </td>
         <td class="text-center td-small"><div th:text="${repairChargersCount}"></div></td>
         <td class="td-medium">
@@ -172,7 +180,7 @@
       const districts = cities[city];
 
       if (districts) {
-        districts.forEach(function(district) {
+        districts.forEach(function (district) {
           districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
         });
       }
@@ -200,8 +208,8 @@
                   reportItem.classList.add('report-item');
 
                   const checkedReport = report.checkedReport
-                          ? (report.checkedRepair ? '<svg class="rowIcon bi flex-shrink-0 fillGreen" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 완료</span>' : '<svg class="rowIcon bi flex-shrink-0 fillYellow" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>수리 필요</span>')
-                          : '<svg class="rowIcon bi flex-shrink-0 fillRed" role="img"><use xlink:href="#lightning-charge-fill"/></svg><span>처리 필요</span>';
+                          ? (report.checkedRepair ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-hammer fillGreen" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>수리 완료</span>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-hammer fillYellow" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>수리 필요</span>')
+                          : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillRed" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5 5 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334"/></svg><span>처리 필요</span>';
                   const checkedClass = report.checkedReport
                           ? (report.checkedRepair ? 'complete' : 'fault')
                           : 'report';
@@ -249,7 +257,7 @@
 
   // 고장 처리 버튼 클릭 시
   function faultReport(reportId, button) {
-    fetch(`/api/v1/reports/check/${reportId}`, { method: 'POST' })
+    fetch(`/api/v1/reports/check/${reportId}`, {method: 'POST'})
             .then(response => {
               console.log(response.status);
               if (response.ok) {
@@ -263,7 +271,7 @@
 
   // 수리 완료 버튼 클릭 시
   function completeReport(reportId, button) {
-    fetch(`/api/v1/reports/repair/${reportId}`, { method: 'POST' })
+    fetch(`/api/v1/reports/repair/${reportId}`, {method: 'POST'})
             .then(response => {
               if (response.ok) {
                 location.reload();

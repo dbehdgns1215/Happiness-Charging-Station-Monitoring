@@ -31,23 +31,58 @@ public class DashboardController {
     
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
+        //충전기
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
         List<ChargerDTO> usingChargers = this.chargerServiceFacade.chargerSelectByUsingYn(true);
         List<ChargerDTO> idleChargers = this.chargerServiceFacade.chargerSelectByUsingYn(false);
         List<ChargerDTO> brokenChargers = this.chargerServiceFacade.chargerSelectByBrokenYn(true);
         List<ChargerDTO> notRequestRecentlyCharger = this.chargerServiceFacade.chargerSelectWithoutLogInPeriod(30);
+
+        //리뷰
         List<ReviewDTO> reviews = reviewService.reviewSelectAll();
-        List<ReportDTO> reportsChecked = reportService.reportSelectByCheckedReport();
-        List<ReportDTO> reportsRepaired = reportService.reportSelectByCheckedRepair();
+        List<ReviewDTO> ratingFive = reviewService.reviewSelectByRatingFive();
+        List<ReviewDTO> ratingFour = reviewService.reviewSelectByRatingFour();
+        List<ReviewDTO> ratingThree = reviewService.reviewSelectByRatingThree();
+        List<ReviewDTO> ratingTwo = reviewService.reviewSelectByRatingTwo();
+        List<ReviewDTO> ratingOne = reviewService.reviewSelectByRatingOne();
+        float ratingAverage = (float) ((ratingFive.size() * 5) +
+                (ratingFour.size() * 4) +
+                (ratingThree.size() * 3) +
+                (ratingTwo.size() * 2) +
+                (ratingOne.size())) / reviews.size();
+        ratingAverage = Math.round(ratingAverage * 10) / 10.0f;
+
+        //고장 신고
+        List<ReportDTO> reports = reportService.reportSelectAll();
+        List<ReportDTO> totalBreakdownReport = reportService.reportSelectByNotCheckedReport();
+        List<ReportDTO> totalRepairRequired = reportService.reportSelectByCheckedReport();
+        List<ReportDTO> totalRepaired = reportService.reportSelectByCheckedRepair();
+
+        //충전기
         model.addAttribute("totalChargerCount", chargers.size());
         model.addAttribute("usingChargerCount", usingChargers.size());
         model.addAttribute("idleChargerCount", idleChargers.size());
         model.addAttribute("brokenChargerCount", brokenChargers.size());
-        model.addAttribute("inProgressReportCount", reportsChecked.size()); // TODO - 단순히 고장 신고 들어온 것도 추가해야할듯
-        model.addAttribute("completedReportCount", reportsRepaired.size());
         model.addAttribute("notRequestRecentlyChargerCount", notRequestRecentlyCharger.size());
         model.addAttribute("notUsingTodayCharger", 0);
-        model.addAttribute("reviewCount", reviews.size());
+
+        //리뷰
+        model.addAttribute("totalReviewCount", reviews.size());
+        model.addAttribute("ratingFiveCount", ratingFive.size());
+        model.addAttribute("ratingFourCount", ratingFour.size());
+        model.addAttribute("ratingThreeCount", ratingThree.size());
+        model.addAttribute("ratingTwoCount", ratingTwo.size());
+        model.addAttribute("ratingOneCount", ratingOne.size());
+        model.addAttribute("ratingAverage", ratingAverage);
+        model.addAttribute("averageReviewRating", ratingAverage);
+
+        //고장 신고
+        model.addAttribute("totalReportCount", reports.size());
+        model.addAttribute("totalBreakdownReportCount", totalBreakdownReport.size());
+        model.addAttribute("totalRepairRequiredCount", totalRepairRequired.size());
+        model.addAttribute("totalRepairedCount", totalRepaired.size());
+
+        //페이지 주소
         model.addAttribute("currentUri", request.getRequestURI());
 
         return "dashboard_V2";
