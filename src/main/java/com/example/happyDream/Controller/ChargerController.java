@@ -1,6 +1,7 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ReportDTO;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +45,6 @@ public class ChargerController {
         } catch (EntityNotFoundException ignored) {
             chargers = null;
         }
-
         model.addAttribute("chargers", chargers);
         model.addAttribute("currentUri", request.getRequestURI());
         return "chargers_V2";

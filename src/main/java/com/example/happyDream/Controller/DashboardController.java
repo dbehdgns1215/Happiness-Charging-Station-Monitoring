@@ -54,7 +54,6 @@ public class DashboardController {
 
         //고장 신고
         List<ReportDTO> reports = reportService.reportSelectAll();
-        List<ReportDTO> totalBreakdownReport = reportService.reportSelectByNotCheckedReport();
         List<ReportDTO> totalRepairRequired = reportService.reportSelectByCheckedReport();
         List<ReportDTO> totalRepaired = reportService.reportSelectByCheckedRepair();
 
@@ -73,12 +72,10 @@ public class DashboardController {
         model.addAttribute("ratingThreeCount", ratingThree.size());
         model.addAttribute("ratingTwoCount", ratingTwo.size());
         model.addAttribute("ratingOneCount", ratingOne.size());
-        model.addAttribute("ratingAverage", ratingAverage);
         model.addAttribute("averageReviewRating", ratingAverage);
 
         //고장 신고
         model.addAttribute("totalReportCount", reports.size());
-        model.addAttribute("totalBreakdownReportCount", totalBreakdownReport.size());
         model.addAttribute("totalRepairRequiredCount", totalRepairRequired.size());
         model.addAttribute("totalRepairedCount", totalRepaired.size());
 
