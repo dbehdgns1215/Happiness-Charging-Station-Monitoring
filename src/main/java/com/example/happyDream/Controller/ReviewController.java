@@ -5,6 +5,7 @@ import com.example.happyDream.DTO.ReportDTO;
 import com.example.happyDream.DTO.ReviewDTO;
 import com.example.happyDream.DTO.UserDTO;
 import com.example.happyDream.Service.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    public String reviewSelectAll(Model model) {
+    public String reviewSelectAll(Model model, HttpServletRequest request) {
         Map<String, List<String>> uniqueCities = reviewService.reviewAddress();
         List<ReviewDTO> reviews = reviewService.reviewSelectAll();
         List<ReviewDTO> ratingFive = reviewService.reviewSelectByRatingFive();
@@ -45,6 +46,7 @@ public class ReviewController {
         model.addAttribute("ratingTwoCount", ratingTwo.size());
         model.addAttribute("ratingOneCount", ratingOne.size());
         model.addAttribute("ratingAverage", ratingAverage);
+        model.addAttribute("currentUri", request.getRequestURI());
         return "reviews";
     }
 }

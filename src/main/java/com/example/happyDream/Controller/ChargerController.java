@@ -1,8 +1,10 @@
 package com.example.happyDream.Controller;
 
 import com.example.happyDream.DTO.ChargerDTO;
+import com.example.happyDream.DTO.ReportDTO;
 import com.example.happyDream.Service.ChargerServiceFacade;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,7 @@ public class ChargerController {
 
     //전체 충전기 조회
     @GetMapping("/chargers")
-    public String chargerSelectAll(Model model,
+    public String chargerSelectAll(Model model, HttpServletRequest request,
                                    @RequestParam(value = "address", required = false) String address,
                                    @RequestParam(value = "latitude", required = false) Double latitude,
                                    @RequestParam(value = "longitude", required = false) Double longitude) {
@@ -43,8 +45,8 @@ public class ChargerController {
         } catch (EntityNotFoundException ignored) {
             chargers = null;
         }
-
         model.addAttribute("chargers", chargers);
+        model.addAttribute("currentUri", request.getRequestURI());
         return "chargers_V2";
     }
 

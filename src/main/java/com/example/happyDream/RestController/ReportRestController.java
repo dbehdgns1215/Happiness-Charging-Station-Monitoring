@@ -7,6 +7,7 @@ import com.example.happyDream.Service.ReportService;
 import com.example.happyDream.Service.ReviewService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportRestController {
 
     private final ReportService reportService;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     public ReportRestController(ReportService reportService) {
@@ -69,42 +71,17 @@ public class ReportRestController {
             @RequestParam(value = "city", required = false) String city,
             @RequestParam(value = "district", required = false) String district,
             @RequestParam(value = "chargerId", required = false) Integer chargerId,
-            @RequestParam(value = "startDate", required = false) LocalDateTime startDate,
-            @RequestParam(value = "endDate", required = false) LocalDateTime endDate) {
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate) {
+
+        LocalDateTime parsedStartDate = null;
+        LocalDateTime parsedEndDate = null;
+
+        parsedStartDate = LocalDateTime.parse(startDate + "T00:00");
+        parsedEndDate = LocalDateTime.parse(endDate + "T00:00");
 
         // 주소 및 검색어로 필터링된 리뷰 목록을 가져오는 서비스 메서드 호출
-        List<ReportDTO> reports = reportService.reportSelectAsSearch(city, district, chargerId, startDate, endDate);
+        List<ReportDTO> reports = reportService.reportSelectAsSearch(city, district, chargerId, parsedStartDate, parsedEndDate);
         return ResponseDTO.success("v1", HttpServletResponse.SC_OK, reports);
     }
-
-    /*
-    // 특정 리뷰 수정
-    @PostMapping("/reports/{id}")
-    public ResponseDTO reviewUpdate(@RequestParam(value="charger_id") Integer chargerId,
-                                    @RequestBody ReviewDTO review) {
-        this.reportService.reportUpdate(chargerId, review);
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
-    }
-
-    // 전체 리뷰 삭제
-    @DeleteMapping("/reports")
-    public ResponseDTO reviewDeleteAll() {
-        this.reportService.reportDeleteAll();
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
-    }
-
-    // 특정 리뷰 조회
-    @GetMapping("/reports/{id}")
-    public ResponseDTO reviewSelect(@PathVariable("id") Integer id) {
-        ReviewDTO review = this.reportService.reportSelect(id);
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK, Collections.singletonList(review));
-    }
-
-    // 특정 리뷰 삭제
-    @DeleteMapping("/reviews/{id}")
-    public ResponseDTO reviewDelete(@PathVariable("id") Integer id) {
-        this.reportService.reportDelete(id);
-        return ResponseDTO.success("v1", HttpServletResponse.SC_OK);
-    }
-     */
 }
