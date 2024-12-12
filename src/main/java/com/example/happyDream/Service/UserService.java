@@ -7,14 +7,19 @@ import com.example.happyDream.Util.Converter;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -34,7 +39,7 @@ public class UserService {
     }
 
     // 회원가입
-    public void userInsert(String username, String password) {
+    public void userInsert(String username, String password, byte userType) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
@@ -45,7 +50,7 @@ public class UserService {
         UserDTO userDTO = UserDTO.builder()
                 .username(username)
                 .password(encryptedPassword)
-                .userType((byte) 1)
+                .userType(userType)
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(null)
                 .deletedYn(false)
@@ -58,10 +63,9 @@ public class UserService {
     public UserDTO userSelect(Integer id) {
         Optional<UserEntity> entity = this.userRepository.findById(id);
         if(entity.isEmpty()){
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("사용자를 찾을 수 없습니다.");
         }
         return entity.get().toDTO();
-
     }
 
     public void userDelete(Integer id) {
@@ -79,5 +83,22 @@ public class UserService {
 
     public Optional<UserEntity> findUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public boolean idCheck(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    // UserDetailsService 메소드 구현
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        return User.builder()
+                .username(userEntity.getUsername())
+                .password(userEntity.getPassword())
+                .authorities(Collections.singleton(() -> "ROLE_USER")) // 필요한 역할 설정
+                .build();
     }
 }

@@ -9,6 +9,7 @@ import com.example.happyDream.Util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class UserRestController {
     @PostMapping("/users")
     public ResponseDTO userInsert(@RequestBody UserDTO userDTO) {
         try {
-            userService.userInsert(userDTO.getUsername(), userDTO.getPassword());
+            userService.userInsert(userDTO.getUsername(), userDTO.getPassword(), (byte)1);
             return ResponseDTO.success("v1", HttpServletResponse.SC_OK, "회원가입 성공");
         } catch (IllegalArgumentException e) {
             // 아이디 중복 시
@@ -81,7 +82,11 @@ public class UserRestController {
         }
     }
 
-
+    @PostMapping("/users/id-check")
+    @ResponseBody
+    public boolean idCheck(String username) {
+        return userService.idCheck(username);
+    }
 
     //특정 사용자 조회
     @GetMapping("/users/{id}")

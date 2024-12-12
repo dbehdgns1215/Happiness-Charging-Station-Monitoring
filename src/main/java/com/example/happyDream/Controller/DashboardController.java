@@ -60,10 +60,11 @@ public class DashboardController {
         //충전기
         model.addAttribute("totalChargerCount", chargers.size());
         model.addAttribute("usingChargerCount", usingChargers.size());
-        model.addAttribute("idleChargerCount", idleChargers.size());
+        model.addAttribute("idleChargerCount", idleChargers.size() - brokenChargers.size());
         model.addAttribute("brokenChargerCount", brokenChargers.size());
         model.addAttribute("notRequestRecentlyChargerCount", notRequestRecentlyCharger.size());
         model.addAttribute("notUsingTodayCharger", 0);
+        model.addAttribute("chargerList", chargers);
 
         //리뷰
         model.addAttribute("totalReviewCount", reviews.size());

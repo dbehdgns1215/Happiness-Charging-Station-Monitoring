@@ -1,7 +1,7 @@
 <html layout:decorate="~{common/layout}" xmlns:th="http://www.thymeleaf.org">
 <div layout:fragment="content" class="container text-center my-3">
 <head>
-    <title>대쉬 보드</title>
+    <title>Happy Dream</title>
     <style>
         .dashboardTable { width: 800px; }
 
@@ -47,6 +47,20 @@
         .text-gray{
             color: #6c757d;
         }
+        .container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .table-color{
+            background-color: #222e3c;
+        }
+        .table-color th {
+            color: white;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* 부드러운 강조 효과 */
+        }
+        .board-item { border: 1px solid #e9ecef; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background: white}
     </style>
 </head>
 
@@ -73,6 +87,14 @@
             reportProgressBarInProgress.style.width = Math.round((inProgressReportCount / totalReportCount) * 100) + '%';
             reportProgressBarCompleted.style.width = (100 - reportProgressBarInProgress.style.width.replace('%', '')) + '%'; // 소수점으로 인한 프로그래스바 오류 대응
         }
+
+    </script>
+
+    <script>
+        function navigateToLogs(row) {
+            const id = row.getAttribute("data-id");
+            window.location.href = `/chargers/${id}/logs`;
+        }
     </script>
 
     <!--  타임리프 인증된 사용자 접속 시 스크립트  -->
@@ -91,7 +113,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <a th:href="@{/chargers}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
@@ -107,14 +129,14 @@
                                         <h1 class="mt-1 mb-3" th:text="${totalChargerCount}"></h1>
                                         <div class="mb-0">
                                             <span class="text-success"
-                                                th:text="${totalChargerCount - (idleChargerCount + usingChargerCount + brokenChargerCount)}"></span>
+                                                th:text="${totalChargerCount - (usingChargerCount + brokenChargerCount)}"></span>
                                             <span class="text-muted">사용 가능 충전기</span>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                             <a th:href="@{/chargers}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
@@ -139,7 +161,7 @@
                         </div>
                         <div class="col-sm-6">
                             <a th:href="@{/chargers}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
@@ -162,7 +184,7 @@
                                 </div>
                             </a>
                             <a th:href="@{/chargers}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
@@ -190,25 +212,38 @@
             </div>
 
             <div class="col-xl-6 col-xxl-7">
-                <a th:href="@{/chargers}">
-                    <div class="card flex-fill w-100">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Recent Movement</h5>
-                        </div>
-                        <div class="card-body py-3">
-                            <div class="chart chart-sm">
-                                <canvas id="chartjs-dashboard-line"></canvas>
-                            </div>
+                <div class="card flex-fill w-100 board-item">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Charger List</h5>
+                    </div>
+                    <div class="card-body py-3">
+                        <div style="max-height: 250px; overflow-y: auto;">
+                            <table class="table table-hover">
+                                <thead class="table-borderless table-color">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Address</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="charger : ${chargerList}" style="cursor: pointer;" onclick="navigateToLogs(this)" th:attr="data-id=${charger.id}">
+                                    <td th:text="${charger.id}"></td>
+                                    <td th:text="${charger.name}"></td>
+                                    <td th:text="${#strings.isEmpty(charger.addressNew) ? charger.addressOld : charger.addressNew}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
 
         <div class="row no-gutters">
             <div class="col-xl-6 col-xxl-7">
                 <a th:href="@{/reviews}">
-                    <div class="card flex-fill w-100">
+                    <div class="card flex-fill w-100 board-item">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Review Rating</h5>
                         </div>
@@ -298,12 +333,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <a th:href="@{/reviews}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Total Review</h5>
-                                            </div>
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillYellow-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star-fill fillYellow" viewBox="0 0 16 16">
@@ -320,12 +352,9 @@
                                 </div>
                             </a>
                             <a th:href="@{/reviews}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Average Review Rating</h5>
-                                            </div>
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillYellow-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-stars fillYellow" viewBox="0 0 16 16">
@@ -353,13 +382,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <a th:href="@{/reports}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Total Report</h5>
-                                            </div>
-
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillBlue-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillBlue" viewBox="0 0 16 16">
@@ -376,13 +401,9 @@
                                 </div>
                             </a>
                             <a th:href="@{/reports}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Total Breakdown Report</h5>
-                                            </div>
-
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillRed-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillRed" viewBox="0 0 16 16">
@@ -401,13 +422,9 @@
                         </div>
                         <div class="col-sm-6">
                             <a th:href="@{/reports}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Total Repair Required</h5>
-                                            </div>
-
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillYellow-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillYellow" viewBox="0 0 16 16">
@@ -424,13 +441,9 @@
                                 </div>
                             </a>
                             <a th:href="@{/reports}">
-                                <div class="card">
+                                <div class="card board-item">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col mt-0">
-                                                <h5 class="card-title">Total Repaired</h5>
-                                            </div>
-
+                                        <div class="row mb-2" style=" justify-content: center;">
                                             <div class="col-auto">
                                                 <div class="fillGreen-background fill-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hammer fillGreen" viewBox="0 0 16 16">
