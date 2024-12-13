@@ -44,15 +44,20 @@ public class ChargerServiceFacade {
     private final ChargerService chargerService;
     private final ChargerStateService chargerStateService;
     private final ChargerLogService chargerLogService;
+    private final ChargerStatisticService chargerStatisticService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    public ChargerServiceFacade(ChargerService chargerService, ChargerStateService chargerStateService, ChargerLogService chargerLogService) {
+    public ChargerServiceFacade(ChargerService chargerService,
+                                ChargerStateService chargerStateService,
+                                ChargerLogService chargerLogService,
+                                ChargerStatisticService chargerStatisticService) {
         this.chargerService = chargerService;
         this.chargerStateService = chargerStateService;
         this.chargerLogService = chargerLogService;
+        this.chargerStatisticService = chargerStatisticService;
     }
 
     /* ===== ChargerService ===== */
@@ -231,15 +236,19 @@ public class ChargerServiceFacade {
     public void createTargetChargerLog(ChargerLogDTO chargerLogDto) {
         // FK(ChargerId) 존재 여부 1차 확인 후 PK(ChargerLogId) 부존재 여부 2차 확인
         try {
-            this.chargerSelect(chargerLogDto.getChargerId()); // 충전기 조회 여부 검증용 호출, 반환값 ignored
+            ChargerDTO chargerDTO = this.chargerSelect(chargerLogDto.getChargerId()); // 충전기 조회 여부 검증용 호출, 반환값 ignored
             this.chargerLogService.createTargetChargerLog(chargerLogDto); // 충전기 로그 추가
 
             ChargerStateDTO chargerStateDto = this.getTargetChargerState(chargerLogDto.getChargerId());
             if (!chargerStateDto.getUsingYn() & chargerLogDto.getAmpere() > STATE_TOGGLE_THRESHOLD) {
+                // 사용 시작
                 chargerStateDto.setUsingYn(true);
+                this.chargerStatisticService.startChargerUsing(chargerDTO);
             }
             else if (chargerStateDto.getUsingYn() & chargerLogDto.getAmpere() < STATE_TOGGLE_THRESHOLD) {
+                // 사용 종료
                 chargerStateDto.setUsingYn(false);
+                this.chargerStatisticService.finishChargerUsing(chargerDTO);
             }
             this.changeTargetChargerState(chargerStateDto);
         } catch (EntityNotFoundException e) {

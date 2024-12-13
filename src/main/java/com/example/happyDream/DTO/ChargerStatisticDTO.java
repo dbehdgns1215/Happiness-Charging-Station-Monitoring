@@ -20,6 +20,7 @@ public class ChargerStatisticDTO {
     private LocalDateTime startedAt;
     private LocalDateTime finishedAt;
     private Integer usingSecond;
+    private Boolean finishedYn;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -31,6 +32,7 @@ public class ChargerStatisticDTO {
                 .startedAt(startedAt)
                 .finishedAt(finishedAt)
                 .usingSecond(usingSecond)
+                .finishedYn(finishedYn)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
                 .build();

@@ -2,6 +2,7 @@ package com.example.happyDream.Entity;
 
 import com.example.happyDream.DTO.ChargerStatisticDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,6 +39,10 @@ public class ChargerStatisticEntity {
     @Column
     private Integer usingSecond;
 
+    @NotNull
+    @Column(columnDefinition = "TINYINT(1) UNSIGNED DEFAULT 0")
+    private Boolean finishedYn;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt; // 데이터 생성 시각
@@ -46,6 +51,11 @@ public class ChargerStatisticEntity {
     @Column
     private LocalDateTime modifiedAt; // 데이터 수정 시각
 
+    @PrePersist
+    public void checkYnNull() {
+        if (this.finishedYn == null) { this.finishedYn = false; }
+    }
+
     public ChargerStatisticDTO toDTO() {
         return ChargerStatisticDTO.builder()
                 .id(id)
@@ -53,8 +63,15 @@ public class ChargerStatisticEntity {
                 .startedAt(startedAt)
                 .finishedAt(finishedAt)
                 .usingSecond(usingSecond)
+                .finishedYn(finishedYn)
                 .createdAt(createdAt)
                 .modifiedAt(modifiedAt)
                 .build();
+    }
+
+    public void setFinishedYn(@NotNull Boolean finishedYn, Integer usingSecond) {
+        this.finishedYn = finishedYn;
+        this.finishedAt = LocalDateTime.now();
+        this.usingSecond = usingSecond;
     }
 }
