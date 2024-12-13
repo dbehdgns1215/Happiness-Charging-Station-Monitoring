@@ -7,6 +7,7 @@ import lombok.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -30,12 +31,12 @@ public class ChargerDTO {
     private Double longitude;
 
     // 츙전기 운영 관련 데이터
-    private Time weekdayOpen;
-    private Time saturdayOpen;
-    private Time holidayOpen;
-    private Time weekdayClose;
-    private Time saturdayClose;
-    private Time holidayClose;
+    private LocalTime weekdayOpen;
+    private LocalTime saturdayOpen;
+    private LocalTime holidayOpen;
+    private LocalTime weekdayClose;
+    private LocalTime saturdayClose;
+    private LocalTime holidayClose;
     private Integer chargerCount;
     private Boolean chargeAirYn;
     private Boolean chargePhoneYn;

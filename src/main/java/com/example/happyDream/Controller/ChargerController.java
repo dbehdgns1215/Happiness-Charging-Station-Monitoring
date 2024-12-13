@@ -85,6 +85,6 @@ public class ChargerController {
         List<ChargerDTO> chargers = this.chargerServiceFacade.chargerSelectAll();
 
         model.addAttribute("chargers", chargers);
-        return  "";
+        return  "chargerLists";
     }
 }

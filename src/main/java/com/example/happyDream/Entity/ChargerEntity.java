@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "charger")
@@ -63,17 +64,17 @@ public class ChargerEntity {
 
     //츙전기 운영 관련 데이터
     @Column
-    private Time weekdayOpen; //평일 운영 시작 시각
+    private LocalTime weekdayOpen; //평일 운영 시작 시각
     @Column
-    private Time saturdayOpen; //토요일 운영 시작 시각
+    private LocalTime saturdayOpen; //토요일 운영 시작 시각
     @Column
-    private Time holidayOpen; //공휴일 운영 시작 시각
+    private LocalTime holidayOpen; //공휴일 운영 시작 시각
     @Column
-    private Time weekdayClose; //평일 운영 종료 시각
+    private LocalTime weekdayClose; //평일 운영 종료 시각
     @Column
-    private Time saturdayClose; //토요일 운영 종료 시각
+    private LocalTime saturdayClose; //토요일 운영 종료 시각
     @Column
-    private Time holidayClose; //공휴일 운영 종료 시각
+    private LocalTime holidayClose; //공휴일 운영 종료 시각
 
     @NotNull
     @Column(columnDefinition = "TINYINT UNSIGNED")
